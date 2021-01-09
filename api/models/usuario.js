@@ -59,8 +59,8 @@ UsuarioSchema.methods.validarSenha = function (password) {
 
 UsuarioSchema.methods.gerarToken = function () {
   const hoje = new Date();
-  const exp = new Date(today);
-  exp.setDate(today.getDate() + 15);
+  const exp = new Date(hoje);
+  exp.setDate(hoje.getDate() + 15);
 
   return jwt.sign(
     {
