@@ -28,8 +28,8 @@ const UsuarioSchema = new mongoose.Schema(
       type: Array,
       default: ['cliente'],
     },
-    hash: String,
-    salt: String,
+    hash: { type: String },
+    salt: { type: String },
     recovery: {
       type: {
         token: String,
