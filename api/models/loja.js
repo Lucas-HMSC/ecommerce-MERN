@@ -18,7 +18,7 @@ const LojaSchema = mongoose.Schema(
     telefones: {
       type: [{ type: String }],
     },
-    enderecos: {
+    endereco: {
       type: {
         local: {
           type: String,
