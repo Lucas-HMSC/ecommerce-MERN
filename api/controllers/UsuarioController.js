@@ -114,41 +114,24 @@ class UsuarioController {
 
   // Get /recuperar-senha
   showRecovery(req, res, next) {
-    return res.render('recovery', { error: null, sucess: null });
+    return res.render('recovery', { error: null, success: null });
   }
 
   // Post /recuperar-senha
   createRecovery(req, res, next) {
-    const { email } = req.body;
-    if (!email)
-      return res.render('recovery', {
-        error: 'Preencha com o seu email',
-        success: null,
-      });
+      const { email } = req.body;
+      if (!email) return res.render('recovery', { error: 'Preencha com o seu email', success: null });
 
-    Usuario.findOne({ email })
-      .then((usuario) => {
-        if (!usuario)
-          return res.render('recovery', {
-            error: 'Não existe usuário com este email',
-            success: null,
-          });
-        const recoveryData = usuario.criarTokenRecuperacaoSenha();
-        return usuario
-          .save()
-          .then(() => {
-            enviarEmailRecovery(
-              { usuario, recovery: recoveryData },
-              ((error = null),
-              (success = null) => {
-                return res.render('recovery', { error, success });
-              }),
-            );
-          })
-          .catch(next);
-      })
-      .catch(next);
-  }
+      Usuario.findOne({ email }).then((usuario) => {
+          if (!usuario) return res.render('recovery', { error: 'Não existe usuário com este email', success: null });
+          const recoveryData = usuario.criarTokenRecuperacaoSenha();
+          return usuario.save().then(() => {
+              enviarEmailRecovery({ usuario, recovery: recoveryData }, (error = null, success = null) => {
+                  return res.render('recovery', { error, success });
+                });
+            }).catch(next);
+        }).catch(next);
+    }
 
   // Get /senha-recuperada
   showCompleteRecovery(req, res, next) {
