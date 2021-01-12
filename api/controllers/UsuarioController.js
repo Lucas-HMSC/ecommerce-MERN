@@ -91,14 +91,6 @@ class UsuarioController {
   // Post /login
   login(req, res, next) {
     const { email, password } = req.body;
-    if (!email)
-      return res
-        .status(422)
-        .json({ errors: { email: 'não pode ficar vazio' } });
-    if (!password)
-      return res
-        .status(422)
-        .json({ errors: { password: 'não pode ficar vazio' } });
     Usuario.findOne({ email })
       .then((usuario) => {
         if (!usuario)
