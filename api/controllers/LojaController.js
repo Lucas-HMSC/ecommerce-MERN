@@ -4,7 +4,7 @@ const Loja = mongoose.model('Loja');
 class LojaController {
   // Get /
   index(req, res, next) {
-    Loja.find({})
+    Loja.find({  })
       .select('_id nome cnpj email telefones endereco')
       .then((lojas) => res.send({ lojas }))
       .catch(next);
@@ -42,7 +42,7 @@ class LojaController {
   update(req, res, next) {
     const { nome, cnpj, email, telefones, endereco } = req.body;
 
-    Loja.fundById(req.params.id)
+    Loja.findById(req.query.loja)
       .then((loja) => {
         if (!loja) return res.status(422).send({ error: 'Loja não existe.' });
 
@@ -62,7 +62,7 @@ class LojaController {
 
   // Delete /:id
   remove(req, res, next) {
-    Loja.findById(req.params.id)
+    Loja.findById(req.query.loja)
       .then((loja) => {
         if (!loja) return res.status(422).send({ error: 'Loja não existe.' });
         loja
