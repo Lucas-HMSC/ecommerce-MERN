@@ -37,11 +37,6 @@ class UsuarioController {
   store(req, res, next) {
     const { nome, email, password, loja } = req.body;
 
-    if (!nome || !email || !password || !loja)
-      return res
-        .status(422)
-        .json({ errors: 'Preencha todos os campos de cadastro.' });
-
     const usuario = new Usuario({ nome, email, loja });
     usuario.setSenha(password);
 
