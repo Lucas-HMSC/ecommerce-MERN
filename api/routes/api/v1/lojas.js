@@ -1,15 +1,35 @@
 const router = require('express').Router();
-const lojaValidation = require('../../../controllers/validacoes/lojaValidacao');
-const auth = require('../../auth');
-const LojaController = require('../../../controllers/LojaController');
 
+const auth = require('../../auth');
+const Validation = require('express-validation');
+const {
+  LojaValidation,
+} = require('../../../controllers/validacoes/lojaValidacao');
+
+const LojaController = require('../../../controllers/LojaController');
 const lojaController = new LojaController();
 
 router.get('/', lojaController.index); // testado
-router.get('/:id', lojaController.show); // testado
+router.get('/:id', Validation(LojaValidation.show), lojaController.show); // testado
 
-router.post('/', auth.required, lojaController.store); // testado
-router.put('/:id', auth.required, lojaValidation, lojaController.update); // testado
-router.delete('/:id', auth.required, lojaValidation, lojaController.remove); // testado
+router.post(
+  '/',
+  auth.required,
+  Validation(LojaValidation.store),
+  lojaController.store,
+); // testado
+router.put(
+  '/:id',
+  auth.required,
+  LojaValidation.admin,
+  Validation(LojaValidation.update),
+  lojaController.update,
+); // testado
+router.delete(
+  '/:id',
+  auth.required,
+  lojaValidation.admin,
+  lojaController.remove,
+); // testado
 
 module.exports = router;
