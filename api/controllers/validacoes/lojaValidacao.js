@@ -29,7 +29,7 @@ const LojaValidation = {
   store: {
     body: {
       nome: Joi.string().required(),
-      cnpj: Joi.string().length(24).required(),
+      cnpj: Joi.string().length(18).required(),
       email: Joi.string().email().required(),
       telefones: Joi.array().items(Joi.string()).required(),
       endereco: Joi.object({
@@ -45,7 +45,7 @@ const LojaValidation = {
   update: {
     body: {
       nome: Joi.string().optional(),
-      cnpj: Joi.string().length(24).optional(),
+      cnpj: Joi.string().length(18).optional(),
       email: Joi.string().email().optional(),
       telefones: Joi.array().items(Joi.string()).optional(),
       endereco: Joi.object({
