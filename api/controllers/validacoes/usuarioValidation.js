@@ -12,7 +12,7 @@ const UsuarioValidation = {
     body: {
       nome: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Jois.string().required(),
+      password: Joi.string().required(),
       loja: Joi.string().alphanum().length(24).required(),
     },
   },
