@@ -28,7 +28,7 @@ router.put(
 router.delete(
   '/:id',
   auth.required,
-  lojaValidation.admin,
+  LojaValidation.admin,
   lojaController.remove,
 ); // testado
 
