@@ -82,6 +82,7 @@ class ClienteController {
       if (telefones) cliente.usuario.telefones = telefones;
       if (endereco) cliente.usuario.endereco = endereco;
       if (dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
+      await cliente.usuario.save();​
       await cliente.save();
       return res.send({ cliente });
     } catch (e) {
