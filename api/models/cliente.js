@@ -26,7 +26,7 @@ const ClienteSchema = Schema(
     },
     deletado: {
       type: Boolean,
-      defaukt: false,
+      default: false,
     },
     loja: {
       type: Schema.Types.ObjectId,
