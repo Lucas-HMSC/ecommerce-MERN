@@ -3,10 +3,10 @@ const Router = required('express').Router();
 const ClienteController = require('../../../controllers/ClienteController');
 const {
   LojaValidation,
-} = require('../../../controllers/validacoes/lojaValidacao');
+} = require('../../../controllers/validacoes/lojaValidation');
 const {
   ClienteValidation,
-} = require('../../../controllers/validacoes/clienteValidacao');
+} = require('../../../controllers/validacoes/clienteValidation');
 const Validation = require('express-validation');
 const auth = require('../../auth');
 const router = require('.');
@@ -35,7 +35,7 @@ router.get(
   clienteController.showAdmin,
 );
 /*router.get(
-  '/admin/:id/:pedidos',
+  '/admin/:id/pedidos',
   auth.required,
   LojaValidation.admin,
   clienteController.showPedidosCliente,
