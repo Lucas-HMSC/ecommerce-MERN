@@ -14,7 +14,13 @@ const router = require('.');
 const clienteController = new ClienteController();
 
 // ADMIN
-router.get('/', auth.required, LojaValidation.admin, clienteController.index);
+router.get(
+  '/',
+  auth.required,
+  LojaValidation.admin,
+  Validation(ClienteValidation.index),
+  clienteController.index,
+);
 /*router.get(
   '/search/:search/pedidos',
   auth.required,
@@ -25,6 +31,7 @@ router.get(
   '/search/:search',
   auth.required,
   LojaValidation.admin,
+  Validation(ClienteValidation.search),
   clienteController.search,
 );
 
@@ -32,6 +39,7 @@ router.get(
   '/admin/:id',
   auth.required,
   LojaValidation.admin,
+  Validation(ClienteValidation.showAdmin),
   clienteController.showAdmin,
 );
 /*router.get(
@@ -45,14 +53,25 @@ router.put(
   '/admin/:id',
   auth.required,
   LojaValidation.admin,
+  Validation(ClienteValidation.updateAdmin),
   clienteController.updateAdmin,
 );
 
 // CLIENTE
-router.get('/:id', auth.required, clienteController.show);
+router.get(
+  '/:id',
+  auth.required,
+  Validation(ClienteValidation.show),
+  clienteController.show,
+);
 
-router.post('/', clienteController.store);
-router.put('/:id', auth.required, clienteController.update);
+router.post('/', Validation(ClienteValidation.store), clienteController.store);
+router.put(
+  '/:id',
+  auth.required,
+  Validation(ClienteValidation.update),
+  clienteController.update,
+);
 router.delete('/:id', auth.required, clienteController.remove);
 
 module.exports = router;
