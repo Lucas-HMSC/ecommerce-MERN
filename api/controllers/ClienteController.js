@@ -65,7 +65,7 @@ class ClienteController {
   async updateAdmin(req, res, next) {
     const {
       nome,
-      cof,
+      cpf,
       email,
       telefones,
       endereco,
@@ -78,6 +78,7 @@ class ClienteController {
         cliente.nome = nome;
       }
       if (email) cliente.usuario.email = email;
+      if (cpf) cliente.cpf = cpf;
       if (telefones) cliente.usuario.telefones = telefones;
       if (endereco) cliente.usuario.endereco = endereco;
       if (dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
