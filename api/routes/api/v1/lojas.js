@@ -4,7 +4,7 @@ const auth = require('../../auth');
 const Validation = require('express-validation');
 const {
   LojaValidation,
-} = require('../../../controllers/validacoes/lojaValidacao');
+} = require('../../../controllers/validacoes/lojaValidation');
 
 const LojaController = require('../../../controllers/LojaController');
 const lojaController = new LojaController();
