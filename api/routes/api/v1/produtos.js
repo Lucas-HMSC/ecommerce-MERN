@@ -62,5 +62,6 @@ router.get('/:id', Validation(ProdutoValidation.show), produtoController.show);
 // VARIAÇÕES
 
 // AVALIAÇÕES
+router.get('/:id/avaliacoes', produtoController.showAvaliacoes);
 
 module.exports = router;
