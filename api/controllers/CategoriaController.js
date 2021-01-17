@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Categoria = mongoose.model('Categoria');
+const Produto = mongoose.model('Produto');
 
 class CategoriaController {
   // Get /index
