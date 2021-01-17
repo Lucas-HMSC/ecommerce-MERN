@@ -192,7 +192,7 @@ class ProdutoController {
   // Get /search/:search
   async search(req, res, next) {
     const offset = Number(req.query.offset) || 0;
-    const limit = Number(req.query.limit) || 0;
+    const limit = Number(req.query.limit) || 30;
     const search = new RegExp(req.params.search, 'i');
     try {
       const produtos = await Produto.paginate(
