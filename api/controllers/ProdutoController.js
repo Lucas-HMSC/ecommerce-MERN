@@ -3,6 +3,21 @@ const mongoose = require('mongoose');
 const Produto = mongoose.model('Produto');
 const Categoria = mongoose.model('Categoria');
 
+const getSort = (sortType) => {
+  switch (sortType) {
+    case 'alfabetica_a-z':
+      return { titulo: 1 };
+    case 'alfabetica_z-a':
+      return { titulo: -1 };
+    case 'preco-crescente':
+      return { preco: 1 };
+    case 'preco-decrescente':
+      return { preco: -1 };
+    default:
+      return {};
+  }
+};
+
 class ProdutoController {
   /*
    * ADMIN
@@ -135,6 +150,77 @@ class ProdutoController {
 
       await produto.remove();
       return res.send({ deleted: true });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  /*
+   * CLIENTES / VISITANTES
+   */
+
+  // Get /
+  async index(req, res, next) {
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 30;
+    try {
+      const produtos = await Produto.paginate(
+        { loja: req.query.loja },
+        { offset, limit, sort: getSort(req.query.sortType) },
+      );
+      return res.send({ produtos });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  // Get /disponiveis
+  async indexDisponiveis(req, res, next) {
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 30;
+    try {
+      const produtos = await Produto.paginate(
+        { loja: req.query.loja, disponibilidade: true },
+        { offset, limit, sort: getSort(req.query.sortType) },
+      );
+      return res.send({ produtos });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  // Get /search/:search
+  async search(req, res, next) {
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 0;
+    const search = new RegExp(req.params.search, 'i');
+    try {
+      const produtos = await Produto.paginate(
+        {
+          loja: req.query.loja,
+          $or: [
+            { titulo: { $regex: search } },
+            { descricao: { $regex: search } },
+            { sku: { $regex: search } },
+          ],
+        },
+        { offset, limit, sort: getSort(req.query.sortType) },
+      );
+      return res.send({ produtos });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  // Get /:id
+  async show(req, res, next) {
+    try {
+      const produto = await (await Produto.findById(req.params.id)).populated([
+        'avaliacoes',
+        'variacoes',
+        'loja',
+      ]);
+      return res.send({ produto });
     } catch (e) {
       next(e);
     }
