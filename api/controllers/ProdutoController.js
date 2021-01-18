@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Produto = mongoose.model('Produto');
 const Categoria = mongoose.model('Categoria');
-const Avaliacao = mongoose.model('AvaliacaoController');
+const Avaliacao = mongoose.model('Avaliacao');
 
 const getSort = (sortType) => {
   switch (sortType) {
