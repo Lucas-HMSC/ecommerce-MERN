@@ -60,6 +60,11 @@ router.get(
 router.get('/:id', Validation(ProdutoValidation.show), produtoController.show);
 
 // VARIAÇÕES
+router.get(
+  '/:id/variacoes',
+  Validation(ProdutoValidation.showVariacoes),
+  produtoController.showVariacoes,
+);
 
 // AVALIAÇÕES
 router.get(
