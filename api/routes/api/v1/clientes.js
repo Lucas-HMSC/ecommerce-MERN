@@ -1,4 +1,4 @@
-const Router = required('express').Router();
+const router = required('express').Router();
 
 const ClienteController = require('../../../controllers/ClienteController');
 const {
@@ -9,7 +9,6 @@ const {
 } = require('../../../controllers/validacoes/clienteValidation');
 const Validation = require('express-validation');
 const auth = require('../../auth');
-const router = require('.');
 
 const clienteController = new ClienteController();
 
