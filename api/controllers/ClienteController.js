@@ -35,9 +35,16 @@ class ClienteController {
     const search = new RegExp(req.params.search, 'i');
     try {
       const clientes = await Cliente.paginate(
-        { loja: req.query.loja, nome: { $regex: search } },
+        { 
+          loja: req.query.loja, 
+          $or: [
+            { $text: { $search: search, $diacriticSensitive: false } },
+            { telefones: { $regex: search } }
+          ]
+        },
         { offset, limit, populate: {path: 'usuario', select: '-salt -hash'} },
       );
+      return res.send({ clientes });
     } catch (e) {
       next(e);
     }
@@ -79,10 +86,10 @@ class ClienteController {
       }
       if (email) cliente.usuario.email = email;
       if (cpf) cliente.cpf = cpf;
-      if (telefones) cliente.usuario.telefones = telefones;
-      if (endereco) cliente.usuario.endereco = endereco;
+      if (telefones) cliente.telefones = telefones;
+      if (endereco) cliente.endereco = endereco;
       if (dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
-      await cliente.usuario.save();​
+      await cliente.usuario.save();
       await cliente.save();
       return res.send({ cliente });
     } catch (e) {
@@ -169,13 +176,13 @@ class ClienteController {
       if (telefones) cliente.telefones = telefones;
       if (endereco) cliente.endereco = endereco;
       if (dataDeNascimento) cliente.dataDeNascimento = dataDeNascimento;
-
+      await cliente.usuario.save();
       await cliente.save();
       cliente.usuario = {
         email: cliente.usuario.email,
         _id: cliente.usuario._id,
         permissao: cliente.usuario.permissao
-      }
+      };
       return res.send({cliente});
     } catch (e) {
       next(e);
@@ -185,9 +192,7 @@ class ClienteController {
   // Delete /:id
   async remove(req, res, next) {
     try {
-      const cliente = await (
-        await Cliente.findOne({ usuario: req.payload.id })
-      ).populated('usuario');
+      const cliente = await Cliente.findOne({ usuario: req.payload.id }).populated('usuario');
       await cliente.usuario.remove();
       cliente.deletado = true;
       await cliente.save();
