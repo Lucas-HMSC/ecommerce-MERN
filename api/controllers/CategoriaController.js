@@ -7,7 +7,7 @@ class CategoriaController {
   // Get /index
   index(req, res, next) {
     Categoria.find({ loja: req.query.loja })
-      .select('_id produtos nome codigo loja')
+      .select('_id produtos nome codigo disponibilidade loja')
       .then((categorias) => res.send({ categorias }))
       .catch(next);
   }
@@ -15,7 +15,7 @@ class CategoriaController {
   // Get /disponiveis
   indexDisponiveis(req, res, next) {
     Categoria.find({ loja: req.query.loja, disponibilidade: true })
-      .select('_id produtos nome codigo loja')
+      .select('_id produtos nome codigo disponibilidade loja')
       .then((categorias) => res.send({ categorias }))
       .catch(next);
   }
@@ -23,7 +23,7 @@ class CategoriaController {
   // Get /:id
   show(req, res, next) {
     Categoria.findOne({ loja: req.query.loja, _id: req.params.id })
-      .select('_id produtos nome codigo loja')
+      .select('_id produtos nome codigo disponibilidade loja')
       .populate(['produtos'])
       .then((categoria) => res.send({ categoria }))
       .catch(next);
@@ -85,7 +85,7 @@ class CategoriaController {
   async showProdutos(req, res, next) {
     const { offset, limit } = req.query;
     try {
-      const produtos = await produtos.paginate(
+      const produtos = await Produto.paginate(
         { categoria: req.params.id },
         { offset: Number(offset) || 0, limit: Number(limit) || 30 },
       );
@@ -95,7 +95,7 @@ class CategoriaController {
     }
   }
 
-  // Pu /:id/produtos
+  // Put /:id/produtos
   async updateProdutos(req, res, next) {
     try {
       const categoria = await Categoria.findById(req.params.id);
