@@ -65,6 +65,7 @@ class ProdutoController {
       titulo,
       descricao,
       disponibilidade,
+      fotos,
       categoria,
       preco,
       promocao,
@@ -91,7 +92,7 @@ class ProdutoController {
 
         if (oldCategoria && newCategoria) {
           oldCategoria.produtos = oldCategoria.produtos.filter(
-            (item) => item !== produto._id,
+            (item) => item.toString() !== produto._id.toString(),
           );
           newCategoria.produtos.push(produto._id);
           produto.categoria = categoria;
@@ -167,7 +168,7 @@ class ProdutoController {
     try {
       const produtos = await Produto.paginate(
         { loja: req.query.loja },
-        { offset, limit, sort: getSort(req.query.sortType) },
+        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -182,7 +183,7 @@ class ProdutoController {
     try {
       const produtos = await Produto.paginate(
         { loja: req.query.loja, disponibilidade: true },
-        { offset, limit, sort: getSort(req.query.sortType) },
+        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -205,7 +206,7 @@ class ProdutoController {
             { sku: { $regex: search } },
           ],
         },
-        { offset, limit, sort: getSort(req.query.sortType) },
+        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -216,10 +217,9 @@ class ProdutoController {
   // Get /:id
   async show(req, res, next) {
     try {
-      const produto = await (await Produto.findById(req.params.id)).populated([
-        'avaliacoes',
-        'variacoes',
+      const produto = await Produto.findById(req.params.id)).populated([
         'loja',
+        'categoria',
       ]);
       return res.send({ produto });
     } catch (e) {
