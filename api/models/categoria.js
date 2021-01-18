@@ -13,7 +13,7 @@ const CategoriaSchema = Schema(
     },
     disponibilidade: {
       type: Boolean,
-      required: true,
+      default: true,
     },
     produtos: {
       type: [
