@@ -54,7 +54,7 @@ const VariacaoSchema = Schema(
     },
     loja: {
       type: Schema.Types.ObjectId,
-      ref: 'Produto',
+      ref: 'Loja',
       required: true,
     },
   },
