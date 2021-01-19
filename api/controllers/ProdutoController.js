@@ -170,7 +170,12 @@ class ProdutoController {
     try {
       const produtos = await Produto.paginate(
         { loja: req.query.loja },
-        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
+        {
+          offset,
+          limit,
+          sort: getSort(req.query.sortType),
+          populate: ['categoria'],
+        },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -185,7 +190,12 @@ class ProdutoController {
     try {
       const produtos = await Produto.paginate(
         { loja: req.query.loja, disponibilidade: true },
-        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
+        {
+          offset,
+          limit,
+          sort: getSort(req.query.sortType),
+          populate: ['categoria'],
+        },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -208,7 +218,12 @@ class ProdutoController {
             { sku: { $regex: search } },
           ],
         },
-        { offset, limit, sort: getSort(req.query.sortType), populate: ['categoria'] },
+        {
+          offset,
+          limit,
+          sort: getSort(req.query.sortType),
+          populate: ['categoria'],
+        },
       );
       return res.send({ produtos });
     } catch (e) {
@@ -219,7 +234,7 @@ class ProdutoController {
   // Get /:id
   async show(req, res, next) {
     try {
-      const produto = await Produto.findById(req.params.id)).populated([
+      const produto = await Produto.findById(req.params.id).populated([
         'loja',
         'categoria',
       ]);
