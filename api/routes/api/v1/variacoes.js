@@ -42,7 +42,7 @@ router.put(
   LojaValidation.admin,
   Validation(VariacaoValidation.updateImages),
   upload.array('files', 4),
-  variacaoController.update,
+  variacaoController.updateImages,
 );
 router.delete(
   '/:id',

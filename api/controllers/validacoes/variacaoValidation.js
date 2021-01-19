@@ -25,7 +25,7 @@ const VariacaoValidation = {
       codigo: Joi.string().required(),
       nome: Joi.string().required(),
       preco: Joi.number().required(),
-      promocao: Joi.string().optional(),
+      promocao: Joi.number().optional(),
       entrega: Joi.object({
         dimensoes: Joi.object({
           alturaCm: Joi.number().required(),
@@ -50,7 +50,7 @@ const VariacaoValidation = {
       codigo: Joi.string().optional(),
       nome: Joi.string().optional(),
       preco: Joi.number().optional(),
-      promocao: Joi.string().optional(),
+      promocao: Joi.number().optional(),
       disponibilidade: Joi.boolean().optional(),
       entrega: Joi.object({
         dimensoes: Joi.object({

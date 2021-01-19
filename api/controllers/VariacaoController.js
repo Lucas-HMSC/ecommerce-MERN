@@ -91,7 +91,7 @@ class VariacaoController {
   }
 
   // Put /images/:id
-  async uploadImages(req, res, next) {
+  async updateImages(req, res, next) {
     const { loja, produto } = req.query;
     const { id: _id } = req.params;
     try {
