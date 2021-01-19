@@ -9,3 +9,5 @@ require('./avaliacao');
 require('./variacao');
 
 require('./pedido');
+require('./pagamento');
+require('./entrega');
