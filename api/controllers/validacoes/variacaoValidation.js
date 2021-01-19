@@ -51,7 +51,6 @@ const VariacaoValidation = {
       nome: Joi.string().optional(),
       preco: Joi.number().optional(),
       promocao: Joi.number().optional(),
-      disponibilidade: Joi.boolean().optional(),
       entrega: Joi.object({
         dimensoes: Joi.object({
           alturaCm: Joi.number().required(),
@@ -62,6 +61,7 @@ const VariacaoValidation = {
         freteGratis: Joi.boolean().optional(),
       }).optional(),
       quantidade: Joi.number().optional(),
+      fotos: Joi.array().items(Joi.string()).optional(),
     },
   },
   updateImages: {
