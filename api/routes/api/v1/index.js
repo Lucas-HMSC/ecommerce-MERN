@@ -9,4 +9,6 @@ router.use('/produtos', required('./produtos'));
 router.use('/avaliacoes', required('./avaliacoes'));
 router.use('/variacoes', require('./variacoes'));
 
+router.use('/pedidos', require('./pedidos'));
+
 module.exports = router;
