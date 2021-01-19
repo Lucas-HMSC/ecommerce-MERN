@@ -234,7 +234,7 @@ class ProdutoController {
   // Get /:id
   async show(req, res, next) {
     try {
-      const produto = await Produto.findById(req.params.id).populated([
+      const produto = await Produto.findById(req.params.id).populate([
         'loja',
         'categoria',
       ]);
