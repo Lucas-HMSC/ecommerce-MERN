@@ -37,7 +37,7 @@ router.put(
   variacaoController.update,
 );
 router.put(
-  '/imagens/:id',
+  '/images/:id',
   auth.required,
   LojaValidation.admin,
   Validation(VariacaoValidation.updateImages),
