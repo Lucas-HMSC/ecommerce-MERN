@@ -113,7 +113,7 @@ class PedidoController {
   async index(req, res, next) {
     const { offset, limit, loja } = req.query;
     try {
-      const cliente = await Cliente.findById({ usuario: req.payload.id });
+      const cliente = await Cliente.findOne({ usuario: req.payload.id });
       const pedidos = await Pedido.paginate(
         { loja, cliente: cliente._id },
         {
@@ -143,7 +143,7 @@ class PedidoController {
   // Get /:id
   async show(req, res, next) {
     try {
-      const cliente = await Cliente.findById({ usuario: req.payload.id });
+      const cliente = await Cliente.findOne({ usuario: req.payload.id });
       const pedido = await Pedido.findOne({
         cliente: cliente._id,
         _id: req.params.id,
@@ -168,7 +168,7 @@ class PedidoController {
 
     try {
       // Checar dados do carrinho
-      if (!CarrinhoValidation(carrinho))
+      if (!(await CarrinhoValidation(carrinho)))
         return res.status(422).send({ error: 'Carrinho Inválido.' });
 
       // Checar dados da entrega
@@ -193,6 +193,7 @@ class PedidoController {
         status: 'nao_iniciaod',
         custo: entrega.custo,
         prazo: entrega.prazo,
+        tipo: entrega.tipo,
         payload: entrega,
         loja,
       });
@@ -215,7 +216,7 @@ class PedidoController {
       // Notificar via email - cliente e admin = novo pedido
 
       return res.send({
-        pedido: Object.assign({}, pedido, {
+        pedido: Object.assign({}, pedido._doc, {
           entrega: novaEntrega,
           pagamento: novoPagamento,
           cliente,
@@ -229,7 +230,7 @@ class PedidoController {
   // Delete /:id
   async remove(req, res, next) {
     try {
-      const cliente = await Cliente.findById({ usuario: req.payload.id });
+      const cliente = await Cliente.findOne({ usuario: req.payload.id });
       if (!cliente)
         return res.status(400).send({ error: 'Cliente não encontrado.' });
       const pedido = await Pedido.findOne({
@@ -254,7 +255,7 @@ class PedidoController {
   // Get /:id/carrinho
   async showCarrinhoPedido(req, res, next) {
     try {
-      const cliente = await Cliente.findById({ usuario: req.payload.id });
+      const cliente = await Cliente.findOne({ usuario: req.payload.id });
       const pedido = await Pedido.findOne({
         cliente: cliente._id,
         _id: req.params.id,
