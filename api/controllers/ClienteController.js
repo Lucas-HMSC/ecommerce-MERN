@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+const Pedido = mongoose.model('Pedido');
+const Produto = mongoose.model('Produto');
+const Variacao = mongoose.model('Variacao');
+
 const Cliente = mongoose.model('Cliente');
 const Usuario = mongoose.model('Usuario');
 
@@ -15,7 +19,7 @@ class ClienteController {
       const limit = Number(req.query.limit) || 30;
       const clientes = await Cliente.paginate(
         { loja: req.query.loja },
-        { offset, limit, populate: {path: 'usuario', select: '-salt -hash'} },
+        { offset, limit, populate: { path: 'usuario', select: '-salt -hash' } },
       );
       return res.send({ clientes });
     } catch (e) {
@@ -24,8 +28,34 @@ class ClienteController {
   }
 
   // Get /search/:search/pedidos
-  searchPedidos(req, res, next) {
-    return res.status(400).send({ error: 'Em desenvolvimento.' });
+  async searchPedidos(req, res, next) {
+    const { offset, limit, loja } = req.query;
+    try {
+      const search = new RegExp(req.params.search, 'i');
+      const clientes = await Cliente.find({ loja, nome: { $regex: search } });
+      const pedidos = await Pedido.paginate(
+        {
+          loja,
+          cliente: { $in: clientes.map((item) => item._id) },
+        },
+        { offset, limit, populate: ['cliente', 'pagamento', 'entrega'] },
+      );
+      pedidos.docs = await Promisse.all(
+        pedidos.docs.map(async (pedido) => {
+          pedido.carrinho = await Promisse.all(
+            pedido.carrinho.map(async (item) => {
+              item.produto = await Produto.findById(item.produto);
+              item.variacao = await Variacao.findById(item.variacao);
+              return item;
+            }),
+          );
+          return pedido;
+        }),
+      );
+      return res.send({ pedidos });
+    } catch (e) {
+      next(e);
+    }
   }
 
   // Get /search/:search
@@ -35,14 +65,14 @@ class ClienteController {
     const search = new RegExp(req.params.search, 'i');
     try {
       const clientes = await Cliente.paginate(
-        { 
-          loja: req.query.loja, 
+        {
+          loja: req.query.loja,
           $or: [
             { $text: { $search: search, $diacriticSensitive: false } },
-            { telefones: { $regex: search } }
-          ]
+            { telefones: { $regex: search } },
+          ],
         },
-        { offset, limit, populate: {path: 'usuario', select: '-salt -hash'} },
+        { offset, limit, populate: { path: 'usuario', select: '-salt -hash' } },
       );
       return res.send({ clientes });
     } catch (e) {
@@ -56,7 +86,7 @@ class ClienteController {
       const cliente = await Cliente.findOne({
         _id: req.params.id,
         loja: req.query.loja,
-      }).populate({path: 'usuario', select: '-salt -hash'});
+      }).populate({ path: 'usuario', select: '-salt -hash' });
       return res.send({ cliente });
     } catch (e) {
       next(e);
@@ -64,8 +94,33 @@ class ClienteController {
   }
 
   // Get /admin/:id/pedidos
-  showPedidosCliente(req, res, next) {
-    return res.status(400).send({ error: 'Em desenvovlimento.' });
+  async showPedidosCliente(req, res, next) {
+    const { offset, limit, loja } = req.query;
+    try {
+      const pedidos = await Pedido.paginate(
+        { loja, cliente: req.params.id },
+        {
+          offset: Number(offset || 0),
+          limit: Number(limit || 30),
+          populate: ['cliente', 'pagamento', 'entrega'],
+        },
+      );
+      pedidos.docs = await Promisse.all(
+        pedidos.docs.map(async (pedido) => {
+          pedido.carrinho = await Promisse.all(
+            pedido.carrinho.map(async (item) => {
+              item.produto = await Produto.findById(item.produto);
+              item.variacao = await Variacao.findById(item.variacao);
+              return item;
+            }),
+          );
+          return pedido;
+        }),
+      );
+      return res.send({ pedidos });
+    } catch (e) {
+      next(e);
+    }
   }
 
   // Put /admin/:id
@@ -79,7 +134,10 @@ class ClienteController {
       dataDeNascimento,
     } = req.body;
     try {
-      const cliente = await Cliente.findById(req.params.id).populate({path: 'usuario', select: '-salt -hash'});
+      const cliente = await Cliente.findById(req.params.id).populate({
+        path: 'usuario',
+        select: '-salt -hash',
+      });
       if (nome) {
         cliente.usuario.nome = nome;
         cliente.nome = nome;
@@ -107,7 +165,7 @@ class ClienteController {
       const cliente = await Cliente.findOne({
         usuario: req.payload.id,
         loja: req.query.loja,
-      }).populate({path: 'usuario', select: '-salt -hash'});
+      }).populate({ path: 'usuario', select: '-salt -hash' });
       return res.send({ cliente });
     } catch (e) {
       next(e);
@@ -162,10 +220,10 @@ class ClienteController {
       password,
     } = req.body;
     try {
-      const cliente = await Cliente.findOne({usuario: req.payload.id}).populate(
-        'usuario',
-      );
-      if (!cliente) return res.send({error: 'Cliente não existe.'});
+      const cliente = await Cliente.findOne({
+        usuario: req.payload.id,
+      }).populate('usuario');
+      if (!cliente) return res.send({ error: 'Cliente não existe.' });
       if (nome) {
         cliente.usuario.nome = nome;
         cliente.nome = nome;
@@ -181,9 +239,9 @@ class ClienteController {
       cliente.usuario = {
         email: cliente.usuario.email,
         _id: cliente.usuario._id,
-        permissao: cliente.usuario.permissao
+        permissao: cliente.usuario.permissao,
       };
-      return res.send({cliente});
+      return res.send({ cliente });
     } catch (e) {
       next(e);
     }
@@ -192,7 +250,9 @@ class ClienteController {
   // Delete /:id
   async remove(req, res, next) {
     try {
-      const cliente = await Cliente.findOne({ usuario: req.payload.id }).populated('usuario');
+      const cliente = await Cliente.findOne({
+        usuario: req.payload.id,
+      }).populated('usuario');
       await cliente.usuario.remove();
       cliente.deletado = true;
       await cliente.save();
