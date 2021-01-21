@@ -46,7 +46,6 @@ router.get(
   pedidoController.showCarrinhoPedidoAdmin,
 );
 
-// -- entrega
 // -- pagamento
 
 // Cliente
@@ -84,6 +83,5 @@ router.get(
   pedidoController.showCarrinhoPedido,
 );
 
-// -- entrega
 // -- pagamento
 module.exports = router;

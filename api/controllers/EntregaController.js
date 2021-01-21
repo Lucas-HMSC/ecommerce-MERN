@@ -26,18 +26,18 @@ class EntregaController {
 
   // Put /:id
   async update(req, res, next) {
-    const { situacao, CodigoRastreamento } = req.body;
+    const { status, CodigoRastreamento } = req.body;
     const { loja } = req.query;
     try {
       const entrega = await Entrega.findOne({ loja, _id: req.params.id });
 
-      if (situacao) entrega.situacao = situacao;
+      if (status) entrega.status = status;
       if (CodigoRastreamento) entrega.CodigoRastreamento = CodigoRastreamento;
 
       const registroPedido = new RegistroPedido({
         pedido: entrega.pedido,
         tipo: 'entrega',
-        situacao,
+        situacao: status,
         payload: req.body,
       });
       await registroPedido.save();
@@ -61,7 +61,7 @@ class EntregaController {
           return item;
         }),
       );
-      const resultados = await calcularFrete(cep, _carrinho);
+      const resultados = await calcularFrete({ cep, pedidos: _carrinho });
       return res.send({ resultados });
     } catch (e) {
       next(e);
