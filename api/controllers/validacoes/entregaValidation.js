@@ -1,5 +1,12 @@
 const Joi = require('joi');
 
+const mongoose = require('mongoose');
+
+const Produto = mongoose.model('Produto');
+const Variacao = mongoose.model('Variacao');
+
+const { calcularFrete } = require('../integracoes/correios');
+
 const EntregaValidation = {
   show: {
     params: {
@@ -38,4 +45,32 @@ const EntregaValidation = {
   },
 };
 
-module.exports = { EntregaValidation };
+const checarValorPrazo = async (cep, carrinho, entrega) => {
+  try {
+    const _carrinho = await Promisse.all(
+      carrinho.map(async (item) => {
+        item.produto = await Produto.findById(item.produto);
+        item.variacao = await Variacao.findById(item.variacao);
+
+        return item;
+      }),
+    );
+    const resultados = await calcularFrete({ cep, produtos: _carrinho });
+    let found = false;
+    resultados.forEach((resultado) => {
+      if (
+        resultado.Codigo.toString() === entrega.tipo &&
+        resultado.Valor === entrega.custo.toString() &&
+        resultado.PrazoEntrega === entrega.prazo.toString()
+      ) {
+        found = true;
+      }
+    });
+    return found;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+module.exports = { EntregaValidation, checarValorPrazo };
