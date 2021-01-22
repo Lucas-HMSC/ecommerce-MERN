@@ -184,7 +184,9 @@ class PedidoController {
       if (!(await CarrinhoValidation(carrinho)))
         return res.status(422).send({ error: 'Carrinho Inválido.' });
 
-      const cliente = await Cliente.findOne({ usuario: req.payload.id });
+      const cliente = await Cliente.findOne({
+        usuario: req.payload.id,
+      }).populate('usuario');
 
       // Checar dados da entrega
       if (
@@ -202,9 +204,12 @@ class PedidoController {
 
       const novoPagamento = new Pagamento({
         valor: pagamento.valor,
+        parcelas: pagamento.parcelas || 1,
         forma: pagamento.forma,
         status: 'Iniciando',
-        payload: pagamento,
+        endereco: pagamento.endereco,
+        cartao: pagamento.cartao,
+        enderecoEntregaIgualCobranca: pagamento.enderecoEntregaIgualCobranca,
         loja,
       });
 
@@ -213,7 +218,7 @@ class PedidoController {
         custo: entrega.custo,
         prazo: entrega.prazo,
         tipo: entrega.tipo,
-        payload: entrega,
+        endereco: entrega.endereco,
         loja,
       });
 
