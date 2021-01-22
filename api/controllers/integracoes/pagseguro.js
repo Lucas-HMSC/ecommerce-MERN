@@ -56,7 +56,7 @@ const _criarPagamentoComBoleto = (
         installments: 1,
         hash: senderHash,
       },
-      (err, data) => (err ? rejeitar(err) : resolver(data)),
+      (err, data) => (err) ? rejeitar(err) : resolver(data),
     );
   });
 };
