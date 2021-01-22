@@ -11,5 +11,6 @@ router.use('/variacoes', require('./variacoes'));
 
 router.use('/pedidos', require('./pedidos'));
 router.use('/entregas', require('./entregas'));
+router.use('/pagamentos', require('./pagamentos'));
 
 module.exports = router;
