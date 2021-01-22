@@ -179,7 +179,7 @@ class PedidoController {
   async store(req, res, next) {
     const { carrinho, pagamento, entrega } = req.body;
     const { loja } = req.query;
-
+    const _carrinho = carrinho.slice();
     try {
       // Checar dados do carrinho
       if (!(await CarrinhoValidation(carrinho)))
@@ -187,7 +187,7 @@ class PedidoController {
 
       const cliente = await Cliente.findOne({
         usuario: req.payload.id,
-      }).populate('usuario');
+      }).populate({ path: 'usuario', select: '_id nome email' });
 
       // Checar dados da entrega
       if (
@@ -235,7 +235,7 @@ class PedidoController {
 
       const pedido = new Pedido({
         cliente: cliente._id,
-        carrinho,
+        carrinho: _carrinho,
         pagamento: novoPagamento._id,
         entrega: novaEntrega._id,
         loja,

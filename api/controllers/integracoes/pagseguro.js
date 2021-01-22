@@ -13,7 +13,7 @@ const _criarPagamentoComBoleto = (
       email: cliente.usuario.email,
       cpf_cnpj: cliente.cpf.replace(/[-\.]/g, ''),
       area_code: cliente.telefones[0].slice(0, 2),
-      phone: cliente.telefones[0].slice(2).trim(),
+      phone: cliente.telefones[0].slice(2).trim().split(' ').join(''),
       birth_date: cliente.dataDeNascimento, // formato DD/MM/YYYY
     });
 
@@ -56,11 +56,14 @@ const _criarPagamentoComBoleto = (
         installments: 1,
         hash: senderHash,
       },
-      (err, data) => (err) ? rejeitar(err) : resolver(data),
+      (err, data) => (err ? rejeitar(err) : resolver(data)),
     );
   });
 };
-const _criarPagamentoComCartao = (senderHash, data) => {
+const _criarPagamentoComCartao = (
+  senderHash,
+  { cliente, carrinho, entrega, pagamento },
+) => {
   return new Promise((resolver, rejeitar) => {
     const pag = new PagSeguro(pagSeguroConfig);
 
@@ -69,7 +72,7 @@ const _criarPagamentoComCartao = (senderHash, data) => {
       email: cliente.usuario.email,
       cpf_cnpj: cliente.cpf.replace(/[-\.]/g, ''),
       area_code: cliente.telefones[0].slice(0, 2),
-      phone: cliente.telefones[0].slice(2).trim(),
+      phone: cliente.telefones[0].slice(2).trim().split(' ').join(''),
       birth_date: cliente.dataDeNascimento, // formato DD/MM/YYYY
     });
 
@@ -109,8 +112,9 @@ const _criarPagamentoComCartao = (senderHash, data) => {
       name: pagamento.cartao.nomeCompleto || cliente.nome,
       area_code:
         pagamento.cartao.codigoArea.trim() || cliente.telefones[0].slice(0, 2),
-      phone:
-        pagamento.cartao.codigoArea.trim() || cliente.telefones[0].slice(2),
+      phone: (pagamento.cartao.telefone.trim() || cliente.telefones[0].slice(2))
+        .split(' ')
+        .join(''),
       birth_date: pagamento.cartao.dataDeNascimento || cliente.dataDeNascimento,
       cpf_cnpj: (pagamento.cartao.cpf || cliente.cpf).replace(/[-\.]/g, ''),
     });

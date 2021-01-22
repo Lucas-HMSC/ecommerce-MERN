@@ -42,7 +42,7 @@ const checarValorTotal = async ({ carrinho, entrega, pagamento }) => {
     const _carrinho = await Promise.all(
       carrinho.map(async (item) => {
         item.produto = await Produto.findById(item.produto);
-        item.variacao = await Produto.findById(item.variacao);
+        item.variacao = await Variacao.findById(item.variacao);
         return item;
       }),
     );
@@ -52,7 +52,7 @@ const checarValorTotal = async ({ carrinho, entrega, pagamento }) => {
       0,
     );
     return (
-      valorTotal.toFixed() === pagamento.valor.toFixed() &&
+      valorTotal.toFixed(2) === pagamento.valor.toFixed(2) &&
       (!pagamento.parcelas || pagamento.parcelas <= 6)
     );
   } catch (e) {
