@@ -124,9 +124,9 @@ class PagamentoController {
       await registroPedido.save();
 
       // Enviar email de aviso para o cliente - aviso de atualização de pagamento
-      const pedido = await (await Pedido.findById(pagamento.pedido)).populated({
+      const pedido = await (await Pedido.findById(pagamento.pedido)).populate({
         path: 'cliente',
-        populate: 'usuario',
+        populate: { path: 'usuario' },
       });
       EmailController.atualizarPedido({
         usuario: pedido.cliente.usuario,
@@ -195,12 +195,12 @@ class PagamentoController {
         await registroPedido.save();
 
         // Enviar email de aviso para o cliente - aviso de atualização de pagamento
-        const pedido = await (
-          await Pedido.findById(pagamento.pedido)
-        ).populated({
-          path: 'cliente',
-          populate: 'usuario',
-        });
+        const pedido = await (await Pedido.findById(pagamento.pedido)).populate(
+          {
+            path: 'cliente',
+            populate: { path: 'usuario' },
+          },
+        );
         EmailController.atualizarPedido({
           usuario: pedido.cliente.usuario,
           pedido,
