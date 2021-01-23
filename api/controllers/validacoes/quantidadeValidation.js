@@ -30,6 +30,37 @@ const validarQuantidadeDisponivel = async (_carrinho) => {
   }
 };
 
+const atualizarQuantidade = async (tipo, pedido) => {
+  try {
+    const carrinho = await Promise.all(
+      pedido.carrinho.map(async (item) => {
+        item.variacao = await Variacao.findById(
+          item.variacao._id || item.variacao,
+        );
+
+        // ALTERAÇÕES
+        if (tipo === 'salvar_pedido') {
+          item.variacao.quantidade -= item.quantidade;
+          item.variacao.quantidadeBloqueada += item.quantidade;
+        } else if (tipo === 'confirmar_pedido') {
+          item.variacao.quantidadeBloqueada -= item.quantidade;
+        } else if (tipo === 'cancelar_pedido') {
+          item.variacao.quantidadeBloqueada -= item.quantidade;
+          item.variacao.quantidade += item.quantidade;
+        }
+
+        await item.variacao.save();
+        return item;
+      }),
+    );
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return e;
+  }
+};
+
 module.exports = {
   validarQuantidadeDisponivel,
+  atualizarQuantidade,
 };
