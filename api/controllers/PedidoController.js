@@ -12,6 +12,7 @@ const RegistroPedido = mongoose.model('RegistroPedido');
 const { calcularFrete } = require('./integracoes/correios');
 const PagamentoValidation = require('./validacoes/pagamentoValidation');
 const EntregaValidation = require('./validacoes/entregaValidation');
+const QuantidadeValidation = require('./validacoes/quantidadeValidation');
 
 const EmailController = require('./EmailController');
 
@@ -194,6 +195,11 @@ class PedidoController {
       const cliente = await Cliente.findOne({
         usuario: req.payload.id,
       }).populate({ path: 'usuario', select: '_id nome email' });
+
+      if (!(await QuantidadeValidation.validarQuantidadeDisponivel(carrinho)))
+        return res
+          .status(400)
+          .send({ error: 'Produtos não tem quantidade disponível.' });
 
       // Checar dados da entrega
       if (

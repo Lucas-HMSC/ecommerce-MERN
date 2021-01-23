@@ -47,6 +47,10 @@ const VariacaoSchema = Schema(
       type: Number,
       default: 0,
     },
+    quantidadeBloqueada: {
+      type: Number,
+      default: 0,
+    },
     produto: {
       type: Schema.Types.ObjectId,
       ref: 'Produto',
