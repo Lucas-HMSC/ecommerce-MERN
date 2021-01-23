@@ -12,6 +12,7 @@ const Pedido = mongoose.model('Pedido');
 const Produto = mongoose.model('Produto');
 const Variacao = mongoose.model('Variacao');
 const RegistroPedido = mongoose.model('RegistroPedido');
+const QuantidadeValidation = require('./validacoes/quantidadeValidation');
 
 const EmailController = require('./EmailController');
 
@@ -138,7 +139,6 @@ class PagamentoController {
 
       await pagamento.save();
 
-      const pedido = await Pedido.findById(pagamento.pedido);
       if (status.toLowerCase().includes('pago'))
         await QuantidadeValidation.atualizarQuantidade(
           'confirmar_pedido',
@@ -206,18 +206,6 @@ class PagamentoController {
         pagamento.status = situacao.status;
         await pagamento.save();
 
-        const pedido = await Pedido.findById(pagamento.pedido);
-        if (status.toLowerCase().includes('pago'))
-          await QuantidadeValidation.atualizarQuantidade(
-            'confirmar_pedido',
-            pedido,
-          );
-        else if (status.toLowerCase().includes('cancelado'))
-          await QuantidadeValidation.atualizarQuantidade(
-            'cancelar_pedido',
-            pedido,
-          );
-
         await registroPedido.save();
 
         // Enviar email de aviso para o cliente - aviso de atualização de pagamento
@@ -234,6 +222,16 @@ class PagamentoController {
           status: situacao.status,
           data: new Date(),
         });
+        if (status.toLowerCase().includes('pago'))
+          await QuantidadeValidation.atualizarQuantidade(
+            'confirmar_pedido',
+            pedido,
+          );
+        else if (status.toLowerCase().includes('cancelado'))
+          await QuantidadeValidation.atualizarQuantidade(
+            'cancelar_pedido',
+            pedido,
+          );
       }
       return res.send({ success: true });
     } catch (e) {
