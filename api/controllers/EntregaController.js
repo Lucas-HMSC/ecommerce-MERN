@@ -2,9 +2,12 @@ const mongoose = require('mongoose');
 const { calcularFrete } = require('./integracoes/correios');
 
 const Entrega = mongoose.model('Entrega');
+const Pedido = mongoose.model('Pedido');
 const Produto = mongoose.model('Produto');
 const Variacao = mongoose.model('Variacao');
 const RegistroPedido = mongoose.model('RegistroPedido');
+
+const EmailController = require('./EmailController');
 
 class EntregaController {
   // Get /:id
@@ -42,6 +45,17 @@ class EntregaController {
       });
       await registroPedido.save();
       // Enviar email de aviso para o cliente - aviso de atualizacao na entrega
+      const pedido = await (await Pedido.findById(pagamento.pedido)).populated({
+        path: 'cliente',
+        populate: 'usuario',
+      });
+      EmailController.atualizarPedido({
+        usuario: pedido.cliente.usuario,
+        pedido,
+        tipo: 'entrega',
+        status: status,
+        data: new Date(),
+      });
 
       await entrega.save();
       return res.send({ entrega });

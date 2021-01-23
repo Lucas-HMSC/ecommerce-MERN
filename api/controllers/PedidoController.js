@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Pedido = mongoose.model('Pedido');
+const Usuario = mongoose.model('Usuario');
 const Produto = mongoose.model('Produto');
 const Variacao = mongoose.model('Variacao');
 const Pagamento = mongoose.model('Pagamento');
@@ -11,6 +12,8 @@ const RegistroPedido = mongoose.model('RegistroPedido');
 const { calcularFrete } = require('./integracoes/correios');
 const PagamentoValidation = require('./validacoes/pagamentoValidation');
 const EntregaValidation = require('./validacoes/entregaValidation');
+
+const EmailController = require('./EmailController');
 
 const CarrinhoValidation = require('./validacoes/carrinhoValidation');
 
@@ -75,7 +78,7 @@ class PedidoController {
       const pedido = await Pedido.findOne({
         loja: req.query.loja,
         _id: req.params.id,
-      });
+      }).populate({ path: 'cliente', populate: 'usuario' });
       if (!pedido)
         return res.status(400).send({ error: 'Pedido não encontrado.' });
       pedido.cancelado = true;
@@ -86,8 +89,11 @@ class PedidoController {
         situacao: 'pedido_cancelado',
       });
       await registroPedido.save();
-      // Registro de atividade = pedido cancelado
-      // Enviar Email para cliente = pedido cancelado
+
+      EmailController.cancelarPedido({
+        usuario: pedido.cliente.usuario,
+        pedido,
+      });
 
       await pedido.save();
 
@@ -254,7 +260,12 @@ class PedidoController {
         situacao: 'pedido_criado',
       });
       await registroPedido.save();
-      // Notificar via email - cliente e admin = novo pedido
+
+      EmailController.enviarNovoPedido({ pedido, usuario: cliente.usuario });
+      const administradores = await Usuario.find({ permissao: 'admin', loja });
+      administradores.forEach((usuario) => {
+        EmailController.enviarNovoPedido({ pedido, usuario });
+      });
 
       return res.send({
         pedido: Object.assign({}, pedido._doc, {
@@ -288,8 +299,14 @@ class PedidoController {
         situacao: 'pedido_cancelado',
       });
       await registroPedido.save();
-      // Registro de atividade = pedido cancelado
-      // Enviar Email para admin = pedido cancelado
+
+      const administradores = await Usuario.find({
+        permissao: 'admin',
+        loja: pedido.loja,
+      });
+      administradores.forEach((usuario) => {
+        EmailController.enviarNovoPedido({ pedido, usuario });
+      });
 
       await pedido.save();
 
