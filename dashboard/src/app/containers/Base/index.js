@@ -1,22 +1,14 @@
 import React from 'react';
 
-const BarraTopo = () => (
-  <div className="flex horizontal full-width">
-    <div className="flex-1 flex flex-start">
-      <p>Ver Loja</p>
-    </div>
-    <div className="flex-1 flex flex-end">
-      <p>Sair</p>
-    </div>
-  </div>
-);
+import BarraTopo from './BarraTopo';
+import Menu from './Menu';
 
 class Dashboard extends React.Component {
   render() {
     return (
       <div className="flex horizontal full-height">
         <div className="flex vertical">
-          <p>Menu</p>
+          <Menu history={this.props.history} />
         </div>
         <div className="flex vertical full-width">
           <div className="flex horizontal">
