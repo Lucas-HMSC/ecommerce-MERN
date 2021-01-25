@@ -125,7 +125,7 @@ class PagamentoController {
       await registroPedido.save();
 
       // Enviar email de aviso para o cliente - aviso de atualização de pagamento
-      const pedido = await (await Pedido.findById(pagamento.pedido)).populate({
+      const pedido = await Pedido.findById(pagamento.pedido)).populate({
         path: 'cliente',
         populate: { path: 'usuario' },
       });
@@ -209,7 +209,7 @@ class PagamentoController {
         await registroPedido.save();
 
         // Enviar email de aviso para o cliente - aviso de atualização de pagamento
-        const pedido = await (await Pedido.findById(pagamento.pedido)).populate(
+        const pedido = await Pedido.findById(pagamento.pedido)).populate(
           {
             path: 'cliente',
             populate: { path: 'usuario' },
@@ -222,12 +222,12 @@ class PagamentoController {
           status: situacao.status,
           data: new Date(),
         });
-        if (status.toLowerCase().includes('pago'))
+        if (situacao.status === 'Paga')
           await QuantidadeValidation.atualizarQuantidade(
             'confirmar_pedido',
             pedido,
           );
-        else if (status.toLowerCase().includes('cancelado'))
+        else if (situacao.status === 'Cancelada')
           await QuantidadeValidation.atualizarQuantidade(
             'cancelar_pedido',
             pedido,
