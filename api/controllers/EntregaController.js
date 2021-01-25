@@ -45,7 +45,7 @@ class EntregaController {
       });
       await registroPedido.save();
       // Enviar email de aviso para o cliente - aviso de atualizacao na entrega
-      const pedido = await (await Pedido.findById(entrega.pedido)).populate({
+      const pedido = await Pedido.findById(entrega.pedido)).populate({
         path: 'cliente',
         populate: { path: 'usuario' },
       });
