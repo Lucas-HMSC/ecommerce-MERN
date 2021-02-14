@@ -6,6 +6,8 @@ import Titulo from '../../components/Texto/Titulo';
 import Input from '../../components/Inputs/Simples';
 import Checkbox from '../../components/Inputs/Checkbox';
 
+import Button from '../../components/Button/Simples';
+
 class Login extends Component {
   state = {
     email: '',
@@ -17,7 +19,7 @@ class Login extends Component {
   onChangeCheckbox = (field) => this.setState({ [field]: !this.state[field] });
 
   render() {
-    const { email, senha } = this.state;
+    const { email, senha, opcaoLembrar } = this.state;
     return (
       <div className="Login">
         <div className="card">
@@ -48,6 +50,8 @@ class Login extends Component {
               <Link to="/recuperar-senha">Esqueceu sua senha?</Link>
             </div>
           </div>
+
+          <Button type="success" rota="/" label='ENTRAR' />
         </div>
       </div>
     );
