@@ -7,8 +7,14 @@ class ListaDinamicaSimples extends React.Component {
 
   onChangeInput = (ev) => this.setState({ texto: ev.target.value });
 
+  onAdd() {
+    const { texto } = this.state;
+    this.props.onAdd(texto);
+    this.setState({ texto: '' });
+  }
+
   render() {
-    const { dados, onAdd, onRemove } = this.props;
+    const { dados, onRemove } = this.props;
     const { texto } = this.state;
     return (
       <div className="flex vertical">
@@ -39,7 +45,7 @@ class ListaDinamicaSimples extends React.Component {
           <div className="flex-1 flex flex-center">
             <ButtonSimples
               type="success"
-              onClick={() => onAdd(texto)}
+              onClick={() => this.onAdd(texto)}
               label=" + "
             />
           </div>

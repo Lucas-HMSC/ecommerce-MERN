@@ -21,11 +21,8 @@ class DetalhesDaEntrega extends Component {
     this.setState({ status });
   };
 
-  onChangeInput = (field, ev) => {
-    this.setState({ [field]: ev.target.value });
-  };
-
-  handleSubmit = () => {
+  handleSubmit = (value) => {
+    this.setState({ codigoDeRastreamento: value });
     alert('SALVO!');
   };
 
@@ -35,10 +32,11 @@ class DetalhesDaEntrega extends Component {
       <div className="Detalhes-de-Entrega">
         <Titulo tipo="h4" titulo="Entrega" />
         <br />
+        <label>Código de Rastreamento</label>
         <InputValor
           value={codigoDeRastreamento}
-          onChangeInput={(ev) => this.onChangeInput('codigoDeRastreamento', ev)}
-          handleSubmit={() => this.handleSubmit()}
+          handleSubmit={(value) => this.handleSubmit(value)}
+          name={'codigoDeRastreamento'}
         />
         <br />
         <ListaDinamica dados={status} onAdd={this.onAddListaDinamica} />
