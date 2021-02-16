@@ -8,12 +8,6 @@ class DetalhesDoPagamento extends Component {
     status: ['Aguardando Pagamento', 'Processando Pagamento'],
   };
 
-  onRemoveListaDinamica = (index) => {
-    let { status } = this.state;
-    status = status.filter((item, _index) => _index !== index);
-    this.setState({ status });
-  };
-
   onAddListaDinamica = (texto) => {
     if (!texto) return false;
     let { status } = this.state;
@@ -29,7 +23,6 @@ class DetalhesDoPagamento extends Component {
         <br />
         <ListaDinamica
           dados={status}
-          onRemove={this.onRemoveListaDinamica}
           onAdd={this.onAddListaDinamica}
         />
       </div>
