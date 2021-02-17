@@ -7,6 +7,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+  --cor-tema: rgb(7, 7, 114);
+
+  --cor-primaria: rgb(10, 99, 167);
+  --cor-secundaria: rgb(17, 131, 17);
+  --cor-terciaria: rgb(176, 22, 22);
+  --cor-amarelo: rgb(220, 204, 26);
+
+  --cor-preta: #000;
+  --cor-branca: #fff;
+  --cor-cinza-claro: #eee;
+  --cor-cinza-escuro: #222;
+}
+
 .full-width {
   width: 100%;
 }
