@@ -9,6 +9,7 @@ body {
 
 :root {
   --cor-tema: rgb(7, 7, 114);
+  --cor-tema-claro: rgb(27, 79, 169);
 
   --cor-primaria: rgb(10, 99, 167);
   --cor-secundaria: rgb(17, 131, 17);
@@ -63,4 +64,55 @@ body {
 }
 .flex-center {
   justify-content: center;
+}
+
+/* COMPONENTES */
+.Barra-Topo {
+  background-color: var(--cor-preta);
+  margin-left: -20px;
+  z-index: 100;
+  padding: 10px;
+  height: 20px;
+}
+
+.Barra-Topo a {
+  color: var(--cor-branca);
+  text-decoration: none;
+  font-weight: 200;
+}
+
+.Menu {
+  background-color: var(--cor-tema);
+  width: 50px;
+  margin-right: 20px;
+  box-shadow: 0 0 5px #111;
+}
+
+.menu-open {
+  width: 180px;
+}
+
+.Menu a {
+  color: var(--cor-branca);
+  text-decoration: none;
+}
+
+.item-top {
+  padding: 10px 10px 0 10px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--cor-branca);
+}
+
+.menu-item {
+  height: 40px;
+}
+
+.menu-item:hover,
+.menu-item-active {
+  background-color: var(--cor-tema-claro);
+}
+
+.menu-item i {
+  font-size: 1.3rem;
 }
