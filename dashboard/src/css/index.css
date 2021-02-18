@@ -118,13 +118,18 @@ body {
   font-size: 1.3rem;
 }
 
-.Card {
+.Card,
+.Sub-Card {
   margin: 40px 20px;
   padding: 30px;
   border-radius: 10px;
   border: 0;
   box-shadow: 0 0 5px #7777;
   background-color: var(--cor-branca);
+}
+
+.Sub-Card {
+  margin-top: 0;
 }
 
 .Pesquisa input {
@@ -197,6 +202,10 @@ main {
   overflow-y: scroll;
 }
 
+main > div {
+  margin-right: 20px;
+}
+
 .Paginacao {
   display: flex;
   justify-content: flex-end;
@@ -225,4 +234,9 @@ main {
   background-color: var(--cor-cinza-escuro);
   color: var(--cor-cinza-claro);
   border: 1px solid var(--cor-cinza-escuro);
+}
+
+.Link-Voltar {
+  text-decoration: none;
+  color: rgb(116, 199, 255);
 }
