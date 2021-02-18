@@ -254,6 +254,11 @@ main > div {
   color: rgb(116, 199, 255);
 }
 
+.Input-Simples label {
+  margin: 5px 0 2px 0;
+  font-weight: bold;
+}
+
 .Input-Simples input {
   padding: 8px 12px;
   margin: 5px 0;
@@ -283,4 +288,20 @@ main > div {
 .Input-Valor .input {
   background-color: var(--cor-cinza-claro);
   color: var(--cor-cinza-medio);
+}
+
+.Login .Card {
+  width: 95%;
+  max-width: 450px;
+}
+
+.Login h1 {
+  font-size: 3rem;
+  color: rgb(20, 3, 61);
+  margin-bottom: 0;
+}
+
+.Login a {
+  text-decoration: none;
+  color: #474747;
 }

@@ -21,10 +21,16 @@ class Login extends Component {
   render() {
     const { email, senha, opcaoLembrar } = this.state;
     return (
-      <div className="Login">
-        <div className="card">
-          <Titulo tipo="h1" titulo="Loja TI" />
-          <p>Faça seu login abaixo</p>
+      <div className="Login flex flex-center">
+        <div className="Card">
+          <div className="flex vertical flex-center">
+            <Titulo tipo="h1" titulo="Loja TI" />
+            <p>Faça seu login abaixo</p>
+          </div>
+
+          <br />
+          <br />
+
           <Input
             label="E-mail"
             value={email}
@@ -38,20 +44,27 @@ class Login extends Component {
             onChange={(ev) => this.onChangeInput('senha', ev)}
           />
 
-          <div>
-            <div>
+          <div className="flex">
+            <div className="flex-1">
               <Checkbox
                 value={opcaoLembrar}
                 onChange={() => this.onChangeCheckbox('opcaoLembrar')}
                 label="Lembrar?"
               />
             </div>
-            <div>
-              <Link to="/recuperar-senha">Esqueceu sua senha?</Link>
+            <div className="flex-1 flex flex-end">
+              <Link to="/recuperar-senha">
+                <small>Esqueceu sua senha?</small>
+              </Link>
             </div>
           </div>
 
-          <Button type="success" rota="/" label='ENTRAR' />
+          <br />
+          <br />
+
+          <div className="flex flex-center">
+            <Button type="success" rota="/" label="ENTRAR" />
+          </div>
         </div>
       </div>
     );

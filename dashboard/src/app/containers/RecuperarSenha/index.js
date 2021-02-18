@@ -14,31 +14,35 @@ class RecuperarSenha extends Component {
   render() {
     const { email } = this.state;
     return (
-      <div className="Recuperar-Senha">
-        <Titulo tipo="h1" titulo="Loja TI" />
-        <br />
-        <div>
-          <p>Para reiniciar sua senha, digite seu e-mail abaixo.</p>
-          <p>
-            Iremos enviar um link para você acessar e definir uma nova senha.
-          </p>
-        </div>
-        <br />
-        <div>
-          <Input
-            label="E-mail"
-            value={email}
-            onChange={(ev) => this.onChangeInput('email', ev)}
-            type="email"
-          />
-        </div>
-        <br />
-        <div>
-          <Button
-            type="success"
-            rota="/resetar-senha/1"
-            label="RESETAR SENHA"
-          />
+      <div className="Recuperar-Senha flex flex-center">
+        <div className="Card">
+          <div className="flex flex-center">
+            <Titulo tipo="h1" titulo="Loja TI" />
+          </div>
+          <br />
+          <div>
+            <p>Para reiniciar sua senha, digite seu e-mail abaixo.</p>
+            <p>
+              Iremos enviar um link para você acessar e definir uma nova senha.
+            </p>
+          </div>
+          <br />
+          <div>
+            <Input
+              label="E-mail"
+              value={email}
+              onChange={(ev) => this.onChangeInput('email', ev)}
+              type="email"
+            />
+          </div>
+          <br />
+          <div className="flex flex-center">
+            <Button
+              type="success"
+              rota="/resetar-senha/1"
+              label="RESETAR SENHA"
+            />
+          </div>
         </div>
       </div>
     );
