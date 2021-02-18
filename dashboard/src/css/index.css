@@ -11,6 +11,7 @@
   --cor-branca: #fff;
   --cor-cinza-claro: #eee;
   --cor-cinza-escuro: #222;
+  --cor-cinza-medio: #888;
 }
 
 body {
@@ -192,9 +193,21 @@ table.simples th:last-child {
   margin: 3px;
 }
 
+.button-success {
+  background-color: var(--cor-secundaria);
+  color: var(--cor-branca);
+  border: 0;
+}
+
 .button-danger {
   background-color: var(--cor-terciaria);
   color: var(--cor-branca);
+  border: 0;
+}
+
+.button-warning {
+  background-color: var(--cor-amarelo);
+  color: var(--cor-preta);
   border: 0;
 }
 
@@ -239,4 +252,35 @@ main > div {
 .Link-Voltar {
   text-decoration: none;
   color: rgb(116, 199, 255);
+}
+
+.Input-Simples input {
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid var(--cor-cinza-medio);
+  font-size: 0.95rem;
+}
+
+.border-green {
+  border-left: 4px solid var(--cor-secundaria);
+  padding-left: 5px;
+  margin: 2px 0;
+}
+
+.Input-Valor {
+  margin: 10px 0;
+}
+
+.Input-Valor input,
+.Input-Valor .input {
+  border: 1px solid var(--cor-cinza-medio);
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+}
+
+.Input-Valor .input {
+  background-color: var(--cor-cinza-claro);
+  color: var(--cor-cinza-medio);
 }

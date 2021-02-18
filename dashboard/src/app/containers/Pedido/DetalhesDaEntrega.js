@@ -30,7 +30,7 @@ class DetalhesDaEntrega extends Component {
     const { status, codigoDeRastreamento } = this.state;
     return (
       <div className="Detalhes-de-Entrega">
-        <Titulo tipo="h4" titulo="Entrega" />
+        <Titulo tipo="h3" titulo="Entrega" />
         <br />
         <label>Código de Rastreamento</label>
         <InputValor
