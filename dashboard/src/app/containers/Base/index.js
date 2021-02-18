@@ -14,7 +14,7 @@ class Dashboard extends React.Component {
           <div className="flex horizontal">
             <BarraTopo />
           </div>
-          <div className="flex full-height">{this.props.children}</div>
+          <main className="flex full-height">{this.props.children}</main>
         </div>
       </div>
     );
