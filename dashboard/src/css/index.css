@@ -81,6 +81,7 @@ body {
   color: var(--cor-branca);
   text-decoration: none;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .Menu {
@@ -100,7 +101,8 @@ body {
 }
 
 .item-top {
-  padding: 10px 10px 0 10px;
+  padding: 10px;
+  padding-bottom: 0;
   font-size: 1.3rem;
   cursor: pointer;
   color: var(--cor-branca);
@@ -252,6 +254,7 @@ main > div {
 .Link-Voltar {
   text-decoration: none;
   color: rgb(116, 199, 255);
+  cursor: pointer;
 }
 
 .Input-Simples label {
