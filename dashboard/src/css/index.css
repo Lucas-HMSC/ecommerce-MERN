@@ -293,6 +293,12 @@ main > div {
   color: var(--cor-cinza-medio);
 }
 
+.Input-Valor .input-nostyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .Login .Card {
   width: 95%;
   max-width: 450px;
