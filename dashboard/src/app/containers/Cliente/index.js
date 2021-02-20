@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 //import DetalhesDoPedido from '../Pedido/DetalhesDoPedido';
 
 import DetalhesDoCliente from './detalhesDoCliente';
-//import DetalhesDosPedidos from './detalhesDosPedidos';
+import DetalhesDosPedidos from './detalhesDosPedidos';
 
 class Cliente extends Component {
   render() {
@@ -11,11 +11,9 @@ class Cliente extends Component {
         <div className="Card">
           <DetalhesDoCliente />
         </div>
-        {/*
         <div className="Sub-card">
           <DetalhesDosPedidos />
         </div>
-        */}
       </div>
     );
   }

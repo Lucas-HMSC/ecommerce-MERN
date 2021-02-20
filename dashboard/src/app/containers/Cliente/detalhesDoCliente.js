@@ -2,7 +2,7 @@ import React from 'react';
 import ButtonSimples from '../../components/Button/Simples';
 import Titulo from '../../components/Texto/Titulo';
 import InputValor from '../../components/Inputs/InputValor';
-import TextoDados from '../../components/Texto/Dados';
+import { TextoDados } from '../../components/Texto/Dados';
 
 class DetalhesDoCliente extends React.Component {
   state = {
@@ -24,9 +24,10 @@ class DetalhesDoCliente extends React.Component {
   };
 
   renderCabecalho() {
+    const { nome } = this.state;
     <div className="flex">
       <div className="flex-1 flex">
-        <Titulo tipo="h1" titulo="Cliente 1" />
+        <Titulo tipo="h1" titulo={nome} />
       </div>
       <div className="flex-1 flex flex-end">
         <ButtonSimples
