@@ -172,7 +172,7 @@ class Configuracoes extends Component {
 
   render() {
     return (
-      <div className="Configurações full-width">
+      <div className="Configuracoes full-width">
         <div className="Card">
           {this.renderCabecalho()}
           <div className="flex horizontal">
