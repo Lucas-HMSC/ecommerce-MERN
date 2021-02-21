@@ -17,6 +17,7 @@ import Categorias from './containers/Categorias';
 import Categoria from './containers/Categoria';
 
 import Produtos from './containers/Produtos';
+import Produto from './containers/Produto';
 
 // Containers sem Base
 import Login from './containers/Login';
@@ -39,6 +40,7 @@ class App extends Component {
             <Route path={'/categoria/:id'} component={base(Categoria)} />
 
             <Route path={'/produtos'} component={base(Produtos)} />
+            <Route path={'/produtos/:id'} component={base(Produto)} />''
 
             <Route path={'/login'} component={Login} />
             <Route path={'/recuperar-senha'} component={RecuperarSenha} />
