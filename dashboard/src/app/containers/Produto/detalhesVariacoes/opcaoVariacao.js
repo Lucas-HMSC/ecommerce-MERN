@@ -5,6 +5,7 @@ import ButtonSimples from '../../../components/Button/Simples';
 import { TextoDados } from '../../../components/Texto/Dados';
 import InputValor from '../../../components/Inputs/InputValor';
 import InputSelect from '../../../components/Inputs/Select';
+import BlocoImagens from '../../../components/Imagens/Bloco';
 
 class OpcaoVariacao extends Component {
   state = {
@@ -46,14 +47,7 @@ class OpcaoVariacao extends Component {
   }
 
   renderDadosCadastrais() {
-    const {
-      nome,
-      disponibilidade,
-      preco,
-      promocao,
-      quantidade,
-      peso,
-    } = this.state;
+    const { nome, disponibilidade, preco, promocao, quantidade } = this.state;
     return (
       <div className="Dados-Produto">
         <TextoDados
@@ -63,7 +57,7 @@ class OpcaoVariacao extends Component {
               value={nome}
               noStyle
               name="nome"
-              onChange={(ev) => this.setState({ nome: ev.target.value })}
+              handleSubmit={(valor) => this.setState({ altura: valor })}
             />
           }
         />
@@ -91,9 +85,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="preco"
               type="number"
-              onChange={(ev) =>
-                this.setState({ preco: Number(ev.target.value) })
-              }
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
             />
           }
         />
@@ -105,9 +97,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="promocao"
               type="number"
-              onChange={(ev) =>
-                this.setState({ promocao: Number(ev.target.value) })
-              }
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
             />
           }
         />
@@ -118,7 +108,7 @@ class OpcaoVariacao extends Component {
               value={quantidade}
               noStyle
               name="quantidade"
-              onChange={(ev) => this.setState({ quantidade: ev.target.value })}
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
             />
           }
         />
@@ -127,11 +117,75 @@ class OpcaoVariacao extends Component {
   }
 
   renderDadosEnvio() {
-    return <div></div>;
+    const { peso, largura, comprimento, altura } = this.state;
+    return (
+      <div className="Dados-Envio">
+        <TextoDados
+          chave="Peso (Kg)"
+          valor={
+            <InputValor
+              value={peso}
+              noStyle
+              name="peso"
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
+            />
+          }
+        />
+        <TextoDados
+          chave="Largura (cm)"
+          valor={
+            <InputValor
+              value={largura}
+              noStyle
+              name="largura"
+              type="number"
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
+            />
+          }
+        />
+        <TextoDados
+          chave="Comprimento (cm)"
+          valor={
+            <InputValor
+              value={comprimento}
+              noStyle
+              name="comprimento"
+              type="number"
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
+            />
+          }
+        />
+        <TextoDados
+          chave="Altura (cm)"
+          valor={
+            <InputValor
+              value={altura}
+              noStyle
+              name="altura"
+              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
+            />
+          }
+        />
+      </div>
+    );
   }
 
+  onRemove = (id) => {
+    const { imagens } = this.state;
+    this.setState({ imagens: imagens.filter((i, idx) => idx !== id) });
+  };
+
   renderImagens() {
-    return <div></div>;
+    const { imagens } = this.state;
+    return (
+      <div className="dados-de-imagens">
+        <BlocoImagens
+          imagens={imagens}
+          handleSubmit={() => alert('Enviado')}
+          onRemove={this.onRemove}
+        />
+      </div>
+    );
   }
 
   render() {

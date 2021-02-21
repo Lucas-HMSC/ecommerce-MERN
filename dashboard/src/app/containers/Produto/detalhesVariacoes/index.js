@@ -10,7 +10,7 @@ class DetalhesVariacoes extends Component {
         <div className="Sub-Card flex-1">
           <Variacoes />
         </div>
-        <div className="Sub-Card flex-6">
+        <div className="Sub-Card flex-8">
           <OpcaoVariacao />
         </div>
       </div>

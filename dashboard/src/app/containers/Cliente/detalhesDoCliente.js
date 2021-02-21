@@ -3,6 +3,7 @@ import ButtonSimples from '../../components/Button/Simples';
 import Titulo from '../../components/Texto/Titulo';
 import InputValor from '../../components/Inputs/InputValor';
 import { TextoDados } from '../../components/Texto/Dados';
+import Voltar from '../../components/Links/Voltar';
 
 class DetalhesDoCliente extends React.Component {
   state = {
@@ -175,6 +176,7 @@ class DetalhesDoCliente extends React.Component {
   render() {
     return (
       <div className="DetalhesDoCliente">
+        <Voltar path="/clientes" />
         {this.renderCabecalho()}
         <div className="DetalhesDoCliente">
           <div className="flex-1 flex vertical">
