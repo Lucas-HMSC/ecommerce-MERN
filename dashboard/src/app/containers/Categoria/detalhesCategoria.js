@@ -5,7 +5,7 @@ import ButtonSimples from '../../components/Button/Simples';
 import { TextoDados } from '../../components/Texto/Dados';
 import InputValor from '../../components/Inputs/InputValor';
 
-class DetalhesCategoria extends React.Component {
+class DetalhesCategoria extends Component {
   state = {
     nome: 'Categoria',
     disponibilidade: 'disponivel',
