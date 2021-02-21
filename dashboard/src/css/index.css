@@ -282,12 +282,17 @@ main > div {
   font-weight: bold;
 }
 
-.Input-Simples input {
+.Input-Simples input,
+textarea {
   padding: 8px 12px;
   margin: 5px 0;
   border-radius: 5px;
   border: 1px solid var(--cor-cinza-medio);
   font-size: 0.95rem;
+}
+
+textarea {
+  width: 90%;
 }
 
 .border-green {
@@ -348,4 +353,34 @@ main > div {
   background-size: cover;
   flex: 1;
   flex-basis: 100px;
+}
+
+.imagem-remover {
+  background-color: var(--cor-terciaria);
+  width: 20px;
+  height: 20px;
+  font-size: 1rem;
+  color: var(--cor-branca);
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.imagem-remover:hover {
+  background-color: #a10b0b;
+}
+
+.variacao-item {
+  background-color: var(--cor-cinza-claro);
+  color: var(--cor-cinza-escuro);
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 5px 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.variacao-item-ativa,
+.variacao-item:hover {
+  background-color: var(--cor-cinza-escuro);
+  color: var(--cor-cinza-claro);
 }
