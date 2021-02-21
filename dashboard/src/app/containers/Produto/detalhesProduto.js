@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import Titulo from '../../components/Texto/Titulo';
 import Button from '../../components/Button/Simples';
 import { TextoDados } from '../../components/Texto/Dados';
 import InputValor from '../../components/Inputs/InputValor';
+import InputSelect from '../../components/Inputs/Select';
 
 class DetalhesProduto extends Component {
   state = {
     nome: 'Produto 1',
     disponibilidade: 'disponível',
     descricao: '',
+    imagens: [
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+      'https://dummyimage.com/100x100/ff9000/000222.jpg',
+    ],
   };
 
   renderCabecalho() {
     const { nome } = this.state;
     return (
       <div className="flex">
-        <div className="flex-1 flex">
+        <div className="flex-1 flex vertical">
           <Titulo tipo="h1" titulo={nome} />
+          <Link to="/avaliacoes/9F2J39FKEW9">
+            <small>Ver Avaliações</small>
+          </Link>
         </div>
         <div className="flex-1 flex-end">
           <Button
@@ -45,6 +58,43 @@ class DetalhesProduto extends Component {
             />
           }
         />
+        <TextoDados
+          chave="Disponibilidade"
+          valor={
+            <InputSelect
+              name="disponibilidade"
+              onChange={(ev) =>
+                this.setState({ disponibilidade: ev.target.value })
+              }
+              value={disponibilidade}
+              opcoes={[
+                { label: 'Disponível', value: 'disponivel' },
+                { label: 'Indisponível', value: 'indisponivel' },
+              ]}
+            />
+          }
+        />
+        <TextoDados
+          chave="Descricao"
+          valor={
+            <textarea
+              name={'descricao'}
+              onChange={(ev) => this.setState({ descricao: ev.target.value })}
+              value={descricao}
+              rows="10"
+              style={{ resize: 'none' }}
+            />
+          }
+        />
+      </div>
+    );
+  }
+
+  renderImagens() {
+    const { imagens } = this.state;
+    return (
+      <div className="dados-de-imagens">
+        <BlocoImagens imagens={imagens} handleSubmit={() => alert('Enviado')} />
       </div>
     );
   }

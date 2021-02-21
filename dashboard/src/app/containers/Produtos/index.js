@@ -25,31 +25,31 @@ class Produtos extends Component {
         'Produto': 'Mouse 1',
         'Categoria': 'acessorios',
         'Disponível': 'sim',
-        'botaoDetalhes': '/produtos/9F2J39FKEW91',
+        'botaoDetalhes': '/produto/9F2J39FKEW91',
       },
       {
         'Produto': 'Mouse 2',
         'Categoria': 'acessorios',
         'Disponível': 'não',
-        'botaoDetalhes': '/produtos/9F2J39FKEW92',
+        'botaoDetalhes': '/produto/9F2J39FKEW92',
       },
       {
         'Produto': 'Mouse 3',
         'Categoria': 'acessorios',
         'Disponível': 'não',
-        'botaoDetalhes': '/produtos/9F2J39FKEW93',
+        'botaoDetalhes': '/produto/9F2J39FKEW93',
       },
       {
         'Produto': 'Mouse 4',
         'Categoria': 'acessorios',
         'Disponível': 'sim',
-        'botaoDetalhes': '/produtos/9F2J39FKEW94',
+        'botaoDetalhes': '/produto/9F2J39FKEW94',
       },
       {
         'Produto': 'Mouse 5',
         'Categoria': 'acessorios',
         'Disponível': 'sim',
-        'botaoDetalhes': '/produtos/9F2J39FKEW95',
+        'botaoDetalhes': '/produto/9F2J39FKEW95',
       },
     ];
 
