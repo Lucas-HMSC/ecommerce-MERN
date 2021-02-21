@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import DetalhesProduto from './detalhesProduto';
-//import DetalhesVariacoes from './detalhesVariacoes';
+import DetalhesVariacoes from './detalhesVariacoes';
 
 class Produto extends Component {
   render() {
@@ -10,9 +10,9 @@ class Produto extends Component {
         <div className="Card">
           <DetalhesProduto />
         </div>
-        {/*<div className="Card">
+        <div className="Card">
           <DetalhesVariacoes />
-        </div>*/}
+        </div>*
       </div>
     );
   }

@@ -25,6 +25,7 @@ class InputValor extends Component {
             value={value}
             onChange={this.onChange}
             name={this.props.name}
+            type={this.props.type || 'text'}
           />
         </div>
         <div className="flex flex-center">
