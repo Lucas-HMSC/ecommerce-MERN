@@ -34,7 +34,7 @@ class DetalhesProduto extends Component {
             <small>Ver Avaliações</small>
           </Link>
         </div>
-        <div className="flex-1 flex-end">
+        <div className="flex-1 flex flex-end">
           <Button
             type="success"
             label="Salvar"
