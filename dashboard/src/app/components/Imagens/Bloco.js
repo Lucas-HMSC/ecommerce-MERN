@@ -6,7 +6,7 @@ class BlocoImagens extends React.Component {
   render() {
     const { handleSubit, imagens, onRemove } = this.props;
     return (
-      <div className="Bloco-Imagens">
+      <div className="Bloco-Imagem">
         <div className="flex horizontal">
           <Titulo tipo="h3" titulo="Imagens" />
         </div>
