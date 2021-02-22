@@ -26,23 +26,25 @@ class DetalhesDoCliente extends React.Component {
 
   renderCabecalho() {
     const { nome } = this.state;
-    <div className="flex">
-      <div className="flex-1 flex">
-        <Titulo tipo="h1" titulo={nome} />
+    return (
+      <div className="flex">
+        <div className="flex-1 flex">
+          <Titulo tipo="h1" titulo={nome} />
+        </div>
+        <div className="flex-1 flex flex-end">
+          <ButtonSimples
+            onClick={() => alert('Salvo!')}
+            label="Salvar"
+            type="success"
+          />
+          <ButtonSimples
+            onClick={() => alert('Removido!')}
+            label="Remover"
+            type="danger"
+          />
+        </div>
       </div>
-      <div className="flex-1 flex flex-end">
-        <ButtonSimples
-          onClick={() => alert('Salvo!')}
-          label="Salvar"
-          type="success"
-        />
-        <ButtonSimples
-          onClick={() => alert('Removido!')}
-          label="Remover"
-          type="danger"
-        />
-      </div>
-    </div>;
+    )
   }
 
   renderDetalhesCadastro() {
@@ -115,7 +117,7 @@ class DetalhesDoCliente extends React.Component {
     return (
       <div className="Detalhes-da-Entrega">
         <TextoDados
-          chave="Endereco"
+          chave="Endereço"
           valor={
             <InputValor
               name="endereco"
@@ -178,7 +180,7 @@ class DetalhesDoCliente extends React.Component {
       <div className="DetalhesDoCliente">
         <Voltar path="/clientes" />
         {this.renderCabecalho()}
-        <div className="DetalhesDoCliente">
+        <div className="flex horizontal">
           <div className="flex-1 flex vertical">
             {this.renderDetalhesCadastro()}
           </div>
