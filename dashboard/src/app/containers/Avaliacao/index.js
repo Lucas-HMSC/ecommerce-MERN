@@ -41,7 +41,7 @@ class Avaliacao extends Component {
 
   render() {
     return (
-      <div className="Avaliacao">
+      <div className="Avaliacao full-width">
         <div className="Card">
           <Voltar path="/avaliacoes/d92kd9" />
           {this.renderCabecalho()}
