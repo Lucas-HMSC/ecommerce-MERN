@@ -82,7 +82,7 @@ class Configuracoes extends Component {
   renderDadosEndereco() {
     const { endereco, bairro, cidade, estado, cep } = this.state;
     return (
-      <div className="dados-endereco">
+      <div className="dados-configuracao">
         <TextoDados
           chave="Endereço"
           valor={
