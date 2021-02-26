@@ -78,7 +78,7 @@ class Perfil extends Component {
   renderDadosSenha() {
     const { senhaAntiga, novaSenha, confirmarNovaSenha } = this.state;
     return (
-      <div className="dados-endereco">
+      <div className="dados-configuracao">
         <InputSimples
           type="password"
           name="senha-antiga"
