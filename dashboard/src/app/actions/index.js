@@ -42,3 +42,7 @@ export const handleLogout = () => {
     type: LOGOUT_USER,
   };
 };
+
+export const formatMoney = (valor) => {
+  return `R$ ${valor.toFixed(2).split('.').join(',')}`;
+};
