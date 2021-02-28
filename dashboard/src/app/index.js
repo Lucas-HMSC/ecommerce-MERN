@@ -6,6 +6,8 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 
 import base from './containers/HOC/Base';
 
+import { initApp } from './actions';
+
 // Containers com Base
 import Pedidos from './containers/Pedidos';
 import Pedido from './containers/Pedido';
@@ -31,6 +33,9 @@ import RecuperarSenha from './containers/RecuperarSenha';
 import ResetarSenha from './containers/RecuperarSenha/ResetarSenha';
 
 class App extends Component {
+  componentWillMount() {
+    initApp();
+  }
   render() {
     return (
       <Provider store={store}>
