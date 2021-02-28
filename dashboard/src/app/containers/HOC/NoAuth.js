@@ -4,18 +4,18 @@ import * as actions from '../../actions';
 
 const noAuth = (Component) => {
   class ComponentNoAuth extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
       const { getUser, authorized, history, usuario } = this.props;
       getUser();
       if (authorized && usuario.role.includes('admin')) history.replace('/');
     }
 
-    componentWillUpdate(nextProps) {
-      const { authorized, history } = this.props;
+    componentDidUpdate(prevProps) {
+      const { authorized, history } = prevProps;
       if (
         !authorized &&
-        nextProps.authorized &&
-        nextProps.usuario.role.includes('admin')
+        this.props.authorized &&
+        this.props.usuario.role.includes('admin')
       )
         history.replace('/');
     }
