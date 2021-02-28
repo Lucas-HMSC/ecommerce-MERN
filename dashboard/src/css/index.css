@@ -97,7 +97,8 @@ body {
   height: 20px;
 }
 
-.Barra-Topo a, span {
+.Barra-Topo a,
+span {
   color: var(--cor-branca);
   text-decoration: none;
   font-size: 1rem;
@@ -393,4 +394,21 @@ textarea {
 .variacao-item:hover {
   background-color: var(--cor-cinza-escuro);
   color: var(--cor-cinza-claro);
+}
+
+.alert {
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 2px solid var(--cor-cinza-medio);
+  background-color: var(--cor-cinza-claro);
+  color: var(--cor-cinza-escuro);
+  font-size: 0.9rem;
+}
+
+.alert-danger {
+  border: 2px solid var(--cor-terciaria);
+  background-color: #f3baba;
+  color: #610505;
 }

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER } from './types';
 import { api, versao } from '../config';
 
+// LocalStorage
 const saveToken = (usuario, opcaoLembrar) => {
   if (!usuario.token) return null;
   const [token1, token2, token3] = usuario.token.split('.');
@@ -28,8 +29,8 @@ const getToken = () => {
 
 const getHeaders = () => {
   return {
-    "headers": {
-      "authorization": `Ecommerce ${getToken()}`,
+    headers: {
+      authorization: `Ecommerce ${getToken()}`,
     },
   };
 };
@@ -37,6 +38,29 @@ const getHeaders = () => {
 export const initApp = () => {
   const opcaoLembrar = localStorage.getItem('opcaoLembrar');
   if (opcaoLembrar === 'false') cleanToken();
+};
+
+// Error Handling
+const errorHandling = (error) => {
+  if (!error.response || !error.response.data) {
+    return {
+      status: 500,
+      message: 'Ocorreu um erro no servidor. Tente novamente.',
+    };
+  }
+  if (error.response.data.status === 401) {
+    return {
+      status: 401,
+      message: 'Você não tem autorização para acessar esses dados',
+    };
+  }
+  if (error.response.data.errors) {
+    return {
+      status: 400,
+      message: error.response.data.errors,
+    };
+  }
+  //console.log(error.response.data);
 };
 
 // Usuários
@@ -48,9 +72,7 @@ export const handleLogin = ({ email, password, opcaoLembrar }, callback) => {
         saveToken(response.data.usuario, opcaoLembrar);
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
-      .catch((error) => {
-        console.log(error, error.response, error.response.data);
-      });
+      .catch((e) => callback(errorHandling(e)));
   };
 };
 

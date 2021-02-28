@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { api, versao } from '../../config';
 
+import Alert from '../../components/Alert/Danger';
+
 class Login extends Component {
   state = {
     email: '',
@@ -28,8 +30,13 @@ class Login extends Component {
   handleLogin() {
     const { email, senha: password, opcaoLembrar } = this.state;
     if (!this.validate()) return;
-    this.props.handleLogin({ email, password, opcaoLembrar }, () => {
-      alert('aviso');
+    this.props.handleLogin({ email, password, opcaoLembrar }, (error) => {
+      this.setState({
+        erros: {
+          ...this.state.erros,
+          form: error,
+        },
+      });
     });
   }
 
@@ -54,6 +61,8 @@ class Login extends Component {
 
           <br />
           <br />
+
+          <Alert error={erros.form} />
 
           <Input
             label="E-mail"
