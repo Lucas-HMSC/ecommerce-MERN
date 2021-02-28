@@ -19,11 +19,12 @@ class Pedidos extends Component {
   };
 
   getPedidos() {
-    const { atual, limit } = this.state;
+    const { atual, limit, pesquisa } = this.state;
     const { usuario } = this.props;
     if (!usuario) return null;
     const loja = usuario.loja;
-    this.props.getPedidos(atual, limit, loja);
+    if (pesquisa) this.props.getPedidosPesquisa(pesquisa, atual, limit, loja);
+    else this.props.getPedidos(atual, limit, loja);
   }
 
   componentDidMount() {
@@ -32,6 +33,16 @@ class Pedidos extends Component {
 
   componentDidUpdate(prevProps) {
     if (!this.props.usuario && prevProps.usuario) this.getPedidos();
+  }
+
+  handleSubmitPesquisa() {
+    this.setState({ atual: 0 }, () => {
+      const { atual, limit, pesquisa } = this.state;
+      const { usuario } = this.props;
+      if (!usuario) return null;
+      const loja = usuario.loja;
+      this.props.getPedidosPesquisa(pesquisa, atual, limit, loja);
+    });
   }
 
   onChangePesquisa = (ev) => this.setState({ pesquisa: ev.target.value });
@@ -49,14 +60,14 @@ class Pedidos extends Component {
     const dados = [];
     (pedidos ? pedidos.docs : []).forEach((item) => {
       dados.push({
-        'Cliente': item.cliente ? item.cliente.nome : '',
+        Cliente: item.cliente ? item.cliente.nome : '',
         'Valor Total': formatMoney(item.pagamento.valor),
-        'Data': moment(item.createdAt).format('DD/MM/YYYY'),
-        'Situação':
+        Data: moment(item.createdAt).format('DD/MM/YYYY'),
+        Situação:
           item.pagamento.status !== 'Paga'
             ? item.pagamento.status
             : item.entrega.status,
-        'botaoDetalhes': `/pedido/${item._id}`,
+        botaoDetalhes: `/pedido/${item._id}`,
       });
     });
 
@@ -69,7 +80,7 @@ class Pedidos extends Component {
             valor={pesquisa}
             placeholder={'Pesquise aqui pelo nome do cliente...'}
             onChange={(ev) => this.onChangePesquisa(ev)}
-            onClick={() => alert('Pesquisar')}
+            onClick={() => this.handleSubmitPesquisa()}
           />
           <br />
           <Tabela

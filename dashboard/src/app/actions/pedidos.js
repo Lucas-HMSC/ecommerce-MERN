@@ -20,3 +20,20 @@ export const getPedidos = (atual, limit, loja) => {
       .catch(errorHandling);
   };
 };
+
+export const getPedidosPesquisa = (termo, atual, limit, loja) => {
+  return function (dispatch) {
+    axios
+      .get(
+        `${api}/${versao}/api/clientes/search/${termo}/pedidos?offset=${atual}&limit=${limit}&loja=${loja}`,
+        getHeaders(),
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_PEDIDOS,
+          payload: response.data,
+        });
+      })
+      .catch(errorHandling);
+  };
+};
