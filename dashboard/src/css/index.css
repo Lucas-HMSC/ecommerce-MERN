@@ -412,3 +412,9 @@ textarea {
   background-color: #f3baba;
   color: #610505;
 }
+
+.alert-success {
+  border: 2px solid var(--cor-secundaria);
+  background-color: #bff3ba;
+  color: #175c11;
+}
