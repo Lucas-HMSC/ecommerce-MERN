@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOGIN_USER } from './types';
+import { LOGIN_USER, LOGOUT_USER } from './types';
 import { api, versao } from '../config';
 
 const saveToken = (usuario, opcaoLembrar) => {
@@ -27,11 +27,11 @@ const getToken = () => {
 };
 
 const getHeaders = () => {
-  return { 
-    "Headers": {
-      "Authorization": `Ecommerce ${getToken()}`
-    }
-   };
+  return {
+    "headers": {
+      "authorization": `Ecommerce ${getToken()}`,
+    },
+  };
 };
 
 export const initApp = () => {
@@ -51,5 +51,26 @@ export const handleLogin = ({ email, password, opcaoLembrar }, callback) => {
       .catch((error) => {
         console.log(error, error.response, error.response.data);
       });
+  };
+};
+
+export const getUser = () => {
+  return function (dispatch) {
+    axios
+      .get(`${api}/${versao}/api/usuarios/`, getHeaders())
+      .then((response) => {
+        saveToken(response.data.usuario, true);
+        dispatch({ type: LOGIN_USER, payload: response.data });
+      })
+      .catch((error) => {
+        console.log(error, error.response, error.response.data);
+      });
+  };
+};
+
+export const handleLogout = () => {
+  cleanToken();
+  return {
+    type: LOGOUT_USER,
   };
 };
