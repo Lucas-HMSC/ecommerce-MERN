@@ -14,7 +14,7 @@ const base = (Component) => {
     }
 
     componentWillUpdate(nextProps) {
-      const { authorized, history } = this.props;
+      const { history } = this.props;
       if (
         !nextProps.authorized ||
         !nextProps.usuario ||

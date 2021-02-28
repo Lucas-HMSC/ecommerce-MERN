@@ -97,7 +97,7 @@ body {
   height: 20px;
 }
 
-.Barra-Topo a {
+.Barra-Topo a, span {
   color: var(--cor-branca);
   text-decoration: none;
   font-size: 1rem;
