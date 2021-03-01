@@ -32,7 +32,7 @@ class Pedidos extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.usuario && prevProps.usuario) this.getPedidos();
+    if (!prevProps.usuario && this.props.usuario) this.getPedidos();
   }
 
   handleSubmitPesquisa() {
