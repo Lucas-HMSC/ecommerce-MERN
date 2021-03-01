@@ -31,7 +31,7 @@ export const getUser = () => {
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
       .catch((error) => {
-        console.log(error, error.response, error.response.data);
+        console.log(error, error.response, error.response && error.response.data);
       });
   };
 };
