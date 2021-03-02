@@ -21,7 +21,7 @@ const errorHandling = (error) => {
   }
 
   let msg = `Erro: Preencha corretamente ${
-    _errors.length > 1 ? 'os campos de' : 'o campos de'
+    _errors.length > 1 ? 'os campos de' : 'o campo de'
   }`;
   _errors.forEach((item, idx) => {
     const field = item.field[item.field.length - 1];
