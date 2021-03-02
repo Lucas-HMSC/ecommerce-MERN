@@ -1,5 +1,4 @@
 import React from 'react';
-import { getUser } from '../../actions';
 import Base from '../Base';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
