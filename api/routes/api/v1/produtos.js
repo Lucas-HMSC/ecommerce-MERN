@@ -9,7 +9,7 @@ const Validation = require('express-validation');
 const {
   ProdutoValidation,
 } = require('../../../controllers/validacoes/produtoValidation');
-const auth = required('../../auth');
+const auth = require('../../auth');
 const upload = require('../../../config/multer');
 
 const produtoController = new ProdutoController();

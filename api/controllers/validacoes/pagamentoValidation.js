@@ -81,4 +81,4 @@ const checarCartao = (pagamento) => {
   else return false;
 };
 
-module.exports = { PagamentoValidation, chevarValorTotal, checarCartao };
+module.exports = { PagamentoValidation, checarValorTotal, checarCartao };
