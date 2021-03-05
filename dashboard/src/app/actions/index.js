@@ -3,6 +3,7 @@ import { LOGIN_USER, LOGOUT_USER } from './types';
 import { api, versao } from '../config';
 import { saveToken, getHeaders, cleanToken } from './localStorage';
 import errorHandling from './errorHandling';
+import moment from 'moment';
 
 export const initApp = () => {
   const opcaoLembrar = localStorage.getItem('opcaoLembrar');
@@ -31,7 +32,11 @@ export const getUser = () => {
         dispatch({ type: LOGIN_USER, payload: response.data });
       })
       .catch((error) => {
-        console.log(error, error.response, error.response && error.response.data);
+        console.log(
+          error,
+          error.response,
+          error.response && error.response.data,
+        );
       });
   };
 };
@@ -45,4 +50,12 @@ export const handleLogout = () => {
 
 export const formatMoney = (valor) => {
   return `R$ ${valor.toFixed(2).split('.').join(',')}`;
+};
+
+export const transformeDate = (data, divisor, formato) => {
+  const _data = data.split(divisor);
+  const dia = Number(_data[0]) + 1;
+  const mes = Number(_data[1]) - 1;
+  const ano = Number(_data[2]);
+  return moment(new Date(ano, mes, dia)).format(formato);
 };
