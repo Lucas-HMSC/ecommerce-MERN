@@ -4,7 +4,7 @@ import DetalhesDoCliente from './detalhesDoCliente';
 import DetalhesDosPedidos from './detalhesDosPedidos';
 
 import { connect } from 'react-redux';
-import { actions } from '../../actions/clientes';
+import * as actions  from '../../actions/clientes';
 
 class Cliente extends Component {
   componentDidMount() {

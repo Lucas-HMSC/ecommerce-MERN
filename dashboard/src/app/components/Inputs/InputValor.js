@@ -18,15 +18,17 @@ class InputValor extends Component {
 
   renderForm() {
     const { value } = this.state;
+    const { erro } = this.props;
     return (
       <div className="Input-Valor flex input-valor-open">
-        <div>
+        <div className="flex vertical">
           <input
             value={value}
             onChange={this.onChange}
             name={this.props.name}
             type={this.props.type || 'text'}
           />
+          {erro && <small className="small-danger">{erro}</small>}
         </div>
         <div className="flex flex-center">
           <ButtonSimples
@@ -45,18 +47,21 @@ class InputValor extends Component {
   }
 
   renderValue() {
-    const { value } = this.props;
+    const { value, erro } = this.props;
     return (
-      <div className="Input-Valor flex" onClick={() => this.toggleForm()}>
-        <span className={this.props.noStyle ? 'input-nostyle' : 'input'}>
-          {value}
-        </span>
-        <div className="flex flex-center">
-          <ButtonSimples
-            type="warning button-small"
-            label={<i className="fas fa-edit" />}
-          />
+      <div className="flex vertical">
+        <div className="Input-Valor flex" onClick={() => this.toggleForm()}>
+          <span className={this.props.noStyle ? 'input-nostyle' : 'input'}>
+            {value}
+          </span>
+          <div className="flex flex-center">
+            <ButtonSimples
+              type="warning button-small"
+              label={<i className="fas fa-edit" />}
+            />
+          </div>
         </div>
+        {erro && <small className="small-danger">{erro}</small>}
       </div>
     );
   }
