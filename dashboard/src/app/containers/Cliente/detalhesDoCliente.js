@@ -59,14 +59,14 @@ class DetalhesDoCliente extends React.Component {
       aviso: null,
     });
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate(prevProps) {
     if (
-      (!this.props.cliente && nextProps.cliente) ||
-      (!this.props.cliente &&
-        nextProps.cliente &&
-        this.props.cliente.updatedAt !== nextProps.cliente.updatedAt)
+      (!prevProps.cliente && this.props.cliente) ||
+      (!prevProps.cliente &&
+        this.props.cliente &&
+        prevProps.cliente.updatedAt !== this.props.cliente.updatedAt)
     )
-      this.generateStateCliente(nextProps);
+      this.generateStateCliente(this.props);
   }
 
   handleSubmit = (field, value) => {
