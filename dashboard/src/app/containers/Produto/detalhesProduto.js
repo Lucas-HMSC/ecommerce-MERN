@@ -48,6 +48,22 @@ class DetalhesProduto extends Component {
       this.setState(this.generateStateProduto(this.props));
   }
 
+  validate() {
+    const { nome, descricao, categoria, preco, sku } = this.state;
+    const erros = {};
+
+    if (!nome) erros.nome = 'Preencha aqui com o nome do produto';
+    if (!descricao)
+      erros.descricao = 'Preencha aqui com a descrição do produto';
+    if (!categoria)
+      erros.categoria = 'Preencha aqui com a categoria do produto';
+    if (!preco) erros.preco = 'Preencha aqui com o preço do produto';
+    if (!sku) erros.sku = 'Preencha aqui com o SKU do produto';
+
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
+  }
+
   updateProduto() {
     const { usuario, produto, updateProduto } = this.props;
     if (!usuario || !produto || !this.validate()) return null;
@@ -85,8 +101,21 @@ class DetalhesProduto extends Component {
     );
   }
 
+  onChangeInput = (field, value) =>
+    this.setState({ [field]: value }, () => this.validate());
+
   renderDados() {
-    const { nome, disponibilidade, descricao } = this.state;
+    const {
+      nome,
+      disponibilidade,
+      descricao,
+      categoria,
+      preco,
+      promocao,
+      sku,
+      erros,
+    } = this.state;
+    const { categorias } = this.props;
     return (
       <div className="Dados-Produto">
         <TextoDados
@@ -96,7 +125,8 @@ class DetalhesProduto extends Component {
               value={nome}
               noStyle
               name="nome"
-              handleSubmit={(valor) => this.setState({ nome: valor })}
+              erro={erros.nome}
+              handleSubmit={(valor) => this.onChangeInput('nome', valor)}
             />
           }
         />
@@ -106,7 +136,7 @@ class DetalhesProduto extends Component {
             <InputSelect
               name="disponibilidade"
               onChange={(ev) =>
-                this.setState({ disponibilidade: ev.target.value })
+                this.onChangeInput('disponibilidade', ev.target.value)
               }
               value={disponibilidade}
               opcoes={[
@@ -118,15 +148,70 @@ class DetalhesProduto extends Component {
         />
         <br />
         <TextoDados
+          chave="Categoria"
+          valor={
+            <InputSelect
+              name="categoria"
+              onChange={(ev) =>
+                this.onChangeInput('categoria', ev.target.value)
+              }
+              value={categoria}
+              opcoes={(categorias || []).map((item) => ({
+                label: item.nome,
+                value: item._id,
+              }))}
+            />
+          }
+        />
+        <br />
+        <TextoDados
           chave="Descricao"
           vertical
           valor={
             <textarea
               name={'descricao'}
-              onChange={(ev) => this.setState({ descricao: ev.target.value })}
+              onChange={(ev) =>
+                this.onChangeInput('descricao', ev.target.value)
+              }
               value={descricao}
               rows="10"
               style={{ resize: 'none' }}
+            />
+          }
+        />
+        <TextoDados
+          chave="Preço"
+          valor={
+            <InputValor
+              value={preco}
+              noStyle
+              name="preco"
+              erro={erros.preco}
+              handleSubmit={(valor) => this.onChangeInput('preco', valor)}
+            />
+          }
+        />
+        <TextoDados
+          chave="Valor em Promoção"
+          valor={
+            <InputValor
+              value={promocao}
+              noStyle
+              name="promocao"
+              erro={erros.promocao}
+              handleSubmit={(valor) => this.onChangeInput('promocao', valor)}
+            />
+          }
+        />
+        <TextoDados
+          chave="SKU"
+          valor={
+            <InputValor
+              value={sku}
+              noStyle
+              name="sku"
+              erro={erros.sku}
+              handleSubmit={(valor) => this.onChangeInput('sku', valor)}
             />
           }
         />
@@ -135,17 +220,60 @@ class DetalhesProduto extends Component {
   }
 
   onRemove = (id) => {
-    const { imagens } = this.state;
-    this.setState({ imagens: imagens.filter((i, idx) => idx !== id) });
+    const { usuario, produto } = this.props;
+    if (!usuario || !produto) return null;
+    const { fotos: _fotos } = this.state;
+    const fotos = _fotos.filter((foto, index) => index !== id);
+    if (window.confirm('Você realmente deseja remover essa imagem?')) {
+      this.props.removeProdutoImagens(
+        fotos,
+        produto._id,
+        usuario.loja,
+        (error) => {
+          this.setState({
+            aviso: {
+              status: !error,
+              msg: error
+                ? error.message
+                : 'Foto do produto removida com sucesso',
+            },
+          });
+        },
+      );
+    }
+  };
+
+  handleUploadFoto = (ev) => {
+    const { usuario, produto } = this.props;
+    if (!usuario || !produto) return null;
+
+    const data = new FormData();
+    data.append('files', ev.target.files[0]);
+
+    this.props.updateProdutoImagens(
+      data,
+      produto._id,
+      usuario.loja,
+      (error) => {
+        this.setState({
+          aviso: {
+            status: !error,
+            msg: error
+              ? error.message
+              : 'Fotos do produto atualizadas com sucesso',
+          },
+        });
+      },
+    );
   };
 
   renderImagens() {
-    const { imagens } = this.state;
+    const { fotos } = this.state;
     return (
       <div className="dados-de-imagens">
         <BlocoImagens
-          imagens={imagens}
-          handleSubmit={() => alert('Enviado')}
+          imagens={fotos || []}
+          handleSubmit={() => this.handleUploadFoto}
           onRemove={this.onRemove}
         />
       </div>
