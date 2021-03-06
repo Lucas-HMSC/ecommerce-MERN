@@ -6,74 +6,68 @@ import Pesquisa from '../../components/Inputs/Pesquisa';
 import Tabela from '../../components/Tabela/Simples';
 import Paginacao from '../../components/Paginacao/Simples.js';
 
+import { Link } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import * as actions from '../../actions/categorias';
+
 class Categorias extends Component {
-  state = {
-    pesquisa: '',
-    atual: 0,
-  };
+  getCategorias() {
+    const { usuario } = this.props;
+    if (!usuario) return null;
+    this.props.getCategorias(usuario.loja);
+  }
 
-  onChangePesquisa = (ev) => this.setState({ pesquisa: ev.target.value });
+  componentDidMount() {
+    this.getCategorias();
+  }
 
-  changeNumeroAtual = (atual) => this.setState({ atual });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.usuario && this.props.usuario) this.getCategorias();
+  }
+
+  renderBotaoNovo() {
+    return (
+      <Link
+        to="/categorias/nova"
+        className="button button-success button-small"
+      >
+        <i className="fas fa-plus"></i>
+        <span>&nbsp;Nova Categoria</span>
+      </Link>
+    );
+  }
 
   render() {
-    const { pesquisa } = this.state;
+    const { categorias } = this.props;
 
-    // Dados
-    const dados = [
-      {
-        'Categoria': 'Acessórios',
-        'Qtd. de Produtos': 15,
-        'botaoDetalhes': '/categoria/acessorios'
-      },
-      {
-        'Categoria': 'Computadores',
-        'Qtd. de Produtos': 5,
-        'botaoDetalhes': '/categoria/computadores'
-      },
-      {
-        'Categoria': 'Fones de Ouvido',
-        'Qtd. de Produtos': 7,
-        'botaoDetalhes': '/categoria/fones'
-      },
-      {
-        'Categoria': 'Gabinetes',
-        'Qtd. de Produtos': 3,
-        'botaoDetalhes': '/categoria/gabinetes'
-      },
-      {
-        'Categoria': 'Processadores',
-        'Qtd. de Produtos': 8,
-        'botaoDetalhes': '/categoria/processadores'
-      },
-    ];
+    const dados = [];
+    (categorias || []).forEach((item) => {
+      dados.push({
+        Categoria: item.nome,
+        'Qtd. de Produtos': item.produtos.length,
+        botaoDetalhes: `/categoria/${item._id}`,
+      });
+    });
 
     return (
       <div className="Categorias full-width">
         <div className="Card">
           <Titulo tipo="h1" titulo="Categorias" />
           <br />
-          <Pesquisa
-            valor={pesquisa}
-            placeholder={'Pesquise aqui pelo nome da categoria...'}
-            onChange={(ev) => this.onChangePesquisa(ev)}
-            onClick={() => alert('Pesquisar')}
-          />
+          {this.renderBotaoNovo()}
           <br />
-          <Tabela
-            cabecalho={['Categoria', 'Qtd. de Produtos']}
-            dados={dados}
-          />
-          <Paginacao
-            atual={this.state.atual}
-            total={120}
-            limite={20}
-            onClick={(numeroAtual) => this.changeNumeroAtual(numeroAtual)}
-          />
+          <br />
+          <Tabela cabecalho={['Categoria', 'Qtd. de Produtos']} dados={dados} />
         </div>
       </div>
     );
   }
 }
 
-export default Categorias;
+const mapStateToProps = (state) => ({
+  categorias: state.categoria.categorias,
+  usuario: state.auth.usuario,
+});
+
+export default connect(mapStateToProps, actions)(Categorias);
