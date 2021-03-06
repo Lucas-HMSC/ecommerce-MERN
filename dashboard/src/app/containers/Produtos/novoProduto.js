@@ -23,6 +23,50 @@ class NovoProduto extends Component {
     erros: {},
   };
 
+  getCategorias(props) {
+    const { usuario, getCategorias } = props;
+    if (usuario) getCategorias(usuario.loja);
+  }
+
+  componentDidMount() {
+    this.getCategorias(this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.usuario && this.props.usuario)
+      this.getCategorias(this.props);
+  }
+
+  validate() {
+    const { nome, descricao, categoria, preco, sku } = this.state;
+    const erros = {};
+
+    if (!nome) erros.nome = 'Preencha aqui com o nome do produto';
+    if (!descricao)
+      erros.descricao = 'Preencha aqui com a descrição do produto';
+    if (!categoria)
+      erros.categoria = 'Preencha aqui com a categoria do produto';
+    if (!preco) erros.preco = 'Preencha aqui com o preço do produto';
+    if (!sku) erros.sku = 'Preencha aqui com o sku do produto';
+
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
+  }
+
+  salvarProduto() {
+    const { usuario, salvarProduto } = this.props;
+    if (!usuario) return null;
+    if (!this.validate()) return null;
+    salvarProduto(this.state, usuario.loja, (error) => {
+      this.setState({
+        aviso: {
+          status: !error,
+          msg: error ? error.message : 'Produto criado com sucesso',
+        },
+      });
+    });
+  }
+
   renderCabecalho() {
     const { nome } = this.state;
     return (
@@ -41,7 +85,8 @@ class NovoProduto extends Component {
     );
   }
 
-  onChangeInput = (field, value) => this.setState({ [field]: value });
+  onChangeInput = (field, value) =>
+    this.setState({ [field]: value }, () => this.validate());
 
   renderDados() {
     const {
@@ -60,7 +105,7 @@ class NovoProduto extends Component {
           name="nome"
           label="Nome:"
           value={nome}
-          erro={erros.nome}
+          error={erros.nome}
           onChange={(ev) => this.onChangeInput('nome', ev.target.value)}
         />
         <br />
@@ -73,6 +118,7 @@ class NovoProduto extends Component {
                 this.onChangeInput('categoria', ev.target.value)
               }
               value={categoria}
+              error={erros.categoria}
               opcoes={[
                 { label: 'Selecionar...', value: '' },
                 ...(categoria || []).map((item) => ({
@@ -87,15 +133,20 @@ class NovoProduto extends Component {
         <TextoDados
           chave="descricao"
           valor={
-            <textarea
-              name={'descricao'}
-              onChange={(ev) =>
-                this.onChangeInput('descricao', ev.target.value)
-              }
-              value={descricao}
-              rows="10"
-              style={{ resize: 'none' }}
-            />
+            <div>
+              <textarea
+                name={'descricao'}
+                onChange={(ev) =>
+                  this.onChangeInput('descricao', ev.target.value)
+                }
+                value={descricao}
+                rows="10"
+                style={{ resize: 'none' }}
+              />
+              {erros.descricao || (
+                <small className="small-danger">{erros.descricao}</small>
+              )}
+            </div>
           }
         />
         <InputSimples
@@ -103,7 +154,7 @@ class NovoProduto extends Component {
           label="Preço:"
           type="number"
           value={preco}
-          erro={erros.preco}
+          error={erros.preco}
           onChange={(ev) => this.onChangeInput('preco', ev.target.value)}
         />
         <InputSimples
@@ -111,14 +162,14 @@ class NovoProduto extends Component {
           label="Valor em Promoção:"
           type="number"
           value={promocao}
-          erro={erros.promocao}
+          error={erros.promocao}
           onChange={(ev) => this.onChangeInput('promocao', ev.target.value)}
         />
         <InputSimples
           name="sku"
           label="SKU:"
           value={sku}
-          erro={erros.sku}
+          error={erros.sku}
           onChange={(ev) => this.onChangeInput('sku', ev.target.value)}
         />
       </div>
@@ -149,4 +200,7 @@ const mapStateToProps = (state) => ({
   usuario: state.auth.usuario,
 });
 
-export default connect(mapStateToProps, actions)(NovoProduto);
+export default connect(mapStateToProps, {
+  ...actionsCategorias,
+  ...actionsProdutos,
+})(NovoProduto);

@@ -38,7 +38,7 @@ export const getProdutosPesquisa = (termo, ordem, atual, limit, loja) => {
   };
 };
 
-export const novoProduto = (produto, loja, cb) => {
+export const salvarProduto = (produto, loja, cb) => {
   return function (dispatch) {
     axios
       .post(
