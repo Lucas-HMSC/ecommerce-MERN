@@ -7,12 +7,81 @@ import InputValor from '../../components/Inputs/InputValor';
 import InputSelect from '../../components/Inputs/Select';
 import Voltar from '../../components/Links/Voltar';
 
+import { connect } from 'react-redux';
+import AlertGeral from '../../components/Alert/Geral';
+import * as actions from '../../actions/categorias';
+
 class DetalhesCategoria extends Component {
-  state = {
-    nome: 'Categoria',
-    disponibilidade: 'disponivel',
-    codigo: 'categoria',
-  };
+  generateStateCategoria = (props) => ({
+    nome: props.categoria ? props.categoria.nome : '',
+    disponibilidade: props.categoria
+      ? props.categoria.disponibilidade ||
+        props.categoria.disponibilidade === undefined
+        ? 'disponivel'
+        : 'indisponivel'
+      : '',
+    codigo: props.categoria ? props.categoria.codigo : '',
+  });
+
+  constructor(props) {
+    super();
+    this.state = {
+      ...this.generateStateCategoria(props),
+      erros: {},
+      aviso: null,
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      (!prevProps.categoria && this.props.categoria) ||
+      (prevProps.categoria &&
+        this.props.categoria &&
+        prevProps.categoria.updatedAt !== this.props.categoria.updatedAt)
+    )
+      this.setState(this.generateStateCategoria(this.props));
+  }
+
+  salvarCategoria() {
+    const { usuario, categoria } = this.props;
+    if (!usuario || !categoria) return null;
+
+    this.props.updateCategoria(
+      this.state,
+      categoria._id,
+      usuario.loja,
+      (error) => {
+        this.setState({
+          aviso: {
+            status: !error,
+            msg: error ? error.message : 'Categoria atualizada com sucesso',
+          },
+        });
+      },
+    );
+  }
+
+  removerCategoria() {
+    const { usuario, categoria } = this.props;
+    if (!usuario || !categoria) return null;
+
+    if (!window.confirm('Você realmente deseja remover essa categoria?'))
+      return;
+
+    this.props.updateCategoria(
+      this.state,
+      categoria._id,
+      usuario.loja,
+      (error) => {
+        this.setState({
+          aviso: {
+            status: !error,
+            msg: error ? error.message : 'Categoria atualizada com sucesso',
+          },
+        });
+      },
+    );
+  }
 
   renderCabecalho() {
     const { nome } = this.state;
@@ -88,7 +157,8 @@ class DetalhesCategoria extends Component {
   render() {
     return (
       <div className="Detalhes-Categoria">
-        <Voltar path="/categorias" />
+        <Voltar history={this.props.history} />
+        <AlertGeral aviso={this.state.aviso} />
         {this.renderCabecalho()}
         {this.renderDados()}
       </div>
@@ -96,4 +166,9 @@ class DetalhesCategoria extends Component {
   }
 }
 
-export default DetalhesCategoria;
+const mapStateToProps = (state) => ({
+  categoria: state.categoria.categoria,
+  usuario: state.auth.usuario,
+});
+
+export default connect(mapStateToProps, actions)(DetalhesCategoria);
