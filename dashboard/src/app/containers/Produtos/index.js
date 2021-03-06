@@ -49,6 +49,15 @@ class Produtos extends Component {
       this.getProdutos(this.props),
     );
 
+  renderBotaoNovo = () => {
+    return (
+      <Link className="button cutton-success button-small" to="/produtos/novo">
+        <i className="fas fa-plus"></i>
+        <span>&nbsp;Novo Produto</span>
+      </Link>
+    );
+  };
+
   render() {
     const { pesquisa, ordem } = this.state;
     const { produtos } = this.props;
@@ -67,6 +76,9 @@ class Produtos extends Component {
       <div className="Produtos full-width">
         <div className="Card">
           <Titulo tipo="h1" titulo="Produtos" />
+          <br />
+          {this.renderBotaoNovo()}
+          <br />
           <br />
           <div className="flex">
             <div className="flex-3">
