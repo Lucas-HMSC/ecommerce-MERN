@@ -1,4 +1,4 @@
-import { GET_PRODUTOS, GET_PRODUTO } from '../actions/types';
+import { GET_PRODUTOS, GET_PRODUTO, LIMPAR_PRODUTO } from '../actions/types';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -11,6 +11,11 @@ export default (state = {}, action) => {
       return {
         ...state,
         produto: action.payload.produto,
+      };
+    case LIMPAR_PRODUTO:
+      return {
+        ...state,
+        produto: null,
       };
     default:
       return state;
