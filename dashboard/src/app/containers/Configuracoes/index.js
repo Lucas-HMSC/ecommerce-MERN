@@ -6,20 +6,91 @@ import { TextoDados } from '../../components/Texto/Dados';
 import InputValor from '../../components/Inputs/InputValor';
 import ListaDinamicaSimples from '../../components/Listas/ListaDinamicaSimples';
 
+import AlertGeral from '../../components/Alert/Geral';
+import { connect } from 'react-redux';
+import * as actions from '../../actions/configuracoes';
+
 class Configuracoes extends Component {
+  generateStateConfiguracao = (props) => ({
+    nome: props.loja ? props.loja.nome : '',
+    CNPJ: props.loja ? props.loja.cnpj : '',
+    email: props.loja ? props.loja.email : '',
+
+    endereco: props.loja ? props.loja.endereco.local : '',
+    numero: props.loja ? props.loja.endereco.numero : '',
+    bairro: props.loja ? props.loja.endereco.bairro : '',
+    cidade: props.loja ? props.loja.endereco.cidade : '',
+    estado: props.loja ? props.loja.endereco.estado : '',
+    cep: props.loja ? props.loja.endereco.CEP : '',
+
+    telefones: props.loja ? props.loja.telefones : [],
+  });
+
   state = {
-    nome: 'Loja TI',
-    CNPJ: '11.123.456/0001-02',
-    email: 'atendimento@lojati.com',
-
-    endereco: 'Rua Logo Ali, 123',
-    bairro: 'Centro',
-    cidade: 'Piracicaba',
-    estado: 'SP',
-    cep: '12345-123',
-
-    telefones: ['11 1234-5678', '12 8765-4321'],
+    ...this.generateStateConfiguracao(this.props),
+    aviso: null,
+    erros: {},
   };
+
+  getConfiguracao(props) {
+    const { usuario } = props;
+    if (!usuario) return null;
+    this.props.getConfiguracao(usuario.loja);
+  }
+
+  componentDidMount() {
+    this.getConfiguracao(this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.usuario && this.props.usuario)
+      this.getConfiguracao(this.props);
+    if (!prevProps.loja && this.props.loja)
+      this.setState(this.generateStateConfiguracao(this.props));
+  }
+
+  updateLoja() {
+    const { usuario } = this.props;
+    if (!usuario || !this.validade()) return null;
+    this.props.updateConfiguracao(this.state, usuario.loja, (error) => {
+      this.setState({
+        aviso: {
+          status: !error,
+          msg: error
+            ? error.message
+            : 'Configuração da loja atualizada com sucesso',
+        },
+      });
+    });
+  }
+
+  validate() {
+    const {
+      nome,
+      CNPJ,
+      email,
+      endereco,
+      numero,
+      bairro,
+      cidade,
+      estado,
+      cep,
+    } = this.state;
+    const erros = {};
+
+    if (!nome) erros.nome = 'Preencha aqui com o nome da loja';
+    if (!CNPJ) erros.CNPJ = 'Preencha aqui com o CNPJ da loja';
+    if (!email) erros.email = 'Preencha aqui com o email da loja';
+    if (!endereco) erros.endereco = 'Preencha aqui com o endereço da loja';
+    if (!numero) erros.numero = 'Preencha aqui com o número da loja';
+    if (!bairro) erros.bairro = 'Preencha aqui com o bairro da loja';
+    if (!cidade) erros.cidade = 'Preencha aqui com a cidade da loja';
+    if (!estado) erros.estado = 'Preencha aqui com o estado da loja';
+    if (!cep) erros.cep = 'Preencha aqui com o CEP da loja';
+
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
+  }
 
   renderCabecalho() {
     return (
@@ -30,7 +101,7 @@ class Configuracoes extends Component {
         <div className="flex-1 flex flex-end">
           <ButtonSimples
             type="success"
-            onClick={() => alert('Salvo')}
+            onClick={() => this.updateLoja()}
             label={'Salvar'}
           />
         </div>
@@ -38,8 +109,12 @@ class Configuracoes extends Component {
     );
   }
 
+  handleSubmit = (field, value) => {
+    this.setState({ [field]: value }, () => this.validate());
+  };
+
   renderDadosConfiguracao() {
-    const { nome, CNPJ, email } = this.state;
+    const { nome, CNPJ, email, erros } = this.state;
     return (
       <div className="dados-configuracao">
         <TextoDados
@@ -49,7 +124,8 @@ class Configuracoes extends Component {
               value={nome}
               name="nome"
               noStyle
-              handleSubmit={(valor) => this.setState({ nome: valor })}
+              erro={erros.nome}
+              handleSubmit={(valor) => this.handleSubmit('nome', valor)}
             />
           }
         />
@@ -60,7 +136,8 @@ class Configuracoes extends Component {
               value={CNPJ}
               name="CNPJ"
               noStyle
-              handleSubmit={(valor) => this.setState({ CNPJ: valor })}
+              erro={erros.CNPJ}
+              handleSubmit={(valor) => this.handleSubmit('CNPJ', valor)}
             />
           }
         />
@@ -71,7 +148,8 @@ class Configuracoes extends Component {
               value={email}
               name="email"
               noStyle
-              handleSubmit={(valor) => this.setState({ email: valor })}
+              erro={erros.email}
+              handleSubmit={(valor) => this.handleSubmit('email', valor)}
             />
           }
         />
@@ -80,7 +158,7 @@ class Configuracoes extends Component {
   }
 
   renderDadosEndereco() {
-    const { endereco, bairro, cidade, estado, cep } = this.state;
+    const { endereco, numero, bairro, cidade, estado, cep, erros } = this.state;
     return (
       <div className="dados-configuracao">
         <TextoDados
@@ -90,7 +168,20 @@ class Configuracoes extends Component {
               value={endereco}
               name="endereco"
               noStyle
-              handleSubmit={(valor) => this.setState({ endereco: valor })}
+              erro={erros.endereco}
+              handleSubmit={(valor) => this.handleSubmit('endereco', valor)}
+            />
+          }
+        />
+        <TextoDados
+          chave="Número"
+          valor={
+            <InputValor
+              value={numero}
+              name="numero"
+              noStyle
+              erro={erros.numero}
+              handleSubmit={(valor) => this.handleSubmit('numero', valor)}
             />
           }
         />
@@ -101,7 +192,8 @@ class Configuracoes extends Component {
               value={bairro}
               name="bairro"
               noStyle
-              handleSubmit={(valor) => this.setState({ bairro: valor })}
+              erro={erros.bairro}
+              handleSubmit={(valor) => this.handleSubmit('bairro', valor)}
             />
           }
         />
@@ -112,7 +204,8 @@ class Configuracoes extends Component {
               value={cidade}
               name="cidade"
               noStyle
-              handleSubmit={(valor) => this.setState({ cidade: valor })}
+              erro={erros.cidade}
+              handleSubmit={(valor) => this.handleSubmit('cidade', valor)}
             />
           }
         />
@@ -123,7 +216,8 @@ class Configuracoes extends Component {
               value={estado}
               name="estado"
               noStyle
-              handleSubmit={(valor) => this.setState({ estado: valor })}
+              erro={erros.estado}
+              handleSubmit={(valor) => this.handleSubmit('estado', valor)}
             />
           }
         />
@@ -134,7 +228,8 @@ class Configuracoes extends Component {
               value={cep}
               name="cep"
               noStyle
-              handleSubmit={(valor) => this.setState({ cep: valor })}
+              erro={erros.cep}
+              handleSubmit={(valor) => this.handleSubmit('cep', valor)}
             />
           }
         />
@@ -149,7 +244,7 @@ class Configuracoes extends Component {
   };
 
   onRemove = (idx) => {
-    if (!idx) return;
+    if (idx === undefined) return;
     const { telefones } = this.state;
     this.setState({
       telefones: telefones.filter((item, index) => index !== idx),
@@ -175,6 +270,7 @@ class Configuracoes extends Component {
       <div className="Configuracoes full-width">
         <div className="Card">
           {this.renderCabecalho()}
+          <AlertGeral aviso={this.state.aviso} />
           <div className="flex horizontal">
             <div className="flex-1">{this.renderDadosConfiguracao()}</div>
           </div>
@@ -191,4 +287,9 @@ class Configuracoes extends Component {
   }
 }
 
-export default Configuracoes;
+const mapStateToProps = (state) => ({
+  loja: state.configuracao.loja,
+  usuario: state.auth.usuario,
+});
+
+export default connect(mapStateToProps, actions)(Configuracoes);
