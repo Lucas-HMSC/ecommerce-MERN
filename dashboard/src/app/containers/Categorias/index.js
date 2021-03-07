@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 
 import Titulo from '../../components/Texto/Titulo';
-
-import Pesquisa from '../../components/Inputs/Pesquisa';
 import Tabela from '../../components/Tabela/Simples';
-import Paginacao from '../../components/Paginacao/Simples.js';
 
 import { Link } from 'react-router-dom';
 
