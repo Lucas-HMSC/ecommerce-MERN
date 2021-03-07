@@ -44,3 +44,37 @@ export const getVariacao = (id, produto, loja) => {
 };
 
 export const limparVariacao = () => ({ type: LIMPAR_VARIACAO });
+
+export const salvarVariacao = (variacao, produto, loja, cb) => {
+  return function (dispatch) {
+    axios
+      .post(
+        `${api}/${versao}/api/variacoes?loja=${loja}&produto=${produto}`,
+        {
+          codigo: variacao.codigo,
+          nome: variacao.nome,
+          preco: variacao.preco,
+          promocao: variacao.promocao,
+          quantidade: variacao.quantidade,
+          entrega: {
+            freteGratis: variacao.freteGratis === 'sim',
+            pesoKg: variacao.peso,
+            dimensoes: {
+              alturaCm: variacao.altura,
+              larguraCm: variacao.largura,
+              profunidadeCm: variacao.comprimento,
+            },
+          },
+        },
+        getHeaders(),
+      )
+      .then((response) => {
+        dispatch({
+          type: GET_VARIACAO,
+          payload: response.data,
+        });
+        cb(null);
+      })
+      .catch((e) => cb(errorHandling(e)));
+  };
+};
