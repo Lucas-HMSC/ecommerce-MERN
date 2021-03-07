@@ -18,15 +18,17 @@ class OpcaoVariacao extends Component {
     preco: props.variacao ? props.variacao.preco : 0,
     promocao: props.variacao ? props.variacao.promocao : 0,
     quantidade: props.variacao ? props.variacao.quantidade : 0,
-    peso: props.variacao ? props.variacao.peso : 0,
+    peso: props.variacao ? props.variacao.entrega.peso : 0,
     freteGratis: props.variacao
-      ? props.variacao.freteGratis
+      ? props.variacao.entrega.freteGratis
         ? 'sim'
         : 'nao'
       : '',
-    largura: props.variacao ? props.variacao.largura : 0,
-    altura: props.variacao ? props.variacao.altura : 0,
-    comprimento: props.variacao ? props.variacao.comprimento : 0,
+    largura: props.variacao ? props.variacao.entrega.dimensoes.larguraCm : 0,
+    altura: props.variacao ? props.variacao.entrega.dimensoes.alturaCm : 0,
+    comprimento: props.variacao
+      ? props.variacaoentrega.dimensoes.profundidadeCm
+      : 0,
     fotos: props.variacao ? props.variacao.fotos : [],
   });
 
@@ -41,11 +43,10 @@ class OpcaoVariacao extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      !prevProps.variacao &&
-      this.props.variacao &&
-      prevProps.variacao &&
-      this.props.variacao &&
-      prevProps.variacao.updatedAt !== this.props.variacao.updatedAt
+      (!prevProps.variacao && this.props.variacao) ||
+      (prevProps.variacao &&
+        this.props.variacao &&
+        prevProps.variacao.updatedAt !== this.props.variacao.updatedAt)
     )
       this.setState(this.generateStateVariacao(this.props));
   }
@@ -215,6 +216,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="quantidade"
               erro={erros.quantidade}
+              type="number"
               handleSubmit={(valor) =>
                 this.onChangeInput('quantidade', Number(valor))
               }
@@ -244,6 +246,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="peso"
               erro={erros.peso}
+              type="number"
               handleSubmit={(valor) =>
                 this.onChangeInput('peso', Number(valor))
               }
@@ -259,7 +262,6 @@ class OpcaoVariacao extends Component {
                 this.onChangeInput('freteGratis', ev.target.value)
               }
               value={freteGratis}
-              error={erros.freteGratis}
               opcoes={[
                 { label: 'Sim', value: 'sim' },
                 { label: 'Não', value: 'nao' },
@@ -305,6 +307,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="altura"
               erro={erros.altura}
+              type="number"
               handleSubmit={(valor) =>
                 this.onChangeInput('altura', Number(valor))
               }
@@ -322,22 +325,24 @@ class OpcaoVariacao extends Component {
     const { fotos: _fotos } = this.state;
     const fotos = _fotos.filter((foto, index) => index !== id);
 
-    this.props.removeVariacaoImagens(
-      fotos,
-      variacao._id,
-      produto._id,
-      usuario.loja,
-      (error) => {
-        this.setState({
-          aviso: {
-            status: !error,
-            msg: error
-              ? error.message
-              : 'Foto da Variação removida com sucesso',
-          },
-        });
-      },
-    );
+    if (window.confirm('Você realmente deseja remover essa imagem?')) {
+      this.props.removeVariacaoImagens(
+        fotos,
+        variacao._id,
+        produto._id,
+        usuario.loja,
+        (error) => {
+          this.setState({
+            aviso: {
+              status: !error,
+              msg: error
+                ? error.message
+                : 'Foto da Variação removida com sucesso',
+            },
+          });
+        },
+      );
+    }
   };
 
   handleUploadFoto = (ev) => {

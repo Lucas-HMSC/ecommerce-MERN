@@ -16,6 +16,10 @@ class Produto extends Component {
     getCategorias(usuario.loja);
   }
 
+  componentWillUnmount() {
+    this.props.limparProduto();
+  }
+
   render() {
     return (
       <div className="Produto full-width flex vertical">
