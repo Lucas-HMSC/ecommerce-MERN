@@ -161,7 +161,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="codigo"
               erro={erros.codigo}
-              handleSubmit={(valor) => this.setState({ codigo: valor })}
+              handleSubmit={(valor) => this.onChangeInput('codigo', valor)}
             />
           }
         />
@@ -173,7 +173,7 @@ class OpcaoVariacao extends Component {
               noStyle
               name="nome"
               erro={erros.nome}
-              handleSubmit={(valor) => this.setState({ nome: valor })}
+              handleSubmit={(valor) => this.onChangeInput('nome', valor)}
             />
           }
         />
@@ -186,7 +186,9 @@ class OpcaoVariacao extends Component {
               name="preco"
               type="number"
               erro={erros.preco}
-              handleSubmit={(valor) => this.setState({ preco: Number(valor) })}
+              handleSubmit={(valor) =>
+                this.onChangeInput('preco', Number(valor))
+              }
             />
           }
         />
@@ -200,7 +202,7 @@ class OpcaoVariacao extends Component {
               type="number"
               erro={erros.promocao}
               handleSubmit={(valor) =>
-                this.setState({ promocao: Number(valor) })
+                this.onChangeInput('promocao', Number(valor))
               }
             />
           }
@@ -214,7 +216,7 @@ class OpcaoVariacao extends Component {
               name="quantidade"
               erro={erros.quantidade}
               handleSubmit={(valor) =>
-                this.setState({ quantidade: Number(valor) })
+                this.onChangeInput('quantidade', Number(valor))
               }
             />
           }
@@ -224,7 +226,14 @@ class OpcaoVariacao extends Component {
   }
 
   renderDadosEnvio() {
-    const { peso, largura, comprimento, altura } = this.state;
+    const {
+      peso,
+      freteGratis,
+      largura,
+      comprimento,
+      altura,
+      erros,
+    } = this.state;
     return (
       <div className="Dados-Envio">
         <TextoDados
@@ -234,7 +243,27 @@ class OpcaoVariacao extends Component {
               value={peso}
               noStyle
               name="peso"
-              handleSubmit={(valor) => this.setState({ peso: Number(valor) })}
+              erro={erros.peso}
+              handleSubmit={(valor) =>
+                this.onChangeInput('peso', Number(valor))
+              }
+            />
+          }
+        />
+        <TextoDados
+          chave="Frete Grátis"
+          valor={
+            <InputSelect
+              name="freteGratis"
+              onChange={(ev) =>
+                this.onChangeInput('freteGratis', ev.target.value)
+              }
+              value={freteGratis}
+              error={erros.freteGratis}
+              opcoes={[
+                { label: 'Sim', value: 'sim' },
+                { label: 'Não', value: 'nao' },
+              ]}
             />
           }
         />
@@ -245,9 +274,10 @@ class OpcaoVariacao extends Component {
               value={largura}
               noStyle
               name="largura"
+              erro={erros.largura}
               type="number"
               handleSubmit={(valor) =>
-                this.setState({ largura: Number(valor) })
+                this.onChangeInput('largura', Number(valor))
               }
             />
           }
@@ -259,9 +289,10 @@ class OpcaoVariacao extends Component {
               value={comprimento}
               noStyle
               name="comprimento"
+              erro={erros.comprimento}
               type="number"
               handleSubmit={(valor) =>
-                this.setState({ comprimento: Number(valor) })
+                this.onChangeInput('comprimento', Number(valor))
               }
             />
           }
@@ -273,7 +304,10 @@ class OpcaoVariacao extends Component {
               value={altura}
               noStyle
               name="altura"
-              handleSubmit={(valor) => this.setState({ altura: Number(valor) })}
+              erro={erros.altura}
+              handleSubmit={(valor) =>
+                this.onChangeInput('altura', Number(valor))
+              }
             />
           }
         />
@@ -282,17 +316,62 @@ class OpcaoVariacao extends Component {
   }
 
   onRemove = (id) => {
-    const { imagens } = this.state;
-    this.setState({ imagens: imagens.filter((i, idx) => idx !== id) });
+    const { usuario, produto, variacao } = this.props;
+    if (!usuario || !produto || !variacao) return null;
+
+    const { fotos: _fotos } = this.state;
+    const fotos = _fotos.filter((foto, index) => index !== id);
+
+    this.props.removeVariacaoImagens(
+      fotos,
+      variacao._id,
+      produto._id,
+      usuario.loja,
+      (error) => {
+        this.setState({
+          aviso: {
+            status: !error,
+            msg: error
+              ? error.message
+              : 'Foto da Variação removida com sucesso',
+          },
+        });
+      },
+    );
+  };
+
+  handleUploadFoto = (ev) => {
+    const { usuario, produto, variacao } = this.props;
+    if (!usuario || !produto || !variacao) return null;
+
+    const data = new FormData();
+    data.append('files', ev.target.files[0]);
+
+    this.props.updateVariacaoImagens(
+      data,
+      variacao._id,
+      produto._id,
+      usuario.loja,
+      (error) => {
+        this.setState({
+          aviso: {
+            status: !error,
+            msg: error
+              ? error.message
+              : 'Foto da Variação adicionada com sucesso',
+          },
+        });
+      },
+    );
   };
 
   renderImagens() {
-    const { imagens } = this.state;
+    const { fotos } = this.state;
     return (
       <div className="dados-de-imagens">
         <BlocoImagens
-          imagens={imagens}
-          handleSubmit={() => alert('Enviado')}
+          imagens={fotos || []}
+          handleSubmit={this.handleUploadFoto}
           onRemove={this.onRemove}
         />
       </div>
@@ -303,6 +382,7 @@ class OpcaoVariacao extends Component {
     return (
       <div className="Opcao-variacao">
         {this.renderCabecalho()}
+        <AlertGeral aviso={this.state.aviso} />
         <br />
         <div className="flex horizontal">
           <div className="flex-1">{this.renderDadosCadastrais()}</div>
