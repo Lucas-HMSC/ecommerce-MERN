@@ -12,6 +12,69 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions/variacoes';
 
 class NovaVariacao extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      codigo: '',
+      nome: '',
+      preco: 0,
+      promocao: 0,
+      quantidade: 0,
+      peso: 0,
+      freteGratis: 'nao',
+      largura: 0,
+      altura: 0,
+      comprimento: 0,
+      aviso: null,
+      erros: {},
+    };
+  }
+
+  onChangeInput = (field, value) =>
+    this.setState({ [field]: value }, () => this.validate());
+
+  validate() {
+    const {
+      codigo,
+      nome,
+      preco,
+      quantidade,
+      peso,
+      largura,
+      altura,
+      comprimento,
+    } = this.state;
+    const erros = {};
+
+    if (!codigo) erros.codigo = 'Preencha aqui com o código da variação';
+    if (!nome) erros.nome = 'Preencha aqui com o nome da variação';
+    if (!preco) erros.preco = 'Preencha aqui com o preço da variação';
+    if (!quantidade)
+      erros.quantidade = 'Preencha aqui com a quantidade da variação';
+    if (!peso) erros.peso = 'Preencha aqui com o peso da variação';
+    if (!largura) erros.largura = 'Preencha aqui com a largura da variação';
+    if (!altura) erros.altura = 'Preencha aqui com a altura da variação';
+    if (!comprimento)
+      erros.comprimento = 'Preencha aqui com o comprimento da variação';
+
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
+  }
+
+  salvarVariacao() {
+    const { usuario, produto, salvarVariacao } = this.props;
+    if (!usuario || !produto || !this.validate()) return null;
+    salvarVariacao(this.state, produto._id, usuario.loja, (error) => {
+      this.setState({
+        aviso: {
+          status: !error,
+          msg: error ? error.message : 'Variação criada com sucesso.',
+        },
+      });
+      this.props.getVariacoes(produto._id, usuario.loja);
+    });
+  }
+
   renderCabecalho() {
     const { nome } = this.state;
     return (
@@ -29,6 +92,115 @@ class NovaVariacao extends Component {
             label="Salvar"
           />
         </div>
+      </div>
+    );
+  }
+
+  renderDadosCadastrais() {
+    const { codigo, nome, preco, promocao, quantidade, erros } = this.state;
+    return (
+      <div className="Dados-Produto">
+        <InputSimples
+          name="codigo"
+          label="Código:"
+          value={codigo}
+          error={erros.codigo}
+          onChange={(ev) => this.onChangeInput('codigo', ev.target.value)}
+        />
+        <InputSimples
+          name="nome"
+          label="Nome:"
+          value={nome}
+          error={erros.nome}
+          onChange={(ev) => this.onChangeInput('nome', ev.target.value)}
+        />
+        <InputSimples
+          name="preco"
+          label="Preço Padrão:"
+          type="number"
+          value={preco}
+          error={erros.preco}
+          onChange={(ev) => this.onChangeInput('preco', ev.target.value)}
+        />
+        <InputSimples
+          name="promocao"
+          label="Preço Promocional:"
+          type="number"
+          value={promocao}
+          error={erros.promocao}
+          onChange={(ev) => this.onChangeInput('promocao', ev.target.value)}
+        />
+        <InputSimples
+          name="quantidade"
+          label="Quantidade:"
+          type="number"
+          value={quantidade}
+          error={erros.quantidade}
+          onChange={(ev) => this.onChangeInput('quantidade', ev.target.value)}
+        />
+      </div>
+    );
+  }
+
+  renderDadosEnvio() {
+    const {
+      peso,
+      freteGratis,
+      largura,
+      comprimento,
+      altura,
+      erros,
+    } = this.state;
+    return (
+      <div className="Dados-Produto">
+        <InputSimples
+          name="peso"
+          label="Peso (Kg):"
+          type="number"
+          value={peso}
+          error={erros.peso}
+          onChange={(ev) => this.onChangeInput('peso', ev.target.value)}
+        />
+        <TextoDados
+          chave="Frete Grátis?"
+          valor={
+            <InputSelect
+              name="freteGratis"
+              onChange={(ev) =>
+                this.onChangeInput('freteGratis', ev.target.value)
+              }
+              value={freteGratis}
+              opcoes={[
+                { label: 'Sim', value: 'sim' },
+                { label: 'Não', value: 'nao' },
+              ]}
+            />
+          }
+        />
+        <InputSimples
+          name="largura"
+          label="Largura (cm):"
+          type="number"
+          value={largura}
+          error={erros.largura}
+          onChange={(ev) => this.onChangeInput('largura', ev.target.value)}
+        />
+        <InputSimples
+          name="comprimento"
+          label="Comprimento:"
+          type="number"
+          value={comprimento}
+          error={erros.comprimento}
+          onChange={(ev) => this.onChangeInput('comprimento', ev.target.value)}
+        />
+        <InputSimples
+          name="altura"
+          label="Altura:"
+          type="number"
+          value={altura}
+          error={erros.altura}
+          onChange={(ev) => this.onChangeInput('altura', ev.target.value)}
+        />
       </div>
     );
   }
