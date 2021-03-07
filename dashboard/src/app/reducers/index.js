@@ -6,6 +6,7 @@ import clienteReducer from './cliente_reducer';
 import categoriaReducer from './categoria_reducer';
 import produtoReducer from './produto_reducer';
 import variacaoReducer from './variacao_reducer';
+import avaliacaoReducer from './avaliacao_reducer';
 
 const reducers = combineReducers({
   auth: authReducer,
@@ -14,6 +15,7 @@ const reducers = combineReducers({
   categoria: categoriaReducer,
   produto: produtoReducer,
   variacao: variacaoReducer,
+  avaliacao: avaliacaoReducer,
 });
 
 export default reducers;

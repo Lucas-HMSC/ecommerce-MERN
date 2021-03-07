@@ -5,47 +5,48 @@ import Titulo from '../../components/Texto/Titulo';
 import Tabela from '../../components/Tabela/Simples';
 import Voltar from '../../components/Links/Voltar';
 
+import { connect } from 'react-redux';
+import * as actions from '../../actions/avaliacoes';
+
 class Avaliacoes extends Component {
+  getAvaliacoes(props) {
+    const { usuario, produto } = props;
+    if (!usuario || !produto) return;
+    this.props.getAvaliacoes(produto._id, usuario.loja);
+  }
+
+  componentDidMount() {
+    this.getAvaliacoes(this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      (!prevProps.usuario || !prevProps.produto) &&
+      this.props.usuario &&
+      this.props.produto
+    )
+      this.getAvaliacoes(this.props);
+  }
+
   render() {
-    // Dados
-    const dados = [
-      {
-        Cliente: 'Cliente 1',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3291',
-      },
-      {
-        Cliente: 'Cliente 2',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3292',
-      },
-      {
-        Cliente: 'Cliente 3',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3293',
-      },
-      {
-        Cliente: 'Cliente 4',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3294',
-      },
-      {
-        Cliente: 'Cliente 5',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3295',
-      },
-      {
-        Cliente: 'Cliente 6',
-        Data: moment().format('DD/MM/YYYY'),
-        botaoDetalhes: '/avaliacao/F92K392KF3296',
-      },
-    ];
+    const { avaliacoes, produto } = this.props;
+    const dados = [];
+    (avaliacoes || []).forEach((item) => {
+      dados.push({
+        Cliente: item.nome,
+        Data: moment(item.createdAt).format('DD/MM/YYYY'),
+        botaoDetalhes: `/avaliacao/${item._id}`,
+      });
+    });
 
     return (
       <div className="Avaliacoes full-width">
         <div className="Card">
           <Voltar path="/produto/d92kd9" />
-          <Titulo tipo="h1" titulo="Avaliações - Produto 1" />
+          <Titulo
+            tipo="h1"
+            titulo={`Avaliações - ${produto ? produto.titulo : ''}`}
+          />
           <br />
           <Tabela cabecalho={['Cliente', 'Data']} dados={dados} />
         </div>
@@ -54,4 +55,10 @@ class Avaliacoes extends Component {
   }
 }
 
-export default Avaliacoes;
+const mapStateToProps = (state) => ({
+  usuario: state.auth.usuario,
+  avaliacoes: state.avaliacao.avaliacoes,
+  produto: state.produto.produto,
+});
+
+export default connect(mapStateToProps, actions)(Avaliacoes);
