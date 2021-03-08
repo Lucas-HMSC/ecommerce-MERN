@@ -131,7 +131,8 @@ class NovoProduto extends Component {
         />
         <br />
         <TextoDados
-          chave="descricao"
+          chave="Descricao"
+          vertical
           valor={
             <div>
               <textarea
@@ -143,7 +144,7 @@ class NovoProduto extends Component {
                 rows="10"
                 style={{ resize: 'none' }}
               />
-              {erros.descricao || (
+              {erros.descricao && (
                 <small className="small-danger">{erros.descricao}</small>
               )}
             </div>
