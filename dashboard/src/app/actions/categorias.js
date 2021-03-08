@@ -37,7 +37,7 @@ export const salvarCategoria = (categoria, loja, cb) => {
       )
       .then((response) => {
         dispatch({
-          type: GET_CATEGORIA,
+          type: GET_CATEGORIAS,
           payload: response.data,
         });
         cb(null);
