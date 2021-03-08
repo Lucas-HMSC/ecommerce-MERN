@@ -42,7 +42,7 @@ class Avaliacoes extends Component {
     return (
       <div className="Avaliacoes full-width">
         <div className="Card">
-          <Voltar path="/produto/d92kd9" />
+          <Voltar history={this.props.history} />
           <Titulo
             tipo="h1"
             titulo={`Avaliações - ${produto ? produto.titulo : ''}`}
