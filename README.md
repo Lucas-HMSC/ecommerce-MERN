@@ -1,6 +1,6 @@
 # Ecommerce com MERN
-* Ecommerce com stack MERN (MongoDB, ExpressJS, ReactJS e NodeJS).
-* Módulos do Projeto e duas principais dependências:
+### Ecommerce com stack MERN (MongoDB, ExpressJS, ReactJS e NodeJS).
+### Módulos do Projeto e duas principais dependências:
    * [API](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/api) (finalizado).
      * cors: 2.8.5;
      * express: 4.16.4;
