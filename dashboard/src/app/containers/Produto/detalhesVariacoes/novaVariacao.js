@@ -212,9 +212,9 @@ class NovaVariacao extends Component {
         <AlertGeral aviso={this.state.aviso} />
         <br />
         <div className="flex horizontal">
-          <div className="flex-3 ">{this.renderDadosCadastrais}</div>
+          <div className="flex-3">{this.renderDadosCadastrais()}</div>
           <div className="flex-1"></div>
-          <div className="flex-3">{this.renderDadossEnvio()}</div>
+          <div className="flex-3">{this.renderDadosEnvio()}</div>    
         </div>
       </div>
     );
