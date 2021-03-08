@@ -62,7 +62,7 @@ export const salvarVariacao = (variacao, produto, loja, cb) => {
             dimensoes: {
               alturaCm: variacao.altura,
               larguraCm: variacao.largura,
-              profunidadeCm: variacao.comprimento,
+              profundidadeCm: variacao.comprimento,
             },
           },
         },
@@ -114,7 +114,7 @@ export const updateVariacao = (variacao, id, produto, loja, cb) => {
             dimensoes: {
               alturaCm: variacao.altura,
               larguraCm: variacao.largura,
-              profunidadeCm: variacao.comprimento,
+              profundidadeCm: variacao.comprimento,
             },
           },
         },
