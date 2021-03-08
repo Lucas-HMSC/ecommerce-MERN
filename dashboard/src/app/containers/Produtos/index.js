@@ -17,7 +17,7 @@ class Produtos extends Component {
   };
 
   getProdutos(props) {
-    const { atual, limit, pesquisa, ordem } = this.state.atual;
+    const { atual, limit, pesquisa, ordem } = this.state;
     const { usuario } = props;
 
     if (!usuario) return null;
@@ -52,7 +52,7 @@ class Produtos extends Component {
 
   renderBotaoNovo = () => {
     return (
-      <Link className="button cutton-success button-small" to="/produtos/novo">
+      <Link className="button button-success button-small" to="/produtos/novo">
         <i className="fas fa-plus"></i>
         <span>&nbsp;Novo Produto</span>
       </Link>
@@ -97,7 +97,7 @@ class Produtos extends Component {
                 <small>Ordenar por</small>
               </label>
               <select value={ordem} onChange={this.changeOrdem}>
-                <option>Aleatório</option>
+                <option value={''}>Aleatório</option>
                 <option value={'alfabetica_a-z'}>Alfabética A-Z</option>
                 <option value={'alfabetica_z-a'}>Alfabética Z-A</option>
                 <option value={'preco-crescente'}>Menor Preço</option>
