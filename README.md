@@ -1,7 +1,7 @@
 # Ecommerce com MERN
 ### Ecommerce com stack MERN (MongoDB, ExpressJS, ReactJS e NodeJS).
 ### Módulos do Projeto e suas principais dependências:
-   * [API](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/api) (finalizado).
+   * [***API***](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/api) ***(finalizado)***
      * cors: 2.8.5;
      * express: 4.16.4;
      * express-jwt: 5.3.1;
@@ -15,7 +15,7 @@
      * nodemailer: 4.7.0;
      * nodemon: 1.18.9;
      * request: 2.88.0;
-   * [Dashboard](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/dashboard) (finalizado).
+   * [***Dashboard***](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/dashboard) ***(finalizado)***
      * axios: 0.21.1;
      * react: 17.0.1;
      * react-cookie: 4.0.3;
@@ -25,7 +25,7 @@
      * react-scripts: 4.0.1;
      * redux: 4.0.5;
      * redux-thunk: 2.3.0;
-   * Loja Virtual.
+   * [***Loja Virtual***](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/lojavirtual) ***(em produção)***
      * async: 3.2.0;
      * axios: 0.21.1;
      * js-cookie: 2.2.1;
@@ -36,4 +36,3 @@
      * react-redux: 7.2.2;
      * redux: 4.0.5;
      * redux-thunk: 2.3.0;
-     * ***OBS: Em produção.***
