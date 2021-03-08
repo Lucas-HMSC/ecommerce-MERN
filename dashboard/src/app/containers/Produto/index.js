@@ -10,7 +10,7 @@ import * as actionsCategorias from '../../actions/categorias';
 class Produto extends Component {
   componentDidMount() {
     const { usuario, getProduto, getCategorias } = this.props;
-    if (!usuario) return null;
+    if (!usuario) return;
     const { id } = this.props.match.params;
     getProduto(id, usuario.loja);
     getCategorias(usuario.loja);
@@ -25,7 +25,6 @@ class Produto extends Component {
         <div>
           <DetalhesVariacoes />
         </div>
-        *
       </div>
     );
   }
