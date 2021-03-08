@@ -46,6 +46,7 @@ class Variacoes extends Component {
         {(variacoes || []).map((item, idx) => (
           <div
             onClick={() => this.getVariacao(item._id)}
+            key={idx}
             className={`flex flex-center variacao-item ${
               variacaoSelecionada === item._id ? 'variacao-item-ativa' : ''
             }`}
