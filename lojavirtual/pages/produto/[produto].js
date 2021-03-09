@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-export default class Index extends Component {
+export default class Produto extends Component {
   render(){
     return (
       <div>
-        <h2>Loja TI - Sobre</h2>
+        <h2>Loja TI - Produto</h2>
       </div>
     )
   }
