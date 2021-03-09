@@ -1,4 +1,4 @@
-# API para o Ecommerce com MERN
+# Dashboard para o Ecommerce com MERN
 ### Dependências utilizadas no desenvolvimento da aplicação:
 * axios: 0.21.1;
 * moment: 2.29.1;
