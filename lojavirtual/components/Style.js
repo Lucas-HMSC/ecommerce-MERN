@@ -40,8 +40,11 @@ export default () => (
         flex-direction: column;
       }
       .Header {
-        max-height: 150px;
+        max-height: 200px;
       }
+    }
+    .logo {
+      max-width: 230px;
     }
     .input-pesquisa {
       font-size: 1rem;
@@ -50,14 +53,43 @@ export default () => (
       width: 90%;
       border: 1px solid #aaa;
       border-radius: 10px;
+      margin: 0 10px;
     }
     .button-pesquisa {
-      margin-left: -35px;
+      margin-left: -45px;
       font-size: 1.2rem;
       color: #333;
       background-color: transparent;
       border: 0;
       cursor: pointer;
+    }
+    .itens-cabecalho {
+      padding: 20px 0;
+    }
+    .item-cabecalho {
+      cursor: pointer;
+    }
+    .item-cabecalho i {
+      color: #e87c09;
+      font-size: 1.7rem;
+      margin: 0 5px;
+    }
+    .item-cabecalho span {
+      color: #777;
+      font-size: 14px;
+    }
+    .item-cabecalho.cart {
+      margin-left: 15px;
+    }
+    .item-cabecalho.cart span {
+      font-size: 1rem;
+      background-color: #222;
+      color: #fff;
+      border-radius: 100px;
+      padding: 0 5px;
+      margin-left: -15px;
+      position: relative;
+      top: -15px;
     }
   `}</style>
 );
