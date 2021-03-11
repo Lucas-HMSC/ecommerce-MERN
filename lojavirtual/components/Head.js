@@ -31,6 +31,7 @@ const Head = (props) => (
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
       crossOrigin="anonymous"
     />
+    <link rel="stylesheet" href="/static/style.css" />
     {props.children}
   </NextHead>
 );
