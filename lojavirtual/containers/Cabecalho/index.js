@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Logo from '../../components/Logo/Cabecalho';
 import CampoPesquisa from '../../components/Campos/Pesquisa';
 import CardCarrinho from '../../components/Cards/Carrinho';
+import Categorias from '../../components/Listas/Categorias';
 
 class Cabecalho extends React.Component {
   renderCabecalhoNormal() {
@@ -13,6 +14,9 @@ class Cabecalho extends React.Component {
           <Logo />
           <CampoPesquisa />
           <CardCarrinho />
+        </div>
+        <div className="categorias-wrapper">
+          <Categorias />
         </div>
       </div>
     );
