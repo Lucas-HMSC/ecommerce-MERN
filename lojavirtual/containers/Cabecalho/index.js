@@ -30,7 +30,9 @@ class Cabecalho extends React.Component {
 
   render() {
     const { simples } = this.props;
-    return simples ? renderCabecalhoSimples() : renderCabecalhoNormal();
+    return simples
+      ? this.renderCabecalhoSimples()
+      : this.renderCabecalhoNormal();
   }
 }
 
