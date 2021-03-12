@@ -5,10 +5,11 @@ import Produto from '../Item/Produto';
 class Produtos extends Component {
   componentDidMount() {
     let highest = 0;
-    document.querySelectorAll('.produto-title').forEach(function (item) {
+    const produtosListados = document.querySelectorAll('.produto-title');
+    produtosListados.forEach(function (item) {
       if (highest < item.clientHeight) highest = item.clientHeight;
     });
-    document.querySelectorAll('.produto-title').forEach(function (item) {
+    produtosListados.forEach(function (item) {
       item.style.height = highest + 10 + 'px';
     });
   }
