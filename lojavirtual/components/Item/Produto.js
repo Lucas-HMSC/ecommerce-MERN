@@ -15,7 +15,7 @@ class Produto extends Component {
           className={`produto flex-1 flex vertical wrap-${porLinha} wrap-2-mb`}
         >
           <div className="produto-image flex flex-center">
-            <img src={fotos[0]} alt={titulo} style={{ maxHeight: '95%' }} />
+            <img src={fotos[0]} alt={titulo} style={{ maxWidth: '95%' }} />
           </div>
           <div className="produto-title flex flex-center">
             <h3>{titulo}</h3>
