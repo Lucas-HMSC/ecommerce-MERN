@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { formatMoney } from '../../utils';
+
 const PRODUTOS = [
   {
     id: 192391231,
@@ -40,7 +42,34 @@ class ListaDeProdutos extends Component {
     const foto = item.fotos[0];
     const nome = item.titulo;
     const { quantidade, precoUnitario } = item;
-    return <div></div>;
+    return (
+      <div key={item.id} className="flex">
+        <div className="flex-6 flex">
+          <div className="produto-image flex-2 flex flex-center">
+            <img src={foto} alt={nome} width="100px" />
+          </div>
+          <div className="produto-titulo flex-4">
+            <h3>{nome}</h3>
+          </div>
+        </div>
+        <div className="flex-1 flex flex-center">
+          <input
+            type="number"
+            defaultValue={quantidade}
+            className="produto-quantidade"
+          />
+        </div>
+        <div className="flex-1 flex flex-center">
+          <span>{formatMoney(precoUnitario)}</span>
+        </div>
+        <div className="flex-1 flex flex-center">
+          <span>{formatMoney(precoUnitario * quantidade)}</span>
+        </div>
+        <div className="flex-1 flex flex-center">
+          <span className="btn-remover">Remover</span>
+        </div>
+      </div>
+    );
   }
 
   renderProdutos() {

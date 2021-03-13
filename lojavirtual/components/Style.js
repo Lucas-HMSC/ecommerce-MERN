@@ -58,6 +58,15 @@ export default () => (
     .flex-3 {
       flex: 3;
     }
+    .flex-4 {
+      flex: 4;
+    }
+    .flex-5 {
+      flex: 5;
+    }
+    .flex-6 {
+      flex: 6;
+    }
     .vertical {
       flex-direction: column;
     }
