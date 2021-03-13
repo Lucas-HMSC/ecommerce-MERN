@@ -170,6 +170,63 @@
   border: 1px solid #333;
 }
 
+/* PAGINA DE PRODUTO */
+.Produto-Hero .titulo {
+  font-size: 1.8rem;
+  color: #222;
+}
+.Produto-Hero .titulo h2 {
+  margin-bottom: 0;
+}
+.Produto-Hero .categoria p {
+  margin-top: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+.Produto-Hero .categoria-link {
+  color: #e87c08;
+  cursor: pointer;
+}
+.Produto-Hero .preco-original,
+.Produto-Hero .preco-promocao {
+  font-size: 1.8rem;
+  color: #434343;
+  margin: 0;
+}
+.Produto-Hero .preco-original.preco-por {
+  color: #777;
+  font-size: 0.95rem;
+  font-weight: normal;
+  text-decoration: line-throught;
+}
+.Produto-Hero .preco-parcelado {
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+  font-weight: normal;
+}
+.Produto-Hero .variacao {
+  max-width: 40px;
+  border: 1px solid #999;
+  padding: 10px 5px;
+  font-size: 1rem;
+  margin: 5px 10px 5px 0;
+  cursor: pointer;
+}
+.Produto-Hero .variacao:hover,
+.Produto-Hero .variacao.variacao-active {
+  background-color: #111111;
+  border-color: #111111;
+  color: #fff;
+}
+.Produto-Hero .opcoes {
+  margin-top: 20px;
+}
+.Produto-Hero .opcao-tab {
+  font-size: 0.9rem;
+  color: #444;
+}
+
 /* RODAPE */
 .Rodape {
   background: #111111;
