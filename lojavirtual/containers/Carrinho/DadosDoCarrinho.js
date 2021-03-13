@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { formatMoney } from '../../utils';
 
+import Frete from '../../components/Item/Frete';
+
 class DadosDoCarrinho extends Component {
   renderDadosDoCarrinho() {
     return (
@@ -19,6 +21,11 @@ class DadosDoCarrinho extends Component {
             <p className="headline">Valor Total:</p>
           </div>
           <div className="flex-1 flex flex-right">{formatMoney(105.35)}</div>
+        </div>
+        <div className="flex flex-right">
+          <button className="btn btn-success btn-cta">
+            <span>Finalizar Pedido</span>
+          </button>
         </div>
       </div>
     );
