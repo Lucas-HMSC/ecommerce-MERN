@@ -66,7 +66,7 @@ class Avaliacoes extends Component {
             <label>Avaliação:</label>
             <br />
             <textarea
-              rows="4"
+              rows="3"
               style={{ resize: 'none', width: '100%', maxWidth: '500px' }}
               placeholder="Digite aqui a sua avaliação..."
             ></textarea>

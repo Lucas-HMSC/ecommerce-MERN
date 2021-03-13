@@ -255,14 +255,52 @@
   max-width: 800px;
 }
 .Descricao h2,
-.Avaliacoes h2 {
-  color: #222;
+.Avaliacoes h2,
+.Produtos-Relacionados h2 {
+  color: rgb(177, 114, 17);
   font-size: 1.8rem;
   text-transform: uppercase;
 }
 
-.Avaliacoes {
+.Avaliacoes,
+.Produtos-Relacionados {
   margin-top: 50px;
+}
+.Produtos-Relacionados {
+  margin-bottom: 60px;
+}
+.avaliacao {
+  border: 1px solid #aaaa;
+  box-shadow: 0 0 5px #aaaa;
+  padding: 10px 15px;
+  margin: 10px 20px 10px 0;
+  border-radius: 15px;
+}
+.avaliacao i.fa-star {
+  color: #cec805;
+  margin-right: 2px;
+}
+.avaliacoes-form {
+  margin-top: 15px;
+}
+.avaliacoes-form h4 {
+  color: #888;
+  font-size: 1.2rem;
+}
+.avaliacoes-form label {
+  font-size: 0.9rem;
+  color: #474747;
+  margin: 10px 10px 5px 0;
+}
+.avaliacoes-form select {
+  font-size: 0.9rem;
+  width: 120px;
+}
+.avaliacoes-form textarea {
+  border-radius: 10px;
+  border: 1px soli #aaa;
+  padding: 10px;
+  font-size: 0.9rem;
 }
 
 /* BOTAO */
@@ -277,6 +315,11 @@
 }
 .btn-success {
   background-color: rgb(3, 123, 17);
+  color: #fff;
+  border: 0;
+}
+.btn-primary {
+  background-color: rgb(177, 114, 17);
   color: #fff;
   border: 0;
 }
