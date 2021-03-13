@@ -10,7 +10,7 @@ export default class Categoria extends Component {
     return (
       <Layout title="Acessórios | Loja TI - Melhores produtos de tecnologia">
         <Cabecalho />
-        <PordutosCategoria />
+        <ProdutosCategoria />
         <Rodape />
       </Layout>
     );
