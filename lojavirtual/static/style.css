@@ -151,6 +151,25 @@
   font-size: 0.95rem;
 }
 
+/* PAGINACAO */
+.Paginacao {
+  margin: 40px 0 80px;
+}
+.paginacao-item {
+  border: 1px solid #ccc;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #474747;
+  margin: 0 5px;
+  cursor: pointer;
+}
+.paginacao-item.paginacao-item-active,
+.paginacao-item:hover {
+  color: #fefefe;
+  background-color: #333;
+  border: 1px solid #333;
+}
+
 /* RODAPE */
 .Rodape {
   background: #111111;
