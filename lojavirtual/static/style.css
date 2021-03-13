@@ -226,6 +226,65 @@
   font-size: 0.9rem;
   color: #444;
 }
+.Produto-Hero .opcao-input {
+  font-size: 1.2rem;
+  padding: 10px 15px;
+  margin: 5px 0;
+  max-width: 45px;
+  border: 1px solid #999;
+}
+.foto-principal {
+  height: 550px;
+}
+.foto-principal img {
+  max-width: 500px;
+}
+.mini-foto {
+  border: 1px solid #999;
+  max-width: 100px;
+  margin-right: 10px;
+  cursor: pointer;
+  opacity: 0.8rem;
+}
+.mini-foto:hover {
+  opacity: 1;
+}
+
+.Descricao {
+  margin-top: 50px;
+  max-width: 800px;
+}
+.Descricao h2,
+.Avaliacoes h2 {
+  color: #222;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+}
+
+.Avaliacoes {
+  margin-top: 50px;
+}
+
+/* BOTAO */
+.btn {
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border: 1px solid #999;
+  background: transparent;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-success {
+  background-color: rgb(3, 123, 17);
+  color: #fff;
+  border: 0;
+}
+.btn-cta {
+  padding: 15px 25px;
+  font-size: 1.3rem;
+  margin: 15px 0;
+}
 
 /* RODAPE */
 .Rodape {
