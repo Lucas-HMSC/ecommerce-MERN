@@ -425,6 +425,29 @@
   padding-top: 0;
 }
 
+/* MINHA CONTA */
+.Acesso-Container {
+  margin: 50px auto 10px;
+  width: calc(100% - 20px);
+  padding: 20px;
+  max-width: 500px;
+  border: 1px solid #aaaa;
+  box-shadow: 0 0 7px #aaaa;
+  border-radius: 10px;
+}
+.Acesso-Container .form-input input {
+  max-width: 100%;
+}
+.Acesso-Container .link-acesso {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #1c2041;
+}
+.Acesso-Container .link-acesso:hover {
+  text-decoration: underline;
+}
+
 /* RODAPE */
 .Rodape {
   background: #111111;

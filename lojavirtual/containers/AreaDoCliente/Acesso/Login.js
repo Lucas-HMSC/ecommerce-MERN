@@ -14,7 +14,6 @@ class LoginContainer extends Component {
       <div className="Login-Container">
         <h2 className="text-center">Minha Conta</h2>
         <br />
-        <hr />
         <br />
         <div className="form-login">
           <FormSimples
@@ -34,7 +33,8 @@ class LoginContainer extends Component {
             <button className="btn btn-primary">ENTRAR</button>
           </div>
           <br />
-          <div className="text-center">
+          <hr />
+          <div className="link-acesso text-center">
             <span onClick={this.props.changeAcesso}>
               Não tem conta? Clique aqui para cadastrar
             </span>
