@@ -447,6 +447,32 @@
 .Acesso-Container .link-acesso:hover {
   text-decoration: underline;
 }
+.Pedidos-Container {
+  padding-top: 30px !important;
+}
+.menu-lateral {
+  border-top: 3px solid #ff9600;
+  margin-top: 30px;
+}
+.menu-lateral-item {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: 1px solid #aaaa;
+  border-top: 0;
+  cursor: pointer;
+}
+.menu-lateral-item-active,
+.menu-lateral-item:hover {
+  background-color: #111111;
+  color: #fff;
+}
+.conteudo-area-cliente {
+  margin: 10px 10px 10px 30px;
+  box-shadow: 0 0 5px #cccc;
+  padding: 20px;
+  border-radius: 15px;
+}
 
 /* RODAPE */
 .Rodape {
