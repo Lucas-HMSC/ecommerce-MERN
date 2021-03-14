@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
+import { withRouter } from 'next/router';
 
 class MenuAreaDoCliente extends Component {
   renderCabecalho() {
@@ -18,7 +19,7 @@ class MenuAreaDoCliente extends Component {
   }
 
   renderMenu() {
-    const url = window.location.pathname;
+    const url = this.props.router.pathname;
     const estaEmDados = url.includes('/area-cliente/dados');
     const estaEmAlterarSenha = url.includes('/area-cliente/alterar-senha');
     const estaEmPedidos = !estaEmDados && !estaEmAlterarSenha;
@@ -68,4 +69,4 @@ class MenuAreaDoCliente extends Component {
   }
 }
 
-export default MenuAreaDoCliente;
+export default withRouter(MenuAreaDoCliente);
