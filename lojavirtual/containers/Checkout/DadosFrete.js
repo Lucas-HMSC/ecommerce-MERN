@@ -6,7 +6,7 @@ class DadosFrete extends Component {
   render() {
     return (
       <div className="Dados-Frete">
-        <h2>Métodos de Entrega</h2>
+        <h2>MÉTODOS DE ENTREGA</h2>
         <br />
         <div className="flex horizontal">
           <div className="flex-1">
