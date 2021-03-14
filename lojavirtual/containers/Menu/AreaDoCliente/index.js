@@ -18,20 +18,36 @@ class MenuAreaDoCliente extends Component {
   }
 
   renderMenu() {
+    const url = window.location.pathname;
+    const estaEmDados = url.includes('/area-cliente/dados');
+    const estaEmAlterarSenha = url.includes('/area-cliente/alterar-senha');
+    const estaEmPedidos = !estaEmDados && !estaEmAlterarSenha;
     return (
       <div className="menu-lateral">
         <Link href="/area-cliente">
-          <div className="menu-lateral-item">
+          <div
+            className={`menu-lateral-item ${
+              estaEmPedidos ? 'menu-lateral-item-active' : ''
+            }`}
+          >
             <span>MEUS PEDIDOS</span>
           </div>
         </Link>
         <Link href="/area-cliente/dados">
-          <div className="menu-lateral-item">
+          <div
+            className={`menu-lateral-item ${
+              estaEmDados ? 'menu-lateral-item-active' : ''
+            }`}
+          >
             <span>MEUS DADOS</span>
           </div>
         </Link>
         <Link href="/area-cliente/alterar-senha">
-          <div className="menu-lateral-item">
+          <div
+            className={`menu-lateral-item ${
+              estaEmAlterarSenha ? 'menu-lateral-item-active' : ''
+            }`}
+          >
             <span>ALTERAR SENHA</span>
           </div>
         </Link>
