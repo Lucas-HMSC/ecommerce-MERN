@@ -65,12 +65,67 @@ class DadosPagamento extends Component {
     return (
       <div className="Dados-Pagamento">
         <FormSimples
-          value={CPnomeCartaoF}
+          value={nomeCartao}
           name="nomeCartao"
           placeholder="Nome como escrito no cartão"
           label="Nome Completo no Cartão"
           onChange={(e) => this.onChange('nomeCartao', e)}
         />
+        <div className="flex horizontal">
+          <div className="flex-1">
+            <FormSimples
+              value={numeroCartao}
+              name="numeroCartao"
+              placeholder="XXXX XXXX XXXX XXXX"
+              label="Número do Cartão"
+              onChange={(e) => this.onChange('numeroCartao', e)}
+            />
+          </div>
+          <div className="flex-1">
+            <FormSimples
+              value={CVVCartao}
+              name="CVVCartao"
+              placeholder="XXX"
+              label="Código de Segurança do Cartão"
+              onChange={(e) => this.onChange('CVVCartao', e)}
+            />
+          </div>
+        </div>
+        <div>
+          <strong>Data de Validade</strong>
+        </div>
+        <div className="flex">
+          <FormSimples
+            value={mesCartao}
+            name="mesCartao"
+            placeholder="MM"
+            label="Mês"
+            onChange={(e) => this.onChange('mesCartao', e)}
+          />
+          <span>&nbso;/&nbsp;</span>
+          <FormSimples
+            value={anoCartao}
+            name="anoCartao"
+            placeholder="AAAA"
+            label="Ano"
+            onChange={(e) => this.onChange('anoCartao', e)}
+          />
+        </div>
+        <br />
+        <div>
+          <strong>Parcelas</strong>
+        </div>
+        <div className="flex">
+          <select name="parcela">
+            <option>Selecione a quantidade de parcelas para pagamento</option>
+            <option value="1">1x de R$ 105,00 sem juros</option>
+            <option value="2">2x de R$ 62,50 sem juros</option>
+            <option value="3">3x de R$ 35,00 sem juros</option>
+            <option value="4">4x de R$ 31,75 sem juros</option>
+            <option value="5">5x de R$ 21,00 sem juros</option>
+            <option value="6">6x de R$ 17,50 sem juros</option>
+          </select>
+        </div>
       </div>
     );
   }
