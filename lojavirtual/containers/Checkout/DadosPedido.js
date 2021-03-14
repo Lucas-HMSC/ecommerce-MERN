@@ -9,6 +9,8 @@ class DadosPedido extends Component {
         <h2>DADOS DO PEDIDO</h2>
         <br />
         <ListaDeProdutos semAlteracoes />
+        <br />
+        <br />
       </div>
     );
   }

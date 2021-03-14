@@ -4,7 +4,7 @@ export default class FormCheckbox extends Component {
   render() {
     const { name, checked, label, onChange } = this.props;
     return (
-      <div className="form-input form-checkbox">
+      <div className="form-input form-check">
         <input
           type="checkbox"
           checked={checked}

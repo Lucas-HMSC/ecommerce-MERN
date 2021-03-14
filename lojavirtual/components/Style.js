@@ -78,6 +78,10 @@ export default () => (
       justify-content: flex-start;
       align-items: center;
     }
+    .flex-right {
+      justify-content: flex-end;
+      align-items: center;
+    }
 
     .text-center {
       text-align: center;

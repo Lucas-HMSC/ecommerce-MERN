@@ -106,7 +106,8 @@ export default class DadosClienteContainer extends Component {
               onChange={(e) => this.onChange('cidade', e)}
             />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 flex vertical form-input">
+            <label>Estado</label>
             <select value={estado} onChange={(e) => this.onChange('estado', e)}>
               <option>Selecione...</option>
               {Object.keys(ESTADOS).map((abbr) => (
@@ -201,7 +202,7 @@ export default class DadosClienteContainer extends Component {
           </div>
         </div>
         <div className="flex-1 flex horizontal">
-          <div className="flex-1">
+          <div className="flex-1 flex">
             <FormSimples
               value={cidade}
               name="cidade"
@@ -210,7 +211,8 @@ export default class DadosClienteContainer extends Component {
               onChange={(e) => this.onChangeCobranca('cidade', e)}
             />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 flex vertical form-input">
+            <label>Estado</label>
             <select
               value={estado}
               onChange={(e) => this.onChangeCobranca('estado', e)}

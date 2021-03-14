@@ -333,7 +333,8 @@
 .Carrinho > h2 {
   font-size: 2rem;
 }
-.Carrinho .produto-image {
+.Carrinho .produto-image,
+.Checkout .produto-image {
   height: auto;
 }
 .Carrinho .produto-quantidade {
@@ -374,6 +375,30 @@
 }
 .Carrinho .valor-frete {
   margin: 0;
+}
+
+/* CHECKOUT */
+.form-input {
+  display: flex;
+  flex-direction: column;
+}
+.form-input label {
+  margin: 10px 0 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.form-input input {
+  max-width: 400px;
+  font-size: 1rem;
+  padding: 5px 8px;
+  margin: 0 5px 5px 0;
+  border: 1px solid #aaaa;
+  border-radius: 5px;
+}
+.Checkout select {
+  max-width: 300px;
+  font-size: 1rem;
+  margin: 0 5px 5px 0;
 }
 
 /* RODAPE */
