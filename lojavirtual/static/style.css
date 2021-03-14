@@ -381,6 +381,10 @@
 .Carrinho .valor-frete {
   margin: 0;
 }
+.form-dados,
+.form-dados input {
+  max-width: 700px;
+}
 
 /* CHECKOUT */
 .form-input {
@@ -452,7 +456,10 @@
 .Acesso-Container .link-acesso:hover {
   text-decoration: underline;
 }
-.Pedidos-Container {
+.Pedidos-Container,
+.Pedido-Container,
+.Dados-Container,
+.Senha-Container {
   padding-top: 30px !important;
 }
 .menu-lateral {
@@ -489,6 +496,20 @@
 .menu-pedidos > div,
 .Pedido-Card > div {
   padding: 0 10px;
+}
+table.simples {
+  border-collapse: collapse; 
+}
+table.simples th,
+table.simples td {
+  padding: 10px 15px;
+}
+table.simples th {
+  background-color: rgb(177, 144, 6);
+  color: #fff;
+}
+table.simples td {
+  border-bottom: 1px slid #dddd;
 }
 
 /* RODAPE */
