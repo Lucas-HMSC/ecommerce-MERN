@@ -8,7 +8,10 @@ class PedidoDetalhes extends Component {
   render() {
     return (
       <div className="flex-4 conteudo-area-cliente">
-        <h2>PEDIDO #123ABC456</h2>
+        <div className="flex-center">
+          <h2>PEDIDO #123ABC456</h2>
+          <button>CANCELAR PEDIDO</button>
+        </div>
         <br />
         <div>
           <DadosDoPedido />
