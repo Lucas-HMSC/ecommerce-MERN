@@ -18,8 +18,8 @@ class Frete extends Component {
 
   renderOpcaoSelecionada() {
     return (
-      <div>
-        <h4>R$ 19,80</h4>
+      <div className="flex vertical flex-center">
+        <h4 className="valor-frete">R$ 19,80</h4>
         <span className="limpar-CEP">Limpar CEP</span>
       </div>
     );
@@ -40,12 +40,12 @@ class Frete extends Component {
 
   render() {
     return (
-      <div className="flex">
+      <div className="dados-do-carrinho-item flex">
         <div className="flex-1 flex vertical">
           <p className="headline">Frete</p>
           {this.state.frete && this.renderOpcoesFrete()}
         </div>
-        <div className="flex-1 flex flex-right">
+        <div className="flex-1 flex flex-center">
           {this.state.frete
             ? this.renderOpcaoSelecionada()
             : this.renderFormularioCEP()}
