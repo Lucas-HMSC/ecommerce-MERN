@@ -92,7 +92,7 @@ class DadosPagamento extends Component {
           </div>
         </div>
         <div>
-          <strong>Data de Validade</strong>
+          <label className="form-input">Data de Validade</label>
         </div>
         <div className="flex">
           <FormSimples
@@ -102,7 +102,7 @@ class DadosPagamento extends Component {
             label="Mês"
             onChange={(e) => this.onChange('mesCartao', e)}
           />
-          <span>&nbso;/&nbsp;</span>
+          <span className="slash-pagamento">&nbso;/&nbsp;</span>
           <FormSimples
             value={anoCartao}
             name="anoCartao"
@@ -113,7 +113,7 @@ class DadosPagamento extends Component {
         </div>
         <br />
         <div>
-          <strong>Parcelas</strong>
+          <label className="form-input">Parcelas</label>
         </div>
         <div className="flex">
           <select name="parcela">
