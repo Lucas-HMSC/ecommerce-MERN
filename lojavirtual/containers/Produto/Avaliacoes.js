@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 class Avaliacoes extends Component {
   state = {
-    estaLogado: false,
     texto: '',
     pontuacao: 5,
   };
@@ -41,7 +40,7 @@ class Avaliacoes extends Component {
 
   submitAvaliacao() {
     const { texto, pontuacao } = this.state;
-    const { produto, token } = this.props;
+    const { produto, token, usuario } = this.props;
     if (!texto || !produto) alert('Preencha o campo de texto da avaliação.');
     this.props.novaAvaliacao(
       {
@@ -53,6 +52,7 @@ class Avaliacoes extends Component {
       },
       (err) => {
         if (err) alert('Ocorreu um erro, tente novamente.');
+        else this.setState({ texto: '', pontuacao: 5 });
       },
     );
   }
@@ -118,7 +118,7 @@ class Avaliacoes extends Component {
         <br />
         {this.renderAvaliacoes()}
         <br />
-        {this.state.estaLogado
+        {this.props.token
           ? this.renderFormularioDeAvalicoes()
           : this.renderAvisoLogin()}
       </div>
@@ -130,6 +130,7 @@ const mapStateToProps = (state) => ({
   produto: state.produto.produto,
   avaliacoes: state.produto.avaliacoes,
   token: state.auth.token,
+  usuario: state.auth.usuario,
 });
 
 export default connect(mapStateToProps, actions)(Avaliacoes);
