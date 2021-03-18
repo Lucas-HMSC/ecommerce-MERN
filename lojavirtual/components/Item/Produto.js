@@ -3,19 +3,24 @@ import Link from 'next/link';
 import { baseImg } from '../../config';
 
 import { formatMoney } from '../../utils';
+import { baseImg } from '../../config';
 
 class Produto extends Component {
   render() {
-    const { item, key, porLinha } = this.props;
-    const { id, titulo, preco, promocao, fotos } = item;
+    const { item, porLinha } = this.props;
+    const { _id, titulo, preco, promocao, fotos } = item;
     const temPromo = promocao && preco !== promocao;
     return (
-      <Link href={`/produto/${titulo}?produto=${id}`}>
+      <Link href={`/produto/${titulo}?produto=${_id}`}>
         <div
           className={`produto flex-1 flex vertical wrap-${porLinha} wrap-2-mb`}
         >
           <div className="produto-image flex flex-center">
-            <img src={fotos[0]} alt={titulo} style={{ maxWidth: '95%' }} />
+            <img
+              src={`${baseImg}${fotos[0]}`}
+              alt={titulo}
+              style={{ maxWidth: '95%' }}
+            />
           </div>
           <div className="produto-title flex flex-center">
             <h3>{titulo}</h3>
