@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { FETCH_PRODUTOS } from '../types';
+import {
+  FETCH_PRODUTOS,
+  FETCH_PESQUISA,
+  FETCH_PRODUTOS_PESQUISA,
+} from '../types';
 import { API, versao, loja } from '../../config;';
 
 export const fetchProdutosPaginaInicial = () => (dispatch) => {
@@ -16,6 +20,28 @@ export const fetchProdutosPaginaInicial = () => (dispatch) => {
     .catch((e) => console.log(e));
 };
 
+export const fetchTermo = (termo) => ({
+  type: FETCH_PESQUISA,
+  termo,
+});
+
+export const fetchProdutosPesquisa = (termo, atual, limit) => (dispatch) => {
+  axios
+    .get(
+      `${API}/${versao}/api/produtos/search/${termo}?loja=${loja}&offset=${atual}&limit=${limit}`,
+    )
+    .then((response) =>
+      dispatch({
+        type: FETCH_PRODUTOS_PESQUISA,
+        payload: response.data,
+        termo,
+      }),
+    )
+    .catch((e) => console.log(e));
+};
+
 export default {
   fetchProdutosPaginaInicial,
+  fetchTermo,
+  fetchProdutosPesquisa,
 };
