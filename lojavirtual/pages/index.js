@@ -24,7 +24,7 @@ class Index extends Component {
     );
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     await this.props.getUser({
       token: this.props.token
     })

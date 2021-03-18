@@ -11,7 +11,7 @@ class Produto extends Component {
     const { _id, titulo, preco, promocao, fotos } = item;
     const temPromo = promocao && preco !== promocao;
     return (
-      <Link href={`/produto/${titulo}?produto=${_id}`}>
+      <Link href={`/produto/${titulo}?id=${_id}`}>
         <div
           className={`produto flex-1 flex vertical wrap-${porLinha} wrap-2-mb`}
         >
