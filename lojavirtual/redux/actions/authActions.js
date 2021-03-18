@@ -15,7 +15,7 @@ export const reauthenticate = (token) => ({
 
 export const getUser = ({ token }) => (dispatch) => {
   axios
-    .get(`${API}/${versao}/usuarios`, getHeaders(token))
+    .get(`${API}/${versao}/api/usuarios`, getHeaders(token))
     .then((response) =>
       dispatch({
         type: USER,
@@ -27,4 +27,5 @@ export const getUser = ({ token }) => (dispatch) => {
 
 export default {
   reauthenticate,
+  getUser,
 };

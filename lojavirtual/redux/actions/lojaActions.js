@@ -2,9 +2,9 @@ import axios from 'axios';
 import { FETCH_DADOS } from '../types';
 import { API, versao, loja } from '../../config';
 
-export const fetchDados = () => (dispatch) => {
+export const fetchDadosLoja = () => (dispatch) => {
   axios
-    .get(`${API}/${versao}/lojas/${loja}?loja=${loja}`)
+    .get(`${API}/${versao}/api/lojas/${loja}?loja=${loja}`)
     .then((response) =>
       dispatch({
         type: FETCH_DADOS,
@@ -15,5 +15,5 @@ export const fetchDados = () => (dispatch) => {
 };
 
 export default {
-  fetchDados,
+  fetchDadosLoja,
 };

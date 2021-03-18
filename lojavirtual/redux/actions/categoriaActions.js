@@ -4,7 +4,7 @@ import { API, versao, loja } from '../../config';
 
 export const fetchCategorias = () => (dispatch) => {
   axios
-    .get(`${API}/${versao}/categorias/disponiveis?loja=${loja}`)
+    .get(`${API}/${versao}/api/categorias/disponiveis?loja=${loja}`)
     .then((response) =>
       dispatch({
         type: FETCH_CATEGORIAS,
