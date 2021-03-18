@@ -1,49 +1,59 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
+import Link from 'next/link';
 
 class Avaliacoes extends Component {
+  state = {
+    estaLogado: false,
+    texto: '',
+    pontuacao: 5,
+  };
   renderAvaliacoes() {
+    const { avaliacoes } = this.props;
     return (
       <div className="avaliacoes-items flex horizontal wrap no-wrap-mb">
-        <div className="avaliacao flex-1 flex vertical wrap-3">
-          <div className="avaliacao-texto flex-3 flex texto">
-            <p>
-              Ótimo produto, gostei muito do mouse, utilizo para minhas Live
-              Streams.
-            </p>
-          </div>
-          <div className="avaliacao-dados flex">
-            <div className="avaliacao-nome flex-1 flex">
-              <small>Lucas Carvalho</small>
+        {avaliacoes.map((avaliacao) => (
+          <div
+            key={avaliacao._id}
+            className="avaliacao flex-1 flex vertical wrap-3"
+          >
+            <div className="avaliacao-texto flex-3 flex texto">
+              <p>{avaliacao.texto}</p>
             </div>
-            <div className="avaliacao-pontuacao flex-1 flex">
-              <span>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="avaliacao flex-1 flex vertical wrap-3">
-          <div className="avaliacao-texto flex-3 flex texto">
-            <p>Produto de boa qualidade.</p>
-          </div>
-          <div className="avaliacao-dados flex">
-            <div className="avaliacao-nome flex-1 flex">
-              <small>Lucas Carvalho</small>
-            </div>
-            <div className="avaliacao-pontuacao flex-1 flex">
-              <span>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-              </span>
+            <div className="avaliacao-dados flex">
+              <div className="avaliacao-nome flex-1 flex">
+                <small>{avaliacao.nome}</small>
+              </div>
+              <div className="avaliacao-pontuacao flex-1 flex">
+                <span>
+                  {[...Array(avaliacao.pontuacao).keys()].map((i, idx) => (
+                    <i key={idx} className="fa fa-star"></i>
+                  ))}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
+    );
+  }
+
+  submitAvaliacao() {
+    const { texto, pontuacao } = this.state;
+    const { produto, token } = this.props;
+    if (!texto || !produto) alert('Preencha o campo de texto da avaliação.');
+    this.props.novaAvaliacao(
+      {
+        nome: usuario.nome,
+        token,
+        produto: produto._id,
+        texto,
+        pontuacao,
+      },
+      (err) => {
+        if (err) alert('Ocorreu um erro, tente novamente.');
+      },
     );
   }
 
@@ -54,7 +64,10 @@ class Avaliacoes extends Component {
         <div className="flex vertical">
           <div className="flex horizontal">
             <label>Pontuação:&nbsp;</label>
-            <select>
+            <select
+              value={this.state.pontuacao}
+              onChange={(e) => this.setState({ pontuacao: e.target.value })}
+            >
               <option value="1">1 estrela</option>
               <option value="2">2 estrelas</option>
               <option value="3">3 estrelas</option>
@@ -69,17 +82,31 @@ class Avaliacoes extends Component {
               rows="3"
               style={{ resize: 'none', width: '100%', maxWidth: '500px' }}
               placeholder="Digite aqui a sua avaliação..."
-            ></textarea>
+              value={this.state.texto}
+              onChange={(e) => this.setState({ texto: e.target.value })}
+            />
           </div>
           <div>
             <button
               className="btn btn-primary btn-lg"
-              onClick={() => alert('Avaliação enviada')}
+              onClick={() => this.submitAvaliacao()}
             >
               <span>Enviar Avaliação</span>
             </button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  renderAvisoLogin() {
+    return (
+      <div>
+        <Link href="/area-cliente">
+          <button className="btn btn-primary btn-sm">
+            CLIQUE AQUI PARA LOGAR E DEIXAR UMA AVALIAÇÃO
+          </button>
+        </Link>
       </div>
     );
   }
@@ -91,10 +118,18 @@ class Avaliacoes extends Component {
         <br />
         {this.renderAvaliacoes()}
         <br />
-        {this.renderFormularioDeAvalicoes()}
+        {this.state.estaLogado
+          ? this.renderFormularioDeAvalicoes()
+          : this.renderAvisoLogin()}
       </div>
     );
   }
 }
 
-export default Avaliacoes;
+const mapStateToProps = (state) => ({
+  produto: state.produto.produto,
+  avaliacoes: state.produto.avaliacoes,
+  token: state.auth.token,
+});
+
+export default connect(mapStateToProps, actions)(Avaliacoes);
