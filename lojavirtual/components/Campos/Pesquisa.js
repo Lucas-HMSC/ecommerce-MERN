@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Router from 'next/router';
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
 
 class Pesquisa extends Component {
   state = {
@@ -6,7 +9,9 @@ class Pesquisa extends Component {
   };
 
   submitPesquisa() {
-    console.log(this.state.termo);
+    const { termo } = this.state;
+    this.props.fetchTermo(termo);
+    Router.push({ pathname: '/pesquisa', query: { termo } });
   }
 
   render() {
@@ -30,4 +35,4 @@ class Pesquisa extends Component {
   }
 }
 
-export default Pesquisa;
+export default connect(null, actions)(Pesquisa);

@@ -3,144 +3,53 @@ import React, { Component } from 'react';
 import Produtos from '../../../components/Listas/Produtos';
 import Paginacao from '../../../components/Paginacao';
 
-const PRODUTOS = [
-  {
-    id: 1,
-    fotos: ['/static/img/mouse-1.png'],
-    titulo: 'Mouse Gamer 1',
-    preco: 35,
-    promocao: 25,
-  },
-  {
-    id: 2,
-    fotos: ['/static/img/mouse-4.png'],
-    titulo: 'Mouse Gamer 2',
-    preco: 55,
-    promocao: 45,
-  },
-  {
-    id: 3,
-    fotos: ['/static/img/mouse-5.png'],
-    titulo: 'Mouse Gamer 3',
-    preco: 105,
-    promocao: 95,
-  },
-  {
-    id: 4,
-    fotos: ['/static/img/mouse-2.png'],
-    titulo: 'Mouse Gamer 4',
-    preco: 160,
-    promocao: 150,
-  },
-  {
-    id: 5,
-    fotos: ['/static/img/mouse-1.png'],
-    titulo: 'Mouse Gamer 1',
-    preco: 35,
-    promocao: 25,
-  },
-  {
-    id: 6,
-    fotos: ['/static/img/mouse-4.png'],
-    titulo: 'Mouse Gamer 2',
-    preco: 55,
-    promocao: 45,
-  },
-  {
-    id: 7,
-    fotos: ['/static/img/mouse-5.png'],
-    titulo: 'Mouse Gamer 3',
-    preco: 105,
-    promocao: 95,
-  },
-  {
-    id: 8,
-    fotos: ['/static/img/mouse-2.png'],
-    titulo: 'Mouse Gamer 4',
-    preco: 160,
-    promocao: 150,
-  },
-  {
-    id: 9,
-    fotos: ['/static/img/mouse-1.png'],
-    titulo: 'Mouse Gamer 1',
-    preco: 35,
-    promocao: 25,
-  },
-  {
-    id: 10,
-    fotos: ['/static/img/mouse-4.png'],
-    titulo: 'Mouse Gamer 2',
-    preco: 55,
-    promocao: 45,
-  },
-  {
-    id: 11,
-    fotos: ['/static/img/mouse-5.png'],
-    titulo: 'Mouse Gamer 3',
-    preco: 105,
-    promocao: 95,
-  },
-  {
-    id: 12,
-    fotos: ['/static/img/mouse-2.png'],
-    titulo: 'Mouse Gamer 4',
-    preco: 160,
-    promocao: 150,
-  },
-  {
-    id: 13,
-    fotos: ['/static/img/mouse-1.png'],
-    titulo: 'Mouse Gamer 1',
-    preco: 35,
-    promocao: 25,
-  },
-  {
-    id: 14,
-    fotos: ['/static/img/mouse-4.png'],
-    titulo: 'Mouse Gamer 2',
-    preco: 55,
-    promocao: 45,
-  },
-  {
-    id: 15,
-    fotos: ['/static/img/mouse-5.png'],
-    titulo: 'Mouse Gamer 3',
-    preco: 105,
-    promocao: 95,
-  },
-  {
-    id: 16,
-    fotos: ['/static/img/mouse-2.png'],
-    titulo: 'Mouse Gamer 4',
-    preco: 160,
-    promocao: 150,
-  },
-];
+import { connect } from 'react-redux';
+import actions from '../../../redux/actions';
 
 class ProdutosPesquisa extends Component {
   state = {
     atual: 0,
+    limit: 20,
   };
+
+  getProdutos() {
+    const { atual, limit } = this.state;
+    const { termo } = this.props;
+    this.props.fetchProdutosPesquisa(termo, atual, limit);
+  }
+
+  changeNumeroAtual = (atual) => {
+    this.setState({ atual }, () => this.getProdutos());
+  };
+
   render() {
+    const { termo, produtosPesquisa } = this.props;
     return (
       <div className="container Categoria-Produtos">
         <br />
         <br />
         <div className="flex flex-center">
-          <h1>Resultados para: Mouse</h1>
+          <h1>Resultados para: {termo}</h1>
         </div>
         <br />
-        <Produtos produtos={PRODUTOS} itensPorLinha={4} />
+        <Produtos
+          produtos={produtosPesquisa ? produtosPesquisa.docs : []}
+          itensPorLinha={4}
+        />
         <Paginacao
           atual={this.state.atual || 0}
-          total={PRODUTOS.length * 4}
-          limite={PRODUTOS.length}
-          onClick={(numeroAtual) => this.setState({ atual: numeroAtual })}
+          total={produtosPesquisa.total}
+          limite={this.state.limit}
+          onClick={(numeroAtual) => this.changeNumeroAtual(numeroAtual)}
         />
       </div>
     );
   }
 }
 
-export default ProdutosPesquisa;
+const mapStateToProps = (state) => ({
+  termo: state.produto.termo,
+  produtoPesquisa: state.produto.produtosPesquisa,
+});
+
+export default connect(mapStateToProps, actions)(ProdutosPesquisa);

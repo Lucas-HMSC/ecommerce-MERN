@@ -25,7 +25,9 @@ export const fetchTermo = (termo) => ({
   termo,
 });
 
-export const fetchProdutosPesquisa = (termo, atual, limit) => (dispatch) => {
+export const fetchProdutosPesquisa = (termo, atual = 0, limit = 20) => (
+  dispatch,
+) => {
   axios
     .get(
       `${API}/${versao}/api/produtos/search/${termo}?loja=${loja}&offset=${atual}&limit=${limit}`,
