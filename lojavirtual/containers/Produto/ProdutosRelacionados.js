@@ -1,48 +1,40 @@
 import React, { Component } from 'react';
-
 import Produtos from '../../components/Listas/Produtos';
 
-const PRODUTOS = [
-  {
-    id: 192391231,
-    fotos: ['/static/img/mouse-1.png'],
-    titulo: 'Mouse Gamer 1',
-    preco: 35,
-    promocao: 25,
-  },
-  {
-    id: 192391234,
-    fotos: ['/static/img/mouse-4.png'],
-    titulo: 'Mouse Gamer 2',
-    preco: 55,
-    promocao: 45,
-  },
-  {
-    id: 192391235,
-    fotos: ['/static/img/mouse-5.png'],
-    titulo: 'Mouse Gamer 3',
-    preco: 105,
-    promocao: 95,
-  },
-  {
-    id: 192391232,
-    fotos: ['/static/img/mouse-2.png'],
-    titulo: 'Mouse Gamer 4',
-    preco: 160,
-    promocao: 150,
-  },
-];
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
 
 class ProdutosRelacionados extends Component {
+  componentDidMount() {
+    if (this.props.produto) {
+      this.props.fetchProdutosCategoria(this.props.produto.categoria._id, 0, 4);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.produto && this.props.produto) {
+      this.props.fetchProdutosCategoria(this.props.produto.categoria._id, 0, 4);
+    }
+  }
+
   render() {
+    const { produtosCategoria } = this.props;
     return (
       <div className="Produtos-Relacionados flex vertical">
         <h2>Produtos Relacionados</h2>
         <br />
-        <Produtos produtos={PRODUTOS} itensPorLinha={4} />
+        <Produtos
+          produtos={produtosCategoria ? produtosCategoria.docs : []}
+          itensPorLinha={4}
+        />
       </div>
     );
   }
 }
 
-export default ProdutosRelacionados;
+const mapStateToProps = (state) => ({
+  produtosCategoria: state.categoria.produtosCategoria,
+  produto: state.produto.produto,
+});
+
+export default connect(mapStateToProps, actions)(ProdutosRelacionados);
