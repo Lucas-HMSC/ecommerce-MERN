@@ -4,6 +4,7 @@ import lojaActions from './lojaActions';
 import produtoActions from './produtoActions';
 import carrinhoActions from './carrinhoActions';
 import clienteActions from './clienteActions';
+import checkoutActions from './checkoutActions';
 
 export default {
   ...authActions,
@@ -12,4 +13,5 @@ export default {
   ...produtoActions,
   ...carrinhoActions,
   ...clienteActions,
+  ...checkoutActions,
 };

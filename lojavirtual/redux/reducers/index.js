@@ -5,7 +5,8 @@ import categoriaReducer from './categoriaReducers';
 import lojaReducer from './lojaReducers';
 import produtoReducer from './produtoReducers';
 import carrinhoReducer from './carrinhoReducers';
-import clienteReducers from './clienteReducers';
+import clienteReducer from './clienteReducers';
+import checkoutReducer from './checkoutReducers';
 
 export default combineReducers({
   auth: authReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   loja: lojaReducer,
   produto: produtoReducer,
   carrinho: carrinhoReducer,
-  cliente: clienteReducers,
+  cliente: clienteReducer,
+  checkout: checkoutReducer,
 });
