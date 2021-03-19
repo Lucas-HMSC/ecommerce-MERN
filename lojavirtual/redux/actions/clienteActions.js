@@ -7,7 +7,7 @@ import Router from 'next/router';
 
 export const fetchCliente = (id, token) => (dispatch) => {
   axios
-    .get(`${API}/${versao}/api/clientes/${id}?loja=${loja}`)
+    .get(`${API}/${versao}/api/clientes/${id}?loja=${loja}`, getHeaders(token))
     .then((response) => {
       dispatch({
         type: FETCH_CLIENTE,
