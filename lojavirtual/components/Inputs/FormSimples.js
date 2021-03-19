@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 
 export default class FormSimples extends Component {
   render() {
-    const { value, name, placeholder, type, label, onChange } = this.props;
+    const {
+      value,
+      name,
+      placeholder,
+      type,
+      label,
+      onChange,
+      erro,
+    } = this.props;
     return (
       <div className="form-input">
         {label && <label>{label}</label>}
@@ -13,6 +21,7 @@ export default class FormSimples extends Component {
           placeholder={placeholder}
           onChange={onChange}
         />
+        {erro && <small className="erro">{erro}</small>}
       </div>
     );
   }

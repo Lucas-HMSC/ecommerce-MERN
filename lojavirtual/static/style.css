@@ -419,6 +419,10 @@
   border: 1px solid #aaaa;
   border-radius: 5px;
 }
+.form-input .erro {
+  color: red;
+  font-size: 12px;
+}
 .Checkout select {
   max-width: 300px;
   font-size: 1rem;

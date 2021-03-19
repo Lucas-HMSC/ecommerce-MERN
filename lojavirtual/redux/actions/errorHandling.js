@@ -38,3 +38,5 @@ const errorHandling = (error) => {
     message: msg,
   };
 };
+
+export default errorHandling;
