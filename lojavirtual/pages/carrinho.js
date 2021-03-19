@@ -5,7 +5,22 @@ import Cabecalho from '../containers/Cabecalho';
 import CarrinhoContainer from '../containers/Carrinho';
 import Rodape from '../containers/Rodape';
 
-export default class Carrinho extends Component {
+import initialize from '../utils/initialize';
+import callBaseData from '../utils/callBaseData';
+
+import { connect } from 'react-redux';
+import actions from '../redux/actions';
+
+class Carrinho extends Component {
+  static async getInitialProps(ctx) {
+    initialize(ctx);
+    return callBaseData([], ctx);
+  }
+
+  async componentDidMount() {
+    await this.props.getUser({ token: this.props.token });
+  }
+
   render() {
     return (
       <Layout title="Carrinho | Loja TI - Melhores produtos de tecnologia">
@@ -16,3 +31,9 @@ export default class Carrinho extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+});
+
+export default connect(mapStateToProps, actions)(Carrinho);

@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
+import { getCountItemsCart } from '../../utils/cart';
 
 class CardCarrinho extends Component {
   state = {
     cartQtd: 0,
   };
+
+  componentDidMount() {
+    this.setState({ cartQtd: getCountItemsCart() });
+  }
+
   render() {
     return (
       <div className="itens-cabecalho flex-2 flex flex-center">

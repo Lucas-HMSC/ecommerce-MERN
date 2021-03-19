@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { formatMoney } from '../../utils';
 import { baseImg } from '../../config';
+import { addCart } from '../../utils/cart';
 
 class Hero extends Component {
   constructor(props) {
