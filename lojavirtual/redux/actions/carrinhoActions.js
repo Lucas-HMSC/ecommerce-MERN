@@ -85,6 +85,18 @@ export const selecionarFrete = (freteSelecionado) => ({
   freteSelecionado,
 });
 
-export const cleanFRetes = () => ({
+export const cleanFretes = () => ({
   type: CLEAN_FRETES,
 });
+
+export default {
+  setCarrinho,
+  cleanCarrinho,
+  fetchProdutoCarrinho,
+  fetchVariacoesCarrinho,
+  calcularFrete,
+  updateQuantidade,
+  selecionarFrete,
+  removerProduto,
+  cleanFretes,
+};
