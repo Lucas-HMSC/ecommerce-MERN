@@ -1,15 +1,34 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Link from 'next/link';
 
-const PHOTOS = [
-  '/static/img/mouse-1.png',
-  '/static/img/mouse-4.png',
-  '/static/img/mouse-5.png',
-];
+import { formatMoney } from '../../utils';
 
-export default class Hero extends Component {
-  state = {
-    foto: PHOTOS[0],
-  };
+class Hero extends Component {
+  constructor(props) {
+    super();
+    const { produtos, variacoes } = props;
+    this.state = {
+      foto: produto ? produtos.fotos[0] || null : null,
+      fotos: produto ? produtos.fotos || [] : [],
+      qtd: 1,
+      variacao: variacoes && variacoes.length >= 1 ? variacoes[0]._id : null,
+      variacaoCompleta:
+        variacoes && variacoes.length >= 1 ? variacoes[0] : null,
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.produto && this.props.produto) {
+      const { fotos } = this.props.produtos;
+      this.setState({ foto: fotos[0], fotos });
+    }
+    if (!prevProps.variacoes && this.props.variacoes) {
+      const variacao = this.props.variacoes[0];
+      if (!variacao) return null;
+      this.setState({ variacao: variacao._id, variacaoCompleta: variacao });
+    }
+  }
 
   renderPhotos() {
     return (
@@ -18,7 +37,7 @@ export default class Hero extends Component {
           <img src={this.state.foto} width="95%" alt="" />
         </div>
         <div className="mini-fotos flex-1 flex">
-          {PHOTOS.map((foto, index) => (
+          {this.state.fotos.map((foto, index) => (
             <div
               className={index}
               className="mini-foto flex-1 flex flex-center"
@@ -58,22 +77,56 @@ export default class Hero extends Component {
   }
 
   renderDetalhes() {
+    const { produto } = this.props;
+    const { variacaoCompleta } = this.state;
+    if (!produto) return null;
     return (
       <div className="flex-2 produto-detalhes">
         <div className="titulo">
-          <h2>Mouse Gamer 2</h2>
+          <h2>{produto.titulo}</h2>
         </div>
         <div className="categoria">
           <p>
-            Categoria:&nbsp;<span className="categoria-link">Mouse Gamer</span>
+            Categoria:&nbsp;
+            <Link href={`/categoria?id=${produto.categoria._id}`}>
+              <span className="categoria-link">{produto.categoria.nome}</span>
+            </Link>
           </p>
         </div>
         <br />
-        <div className="precos">
-          <h2 className="preco-original preco-por">R$ 55,00</h2>
-          <h2 className="preco-promocao">R$ 45,00</h2>
-          <h4 className="preco-parcelado">ou em 6x de R$ 7,50 sem juros</h4>
-        </div>
+        {variacaoCompleta ? (
+          <div className="precos">
+            <h2 className="preco-original preco-por">
+              {formatMoney(variacaoCompleta.preco)}
+            </h2>
+            {variacaoCompleta.promocao &&
+              variacaoCompleta.promocao !== variacaoCompleta.preco && (
+                <h2 className="preco-promocao">
+                  {formatMoney(variacaoCompleta.promocao)}
+                </h2>
+              )}
+            <h4 className="preco-parcelado">
+              ou em 6x de{' '}
+              {formatMoney(variacaoCompleta.promocao || variacaoCompleta.preco)}{' '}
+              sem juros
+            </h4>
+          </div>
+        ) : (
+          <div className="precos">
+            <h2 className="preco-original preco-por">
+              {formatMoney(produto.preco)}
+            </h2>
+            {produto.promocao && produto.promocao !== produto.preco && (
+              <h2 className="preco-promocao">
+                {formatMoney(produto.promocao)}
+              </h2>
+            )}
+            <h4 className="preco-parcelado">
+              ou em 6x de {formatMoney(produto.promocao || produto.preco)} sem
+              juros
+            </h4>
+          </div>
+        )}
         <br />
         {this.renderVariacoes()}
         <div className="opcoes">
@@ -108,3 +161,10 @@ export default class Hero extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  produto: state.produto.produto,
+  variacoes: state.produto.variacoes,
+});
+
+export default connect(mapStateToProps)(Hero);
