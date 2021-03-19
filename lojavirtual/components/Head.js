@@ -32,6 +32,12 @@ const Head = (props) => (
       crossOrigin="anonymous"
     />
     <link rel="stylesheet" href="/static/style.css" />
+    {props.pagSeguro && (
+      <script
+        type="text/javascript"
+        src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"
+      ></script>
+    )}
     {props.children}
   </NextHead>
 );
