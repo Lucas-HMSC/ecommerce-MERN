@@ -1,6 +1,11 @@
 export const formatMoney = (value =
   'R$ ' + (value || 0).toFized(2).replace('.', ','));
 
+export const codigosCorreios = {
+  40010: 'Sedex',
+  41106: 'PAC',
+};
+
 export const ESTADOS = {
   Acre: 'AC',
   Alagoas: 'AL',

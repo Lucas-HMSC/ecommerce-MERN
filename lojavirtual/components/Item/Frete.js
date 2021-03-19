@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
+import { getCart } from '../../utils/cart';
+import { formatMoney, codigosCorreios } from '../../utils';
+import { formatCEP } from '../../utils/format';
+
 class Frete extends Component {
-  state = {
-    frete: false,
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      cep: this.props.cep || '',
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      !prevProps.fretes &&
+      this.props.fretes &&
+      !this.props.freteSelecionado
+    ) {
+      this.props.selecionarFrete(this.props.fretes[0]);
+    }
+  }
 
   renderOpcoesFrete() {
     return (
@@ -25,14 +44,36 @@ class Frete extends Component {
     );
   }
 
+  calcularFrete() {
+    const { cep } = this.state;
+    if (!cep || cep.length !== 9) return alert('Digite o CEP corretamente.');
+    this.props.calcularFrete(cep, getCart());
+  }
+
+  onChangeCEP = (e) => {
+    this.setState({
+      cep: formatCEP(e.target.value),
+    });
+  };
+
   renderFormularioCEP() {
     return (
       <div className="flex-1 flex">
         <div className="flex-3">
-          <input className="campo-frete" defaultValue="" name="CEP" />
+          <input
+            className="campo-frete"
+            value={this.state.cep}
+            name="CEP"
+            onChange={this.onChangeCEP}
+          />
         </div>
         <div className="flex-1">
-          <button className="btn btn-primary btn-small">CALCULAR</button>
+          <button
+            className="btn btn-primary btn-small"
+            onClick={() => this.calcularFrete()}
+          >
+            CALCULAR
+          </button>
         </div>
       </div>
     );
@@ -43,10 +84,10 @@ class Frete extends Component {
       <div className="dados-do-carrinho-item flex">
         <div className="flex-1 flex vertical">
           <p className="headline">Frete</p>
-          {this.state.frete && this.renderOpcoesFrete()}
+          {this.props.freteSelecionado && this.renderOpcoesFrete()}
         </div>
         <div className="flex-1 flex flex-center">
-          {this.state.frete
+          {this.props.freteSelecionado
             ? this.renderOpcaoSelecionada()
             : this.renderFormularioCEP()}
         </div>
@@ -55,4 +96,11 @@ class Frete extends Component {
   }
 }
 
-export default Frete;
+const mapStateToProps = (state) => ({
+  carrinho: state.carrinho.carrinho,
+  freteSelecionado: state.carrinho.freteSelecionado,
+  fretes: state.carrinho.fretes,
+  cep: state.carrinhi.cep,
+});
+
+export default connect(mapStateToProps, actions)(Frete);
