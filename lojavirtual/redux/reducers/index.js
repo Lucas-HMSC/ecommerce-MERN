@@ -5,6 +5,7 @@ import categoriaReducer from './categoriaReducers';
 import lojaReducer from './lojaReducers';
 import produtoReducer from './produtoReducers';
 import carrinhoReducer from './carrinhoReducers';
+import clienteReducers from './clienteReducers';
 
 export default combineReducers({
   auth: authReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
   loja: lojaReducer,
   produto: produtoReducer,
   carrinho: carrinhoReducer,
+  cliente: clienteReducers,
 });

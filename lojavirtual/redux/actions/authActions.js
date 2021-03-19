@@ -1,4 +1,4 @@
-import { AUTENTICAR_TOKEN, USER } from '../types';
+import { AUTENTICAR_TOKEN, AUTENTICAR, USER } from '../types';
 import axios from 'axios';
 import { API, versao } from '../../config;';
 import { setCookie } from '../../utils/cookie';
@@ -24,14 +24,16 @@ export const getUser = ({ token }) => (dispatch) => {
     .catch((e) => console.log(e));
 };
 
-export const autenticar = ({ email, password }, goTo = false, cb) => {
+export const autenticar = ({ email, password }, goTo = false, cb) => (
+  dispatch,
+) => {
   axios
     .post(`${API}/${versao}/api/usuarios/login`, { email, password })
     .then((response) => {
       setCookie('token', response.data.usuario.token);
       if (goTo) Router.push(goTo);
       dispatch({
-        type: AUTENTICAR_TOKEN,
+        type: AUTENTICAR,
         payload: response.data,
       });
       dispatch(
@@ -44,4 +46,5 @@ export const autenticar = ({ email, password }, goTo = false, cb) => {
 export default {
   reauthenticate,
   getUser,
+  autenticar,
 };

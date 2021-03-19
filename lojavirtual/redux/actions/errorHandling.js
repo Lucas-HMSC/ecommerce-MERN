@@ -25,6 +25,16 @@ const errorHandling = (error) => {
       msg += `${erro} ${_errors[erro].message || _errors[erro]}\n`;
     });
   } else {
-    
+    msg += `Preencha corretamente ${
+      _errors.length > 1 ? 'os campos ' : 'o campo '
+    } de:`;
+    _errors.forEach((item, index) => {
+      const field = item.field[item.field.length - 1];
+      msg += ` ${field}${index === _errors.length - 1 ? '.' : ','}`;
+    });
   }
+  return {
+    status: 400,
+    message: msg,
+  };
 };
