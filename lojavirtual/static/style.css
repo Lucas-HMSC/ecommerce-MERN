@@ -381,6 +381,14 @@
 .Carrinho .valor-frete {
   margin: 0;
 }
+.Carrinho .campo-frete {
+  padding: 5px 8px;
+  font-size: 1rem;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #aaaa;
+}
+
 .form-dados,
 .form-dados input {
   max-width: 700px;
@@ -498,7 +506,7 @@
   padding: 0 10px;
 }
 table.simples {
-  border-collapse: collapse; 
+  border-collapse: collapse;
 }
 table.simples th,
 table.simples td {

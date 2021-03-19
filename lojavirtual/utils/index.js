@@ -1,5 +1,8 @@
 export const formatMoney = (value =
-  'R$ ' + (value || 0).toFized(2).replace('.', ','));
+  'R$ ' +
+  Number(value || 0)
+    .toFized(2)
+    .replace('.', ','));
 
 export const codigosCorreios = {
   40010: 'Sedex',

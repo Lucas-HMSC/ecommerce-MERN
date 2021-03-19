@@ -10,7 +10,7 @@ class Frete extends Component {
   constructor(props) {
     super();
     this.state = {
-      cep: this.props.cep || '',
+      cep: props.cep || '',
     };
   }
 
@@ -24,22 +24,45 @@ class Frete extends Component {
     }
   }
 
+  selectFrete(codigo, fretes) {
+    const frete = fretes.reduce(
+      (all, frete) => (frete.Codigo.toString() === codigo ? frete : all),
+      {},
+    );
+    this.props.selecionarFrete(frete);
+  }
+
   renderOpcoesFrete() {
+    const { fretes, freteSelecionado } = this.props;
+    if (!fretes || !freteSelecionado) return null;
     return (
       <div>
-        <select defaultValue="PAC">
-          <option value="PAC">PAC (15 dias úteis) - R$ 18,90</option>
-          <option value="SEDEX">SEDEX (3 dias úteis) - R$ 38,90</option>
+        <select
+          value={freteSelecionado.Codigo}
+          onChange={(e) => this.selectFrete(e.target.value, fretes)}
+        >
+          {fretes.map((frete, index) => (
+            <option value={frete.Codigo} key={frete.Codigo}>
+              {codigosCorreios[frete.Codigo]}&nbsp; ({frete.PrazoEntrega} dias
+              úteis) -&nbsp; {formatMoney(frete.Valor.replace(',', '.'))}
+            </option>
+          ))}
         </select>
       </div>
     );
   }
 
   renderOpcaoSelecionada() {
+    const { freteSelecionado, cleanFretes } = this.props;
+    if (!freteSelecionado || !freteSelecionado.Valor) return null;
     return (
       <div className="flex vertical flex-center">
-        <h4 className="valor-frete">R$ 19,80</h4>
-        <span className="limpar-CEP">Limpar CEP</span>
+        <h4 className="valor-frete">
+          {formatMoney(freteSelecionado.Valor.replace(',', '.'))}
+        </h4>
+        <span className="limpar-CEP" onClick={() => cleanFretes()}>
+          Limpar CEP
+        </span>
       </div>
     );
   }
@@ -69,7 +92,7 @@ class Frete extends Component {
         </div>
         <div className="flex-1">
           <button
-            className="btn btn-primary btn-small"
+            className="btn btn-primary btn-sm"
             onClick={() => this.calcularFrete()}
           >
             CALCULAR
