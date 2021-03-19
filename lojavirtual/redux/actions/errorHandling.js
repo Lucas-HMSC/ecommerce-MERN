@@ -1,5 +1,5 @@
 const errorHandling = (error) => {
-  console.log(error, error.response.data);
+  console.log(error, error.response ? error.response.data : null);
   if (!error.response || !error.response.data) {
     return {
       status: 500,

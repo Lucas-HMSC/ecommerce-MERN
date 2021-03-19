@@ -56,7 +56,7 @@ class ClienteLogin extends Component {
           this.setState({
             aviso: {
               status: false,
-              msg: error.message,
+              message: error.message,
             },
           });
       },
