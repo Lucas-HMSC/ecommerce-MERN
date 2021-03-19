@@ -4,11 +4,13 @@ import DadosClienteContainer from '../Cliente/DadosCliente';
 import ClienteLogin from '../Cliente/ClienteLogin';
 
 class DadosCliente extends Component {
-  state = {
-    usuario: false,
-  };
   render() {
-    return this.state.usuario ? <DadosClienteContainer /> : <ClienteLogin />;
+    const { usuario, permissaoInicial, permitir } = this.props;
+    return usuario || permissaoInicial ? (
+      <DadosClienteContainer />
+    ) : (
+      <ClienteLogin permitir={permitir} />
+    );
   }
 }
 

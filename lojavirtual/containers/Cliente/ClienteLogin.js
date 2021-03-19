@@ -13,7 +13,10 @@ class ClienteLogin extends Component {
       <div className="flex-1">
         <h2>Comprar como Visitante / Realizar Registro</h2>
         <br />
-        <button className="btn btn-success">
+        <button
+          className="btn btn-success"
+          onClick={() => this.props.permitir()}
+        >
           <span>CONTINUAR</span>
         </button>
       </div>
