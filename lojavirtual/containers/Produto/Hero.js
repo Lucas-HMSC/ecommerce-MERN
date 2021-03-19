@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import Link from 'next/link';
 
 import { formatMoney } from '../../utils';
+import { baseImg } from '../../config';
 
 class Hero extends Component {
   constructor(props) {
     super();
-    const { produtos, variacoes } = props;
+    const { produto, variacoes } = props;
     this.state = {
-      foto: produto ? produtos.fotos[0] || null : null,
-      fotos: produto ? produtos.fotos || [] : [],
+      foto: produto ? produto.fotos[0] || null : null,
+      fotos: produto ? produto.fotos || [] : [],
       qtd: 1,
       variacao: variacoes && variacoes.length >= 1 ? variacoes[0]._id : null,
       variacaoCompleta:
@@ -34,7 +35,7 @@ class Hero extends Component {
     return (
       <div className="fotos flex-2 flex vertical">
         <div className="foto-principal flex-6 flex flex-center">
-          <img src={this.state.foto} width="95%" alt="" />
+          <img src={baseImg + this.state.foto} width="95%" alt="" />
         </div>
         <div className="mini-fotos flex-1 flex">
           {this.state.fotos.map((foto, index) => (
@@ -43,7 +44,7 @@ class Hero extends Component {
               className="mini-foto flex-1 flex flex-center"
               onClick={() => this.setState({ foto })}
             >
-              <img src={foto} width="90%" alt="" />
+              <img src={baseImg + foto} width="90%" alt="" />
             </div>
           ))}
         </div>
@@ -51,29 +52,63 @@ class Hero extends Component {
     );
   }
 
+  setVariacao(produto, variacao) {
+    this.setState({
+      variacao: variacao._id,
+      variacaoCompleta: variacao,
+    });
+    if (variacao.fotos && variacao.fotos.length > 0) {
+      this.setState({
+        fotos: variacao.fotos,
+        foto: variacao.fotos[0],
+      });
+    } else {
+      this.setState({
+        fotos: produto.fotos,
+        foto: produto.fotos[0],
+      });
+    }
+  }
+
   renderVariacoes() {
+    const { variacoes, produto } = this.props;
+    if (!produto || !variacoes || variacoes.length === 0) return null;
     return (
       <div>
         <div>
           <label>Selecione uma opção:</label>
         </div>
         <div className="variacoes flex wrap">
-          <div className="variacao flex-1 flex flex-center wrap-4">
-            <span className="variacao-item">P</span>
-          </div>
-          <div className="variacao flex-1 flex flex-center wrap-4">
-            <span className="variacao-item">M</span>
-          </div>
-          <div className="variacao flex-1 flex flex-center wrap-4">
-            <span className="variacao-item">G</span>
-          </div>
+          {variacoes.map((variacao, index) => (
+            <div
+              className={`variacao${
+                variacao._id === this.state.variacao ? ' variacao-active' : ''
+              } flex-1 flex flex-center wrap-4`}
+              key={variacao._id}
+              onClick={() => this.setVariacao(produto, variacao)}
+            >
+              <span className="variacao-item">{variacao.nome}</span>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
   addCart() {
-    alert('Adicionado ao carrinho');
+    const { variacao, qtd, variacaoCompleta } = this.state;
+    const { produto } = this.props;
+    addCart(
+      {
+        produto: produto._id,
+        variacao,
+        quantidade: qtd,
+        precoUnitario: variacaoCompleta
+          ? variacaoCompleta.promocao || variacaoCompleta.preco
+          : produto.promocao || produto.preco,
+      },
+      true,
+    );
   }
 
   renderDetalhes() {
@@ -107,7 +142,9 @@ class Hero extends Component {
               )}
             <h4 className="preco-parcelado">
               ou em 6x de{' '}
-              {formatMoney(variacaoCompleta.promocao || variacaoCompleta.preco)}{' '}
+              {formatMoney(
+                (variacaoCompleta.promocao || variacaoCompleta.preco) / 6,
+              )}{' '}
               sem juros
             </h4>
           </div>
@@ -122,8 +159,8 @@ class Hero extends Component {
               </h2>
             )}
             <h4 className="preco-parcelado">
-              ou em 6x de {formatMoney(produto.promocao || produto.preco)} sem
-              juros
+              ou em 6x de {formatMoney((produto.promocao || produto.preco) / 6)}{' '}
+              sem juros
             </h4>
           </div>
         )}
@@ -136,7 +173,11 @@ class Hero extends Component {
               className="opcao-input"
               type="nuber"
               name="quantidade"
-              defaultValue={1}
+              value={this.state.qtd}
+              onChange={(e) =>
+                Number(e.target.value) >= 1 &&
+                this.setState({ qtd: e.target.value })
+              }
             />
           </div>
         </div>
