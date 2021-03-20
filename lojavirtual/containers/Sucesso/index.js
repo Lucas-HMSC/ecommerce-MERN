@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-class SucessoContainer extends Component {
-  state = {
-    pedidoSucesso: true,
-    formaPagamento: 'boleto',
-  };
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
 
+class SucessoContainer extends Component {
   renderBoleto() {
+    const { pagamento } = this.props;
+
     return (
       <div>
         <p>
@@ -14,7 +14,12 @@ class SucessoContainer extends Component {
           abaixo:
         </p>
         <br />
-        <a href="#" className="btn btn-success">
+        <a
+          href={pagamento.payload[0].paymentLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-success"
+        >
           IMPRIMIR BOLETO
         </a>
         <br />
@@ -35,14 +40,14 @@ class SucessoContainer extends Component {
   }
 
   renderSucesso() {
-    const { formaPagamento } = this.state;
+    const { pagamento } = this.props;
     return (
       <div className="Sucesso">
         <br />
         <h1 className="headline-big">PEDIDO CONCLUÍDO COM SUCESSO</h1>
         <br />
         <br />
-        {formaPagamento === 'boleto'
+        {pagamento.forma === 'boleto'
           ? this.renderBoleto()
           : this.renderCartao()}
         <br />
@@ -67,12 +72,18 @@ class SucessoContainer extends Component {
   }
 
   render() {
-    const { pedidoSucesso } = this.state;
+    const { pagamento } = this.props;
     return (
       <div className="Sucesso-Container container">
-        {pedidoSucesso ? this.renderSucesso() : this.renderErro()}
+        {!pagamento.payload[0].error ? this.renderSucesso() : this.renderErro()}
       </div>
     );
   }
 }
-export default SucessoContainer;
+
+const mapStateToProps = (state) => ({
+  pedido: state.checkout.novoPedido,
+  pagamento: state.checkout.novoPagamento,
+});
+
+export default connect(mapStateToProps, actions)(SucessoContainer);

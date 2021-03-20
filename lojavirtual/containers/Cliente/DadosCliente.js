@@ -90,7 +90,7 @@ class DadosClienteContainer extends Component {
       <div className="flex-1 flex">
         <div className="flex-1">
           <FormSimples
-            value={email}
+            value={email || ''}
             name="email"
             placeholder="E-mail"
             label="E-mail"
@@ -100,7 +100,7 @@ class DadosClienteContainer extends Component {
         </div>
         <div className="flex-1">
           <FormSimples
-            value={senha}
+            value={senha || ''}
             name="senha"
             placeholder="Senha"
             label="Senha"
@@ -119,7 +119,7 @@ class DadosClienteContainer extends Component {
       <div className="flex-1 flex horizontal">
         <div className="flex-1">
           <FormSimples
-            value={nome}
+            value={nome || ''}
             name="nome"
             placeholder="Nome"
             label="Nome"
@@ -129,7 +129,7 @@ class DadosClienteContainer extends Component {
         </div>
         <div className="flex-1">
           <FormSimples
-            value={CPF}
+            value={CPF || ''}
             name="CPF"
             placeholder="CPF"
             label="CPF"
@@ -140,7 +140,7 @@ class DadosClienteContainer extends Component {
         <div className="flex-1 flex horizontal">
           <div className="flex-1">
             <FormSimples
-              value={dataDeNascimento}
+              value={dataDeNascimento || ''}
               name="dataDeNascimento"
               placeholder="DD/MM/AAAA"
               label="Data de Nascimento"
@@ -156,7 +156,7 @@ class DadosClienteContainer extends Component {
           </div>
           <div className="flex-1">
             <FormSimples
-              value={telefone}
+              value={telefone || ''}
               name="telefone"
               placeholder="(12) 3456-7890"
               label="Telefone/Celular"
