@@ -1,18 +1,86 @@
 import React, { Component } from 'react';
 import FormSimples from '../../components/Inputs/FormSimples';
+import { connect } from 'react-redux';
+import actions from '../../redux/actions';
+import moment from 'moment';
 
-export default class DadosClienteContainer extends Component {
+import { validateCPF } from '../../utils/validate';
+
+class DadosClienteContainer extends Component {
   state = {
-    email: '',
-    senha: '',
-    nome: '',
-    CPF: '',
-    telefone: '',
-    dataDeNascimento: '',
+    erros: {},
+  };
+
+  componentDidMount() {
+    this.props.setForm({
+      email: '',
+      senha: '',
+      nome: this.props.cliente ? this.props.cliente.nome : '',
+      CPF: this.props.cliente ? this.props.cliente.cpf : '',
+      telefone:
+        this.props.cliente && this.props.cliente.telefones
+          ? this.props.cliente.telefones[0]
+          : '',
+      dataDeNascimento: this.props.cliente
+        ? moment(this.props.cliente.dataDeNascimento).format('DD/MM/YYYY')
+        : '',
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.cliente && this.props.cliente) {
+      const { nome, cpf, telefones, dataDeNascimento } = this.props.cliente;
+      this.props.setForm({
+        nome: nome,
+        CPF: cpf,
+        telefone: telefones[0],
+        dataDeNascimento: moment(dataDeNascimento).format('DD/MM/YYYY'),
+      });
+    }
+  }
+
+  validate() {
+    const {
+      email,
+      senha,
+      nome,
+      CPF,
+      dataDeNascimento,
+      telefone,
+    } = this.props.form;
+    const { usuario } = this.props;
+    const erros = {};
+
+    if (!usuario && !email) erros.email = 'Preencha aqui com o seu email';
+    if (!usuario && !senha) erros.senha = 'Preencha aqui com a sua senha';
+
+    if (!nome) erros.nome = 'Preencha aqui com o seu nome';
+    if (!CPF || CPF.length !== 14) erros.CPF = 'Preencha aqui com o seu CPF';
+    if (CPF && CPF.length === 14 && !validateCPF(CPF))
+      erros.CPF = 'Preencha aqui com o seu CPF corretamente';
+    if (!dataDeNascimento || dataDeNascimento.length !== 10)
+      erros.dataDeNascimento = 'Preencha aqui com a sua data de nascimento';
+    if (!telefone || telefone.length < 11)
+      erros.telefone = 'Preencha aqui com o seu telefone';
+
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
+  }
+
+  onChange = (field, e) => {
+    this.props
+      .setForm(
+        {
+          [field]: e.target.value,
+        },
+        null,
+      )
+      .then(() => this.validate());
   };
 
   renderDadosRegistro() {
-    const { email, senha } = this.state;
+    const { email, senha } = this.props.form;
+    const { erros } = this.state;
     return (
       <div className="flex-1 flex">
         <div className="flex-1">
@@ -21,6 +89,7 @@ export default class DadosClienteContainer extends Component {
             name="email"
             placeholder="E-mail"
             label="E-mail"
+            erro={erros.email}
             onChange={(e) => this.onChange('email', e)}
           />
         </div>
@@ -30,6 +99,7 @@ export default class DadosClienteContainer extends Component {
             name="senha"
             placeholder="Senha"
             label="Senha"
+            erro={erros.senha}
             onChange={(e) => this.onChange('senha', e)}
           />
         </div>
@@ -37,7 +107,8 @@ export default class DadosClienteContainer extends Component {
     );
   }
   renderDadosUsuario() {
-    const { nome, CPF, dataDeNascimento, telefone } = this.state;
+    const { nome, CPF, dataDeNascimento, telefone } = this.props.form;
+    const { erros } = this.state;
     return (
       <div className="flex-1 flex horizontal">
         <div className="flex-1">
@@ -46,6 +117,7 @@ export default class DadosClienteContainer extends Component {
             name="nome"
             placeholder="Nome"
             label="Nome"
+            erro={erros.nome}
             onChange={(e) => this.onChange('nome', e)}
           />
         </div>
@@ -55,6 +127,7 @@ export default class DadosClienteContainer extends Component {
             name="CPF"
             placeholder="CPF"
             label="CPF"
+            erro={erros.CPF}
             onChange={(e) => this.onChange('CPF', e)}
           />
         </div>
@@ -65,6 +138,7 @@ export default class DadosClienteContainer extends Component {
               name="dataDeNascimento"
               placeholder="DD/MM/AAAA"
               label="Data de Nascimento"
+              erro={erros.dataDeNascimento}
               onChange={(e) => this.onChange('', e)}
             />
           </div>
@@ -74,6 +148,7 @@ export default class DadosClienteContainer extends Component {
               name="telefone"
               placeholder="(12) 3456-7890"
               label="Telefone/Celular"
+              erro={erros.telefone}
               onChange={(e) => this.onChange('telefone', e)}
             />
           </div>
@@ -87,9 +162,18 @@ export default class DadosClienteContainer extends Component {
         <div>
           <h2>DADOS DO CLIENTE</h2>
         </div>
-        {this.renderDadosRegistro()}
+        {!this.props.usuario && this.renderDadosRegistro()}
         {this.renderDadosUsuario()}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  usuario: state.auth.usuario,
+  token: state.auth.token,
+  cliente: state.cliente.cliente,
+  form: state.checkout.form,
+});
+
+export default connect(mapStateToProps, actions)(DadosClienteContainer);
