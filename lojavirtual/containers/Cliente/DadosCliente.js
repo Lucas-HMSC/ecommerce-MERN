@@ -104,6 +104,7 @@ class DadosClienteContainer extends Component {
             name="senha"
             placeholder="Senha"
             label="Senha"
+            type="password"
             erro={erros.senha}
             onChange={(e) => this.onChange('senha', e)}
           />

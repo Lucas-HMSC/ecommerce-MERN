@@ -9,7 +9,12 @@ import errorHandling from './errorHandling';
 
 export const getRawData = (data) => {
   let _data = data.split('/');
-  return `${_data[2]}-${_data[1] - 1}-${_data[0]}`;
+  let ano = _data[2];
+  let _mes = _data[1] - 1;
+  let mes = _mes < 10 ? '0' + _mes : _mes;
+  let _dia = Number(_data[0]);
+  let dia = _dia < 10 ? '0' + _dia : _dia;
+  return `${ano}-${mes}-${dia}`;
 };
 
 export const fetchCliente = (id, token) => (dispatch) => {
@@ -48,7 +53,11 @@ export const newCliente = (form, cb) => (dispatch) => {
         type: FETCH_CLIENTE,
         payload: response.data,
       });
-      dispatch(autenticar({ email: form.email, password: form.senha }));
+      dispatch(
+        autenticar({ email: form.email, password: form.senha }),
+        null,
+        cb,
+      );
       cb(null);
     })
     .catch((e) => cb(errorHandling(e)));
