@@ -18,7 +18,7 @@ class Checkout extends Component {
   };
   render() {
     const { permissaoInicial, permissaoCheckout } = this.state;
-    const { usuario } = this.props;
+    const { usuario, freteSelecionado } = this.props;
     return (
       <div className="Checkout container">
         <h2>CONCLUINDO SEU PEDIDO</h2>
@@ -35,9 +35,9 @@ class Checkout extends Component {
           />
         )}
         {permissaoCheckout && <DadosFrete />}
-        {permissaoCheckout && <DadosPagamento />}
-        {permissaoCheckout && <DadosPedido />}
-        {permissaoCheckout && <CheckoutButton />}
+        {permissaoCheckout && freteSelecionado && <DadosPagamento />}
+        {permissaoCheckout && freteSelecionado && <DadosPedido />}
+        {permissaoCheckout && freteSelecionado && <CheckoutButton />}
       </div>
     );
   }
@@ -45,6 +45,7 @@ class Checkout extends Component {
 
 const mapStateToProps = (state) => ({
   usuario: state.auth.usuario,
+  freteSelecionado: state.carrinho.freteSelecionado,
 });
 
 export default connect(mapStateToProps, actions)(Checkout);
