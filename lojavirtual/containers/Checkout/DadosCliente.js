@@ -7,11 +7,20 @@ import { connect } from 'react-redux';
 
 class DadosCliente extends Component {
   componentDidMount() {
+    this.fetchCliente();
+  }
+
+  componentDidUpdate() {
+    this.fetchCliente();
+  }
+
+  fetchCliente() {
     const { usuario, token, cliente } = this.props;
     if (usuario && token && !cliente) {
       this.props.fetchCliente(usuario._id, token);
     }
   }
+
   render() {
     const { usuario, permissaoInicial, permitir } = this.props;
     return usuario || permissaoInicial ? (
