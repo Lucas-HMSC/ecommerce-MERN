@@ -7,8 +7,13 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { formatCPF, formatCartao, formatNumber } from '../../utils/format';
 import { formatMoney } from '../../utils';
+import { validateCPF } from '../../utils/validate';
 
 class DadosPagamento extends Component {
+  state = {
+    erros: {},
+  };
+
   componentDidMount() {
     this.props.getSessionPagamento();
   }
@@ -47,11 +52,10 @@ class DadosPagamento extends Component {
       this.submitCartaoHash();
 
     if (
-      !parcelasCartao &&
-      bandeira_cartao &&
-      parcelasCartao &&
-      bandeira_cartao &&
-      prevProps.freteSelecionado !== this.props.freteSelecionado
+      (!parcelasCartao && bandeira_cartao) ||
+      (parcelasCartao &&
+        bandeira_cartao &&
+        prevProps.freteSelecionado !== this.props.freteSelecionado)
     )
       this.getParcelas();
   }
@@ -140,18 +144,55 @@ class DadosPagamento extends Component {
     );
   }
 
-  validate() {}
+  validate() {
+    const { tipoPagamentoSelecionado } = this.props;
+    const {
+      CPF,
+      CPFboleto,
+      numeroCartao,
+      nomeCartao,
+      mesCartao,
+      anoCartao,
+      parcelasCartaoSelecionada,
+      CVVCartao,
+    };
+    const erros = {};
+
+    if (tipoPagamentoSelecionado === 'boleto') {
+      if (!CPFboleto && !CPF) erros.CPFboleto = 'Preencha aqui com o seu CPF';
+      if (CPFboleto && CPFboleto.length !== 14 && !validateCPF(CPFboleto))
+        erros.CPFboleto = 'Preencha aqui com o seu CPF corretamente';
+    } else {
+      if (!numeroCartao || numeroCartao.length !== 19)
+        erros.numeroCartao = 'Preencha aqui com o número do seu cartão';
+      if (!nomeCartao)
+        erros.nomeCartao = 'Preencha aqui com o nome que está no cartão';
+      if (!mesCartao || mesCartao.length !== 2)
+        erros.mesCartao = 'Preencha aqui com o mês de vencimento do cartão';
+      if (!anoCartao || anoCartao.length !== 4)
+        erros.anoCartao = 'Preencha aqui com o ano de vencimento do cartão';
+      if (!parcelasCartaoSelecionada)
+        erros.parcelasCartaoSelecionada = 'Selecione uma forma de pagamento';
+      if (!CVVCartao || CVVCartao.length !== 3)
+        erros.CVVCartao = 'Preencha aqui com o código de segurança do cartão';
+
+      this.setState({ erros });
+      return !(Object.keys(erros).length > 0);
+    }
+  }
 
   onChange = (field, value) =>
     this.props.setForm({ [field]: value }).then(() => this.validate());
 
   renderPagamentoComBoleto() {
     const { CPF, CPFboleto } = this.props.form;
+    const { erros } = this.state;
     return (
       <div className="Dados-Pagamento">
         <FormSimples
           value={CPFboleto || CPF}
           name="CPF"
+          erro={erros.CPFboleto}
           placeholder="CPF"
           label="CPF"
           onChange={(e) => onChange(CPFboleto, formatCPF(e.target.value))}
@@ -171,10 +212,12 @@ class DadosPagamento extends Component {
       parcelasCartaoSelecionada,
       bandeira_cartao,
     } = this.props.form;
+    const { erros } = this.state;
     return (
       <div className="Dados-Pagamento">
         <FormSimples
           value={nomeCartao}
+          erro={erros.nomeCartao}
           name="nomeCartao"
           placeholder="Nome como escrito no cartão"
           label="Nome Completo no Cartão"
@@ -185,6 +228,7 @@ class DadosPagamento extends Component {
             <FormSimples
               value={numeroCartao}
               name="numeroCartao"
+              erro={erros.numeroCartao}
               placeholder="XXXX XXXX XXXX XXXX"
               label="Número do Cartão"
               onChange={(e) =>
@@ -196,6 +240,7 @@ class DadosPagamento extends Component {
             <FormSimples
               value={CVVCartao}
               name="CVVCartao"
+              erro={erros.CVVCartao}
               placeholder="XXX"
               label="Código de Segurança do Cartão"
               onChange={(e) =>
@@ -211,6 +256,7 @@ class DadosPagamento extends Component {
           <FormSimples
             value={mesCartao}
             name="mesCartao"
+            erro={erros.mesCartao}
             placeholder="MM"
             label="Mês"
             onChange={(e) =>
@@ -221,6 +267,7 @@ class DadosPagamento extends Component {
           <FormSimples
             value={anoCartao}
             name="anoCartao"
+            erro={erros.anoCartao}
             placeholder="AAAA"
             label="Ano"
             onChange={(e) =>
@@ -244,14 +291,23 @@ class DadosPagamento extends Component {
                 )
               }
             >
-              <option>Selecione a quantidade de parcelas para pagamento</option>
-              {parcelasCartao[bandeira_cartao.name].map((item, index) => (
-                <option key={index} value={item.quantity}>
-                  {item.quantity}x de{' '}
-                  {formatMoney(item.totalAmount / item.quantity)} sem juros
+              {!parcelasCartaoSelecionada && (
+                <option>
+                  Selecione a quantidade de parcelas para pagamento
                 </option>
-              ))}
+              )}
+              {parcelasCartao[bandeira_cartao.name]
+                .slice(0, 6)
+                .map((item, index) => (
+                  <option key={index} value={item.quantity}>
+                    {item.quantity}x de{' '}
+                    {formatMoney(item.totalAmount / item.quantity)} sem juros
+                  </option>
+                ))}
             </select>
+            {erros.parcelasCartaoSelecionada && (
+              <small className="erro">{erros.parcelasCartaoSelecionada}</small>
+            )}
           </div>
         )}
       </div>

@@ -9,7 +9,7 @@ import {
 const initialState = {
   form: {
     dadosCobranca: {},
-    tipoPagamentoSelecionado: 'cartao_credito',
+    tipoPagamentoSelecionado: 'cartao',
   },
 };
 
