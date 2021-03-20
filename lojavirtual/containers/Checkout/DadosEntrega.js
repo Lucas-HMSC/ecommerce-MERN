@@ -4,6 +4,7 @@ import FormSimples from '../../components/Inputs/FormSimples';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import moment from 'moment';
+import axios from 'axios';
 
 import { ESTADOS } from '../../utils';
 import { formatNumber, formatCEP } from '../../utils/format';
@@ -91,6 +92,32 @@ class DadosEntregaContainer extends Component {
   onChange = (field, value, prefix) =>
     this.props.setForm({ [field]: value }, prefix).then(() => this.validate());
 
+  onChangeCEP = (field, value, prefix) => {
+    this.props.setForm({ [field]: value }, prefix).then(() => {
+      this.validate();
+      if (value.length === 9) {
+        axios
+          .get(
+            `https://viacep.com.br/ws/${value.replace('-', '')}/json/unicode`,
+          )
+          .then((response) => {
+            this.props
+              .setForm(
+                {
+                  local: response.data['logradouro'],
+                  bairro: response.data['bairro'],
+                  cidade: response.data['localidade'],
+                  estado: response.data['uf'],
+                },
+                prefix,
+              )
+              .then(() => this.validate());
+          })
+          .catch((e = console.log(e)));
+      }
+    });
+  };
+
   renderDadosDeEntrega() {
     if (!this.props.form) return null;
     const {
@@ -116,7 +143,7 @@ class DadosEntregaContainer extends Component {
             name="CEP"
             placeholder="12345-789"
             label="CEP"
-            onChange={(e) => this.onChange('CEP', formatCEP(e.target.value))}
+            onChange={(e) => this.onChangeCEP('CEP', formatCEP(e.target.value))}
           />
         </div>
         <div className="flex-1 flex horizontal">
@@ -236,7 +263,11 @@ class DadosEntregaContainer extends Component {
             placeholder="12345-789"
             label="CEP"
             onChange={(e) =>
-              this.onChange('CEP', formatCEP(e.target.value), 'dadosCobranca')
+              this.onChangeCEP(
+                'CEP',
+                formatCEP(e.target.value),
+                'dadosCobranca',
+              )
             }
           />
         </div>
