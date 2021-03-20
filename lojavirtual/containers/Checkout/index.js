@@ -29,7 +29,11 @@ class Checkout extends Component {
           permitir={() => this.setState({ permissaoInicial: true })}
         />
         {(permissaoInicial || usuario) && <DadosEntrega />}
-        {(permissaoInicial || usuario) && <SubmitDadosCliente />}
+        {(permissaoInicial || usuario) && (
+          <SubmitDadosCliente
+            permitir={() => this.setState({ permissaoCheckout: true })}
+          />
+        )}
         {permissaoCheckout && <DadosFrete />}
         {permissaoCheckout && <DadosPagamento />}
         {permissaoCheckout && <DadosPedido />}
