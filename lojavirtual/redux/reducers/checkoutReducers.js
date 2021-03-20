@@ -1,8 +1,14 @@
-import { SET_FORM } from '../types';
+import {
+  SET_FORM,
+  CLEAN_FORM,
+  SET_TIPO_PAGAMENTO,
+  FETCH_SESSION_ID,
+  FETCH_SENDER_HASH,
+} from '../types';
 
 const initialState = {
   form: {
-    billing: {},
+    dadosCobranca: {},
     tipoPagamentoSelecionado: 'cartao_credito',
   },
 };
@@ -18,6 +24,26 @@ export default (state = initialState, action) => {
       return {
         ...state,
         form,
+      };
+    case CLEAN_FORM:
+      return {
+        ...state,
+        ...initialState,
+      };
+    case SET_TIPO_PAGAMENTO:
+      return {
+        ...state,
+        tipoPagamentoSelecionado: action.tipoPagamentoSelecionado,
+      };
+    case FETCH_SESSION_ID:
+      return {
+        ...state,
+        sessionId: action.payload.sessionId,
+      };
+    case FETCH_SENDER_HASH:
+      return {
+        ...state,
+        senderHash: action.senderHash,
       };
     default:
       return state;

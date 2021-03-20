@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import FormRadio from '../../components/Inputs/FormRadio';
 import FormSimples from '../../components/Inputs/FormSimples';
 
+import { connect } from 'react-redux';
+import action from '../../redux/actions';
+
 class DadosPagamento extends Component {
-  state = {
-    opcaoPagamentoSelecionada: 'boleto',
-    CPF: '',
-  };
+  componentDidMount() {
+    this.props.getSessionPagamento();
+  }
 
   renderOpcoesPagamento() {
     const { opcaoPagamentoSelecionada } = this.state;
@@ -148,4 +150,15 @@ class DadosPagamento extends Component {
   }
 }
 
-export default DadosPagamento;
+const mapStateToProps = (state) => ({
+  usuario: state.auth.usuario,
+  carrinho: state.carrinho.carrinho,
+  cliente: state.cliente.cliente,
+  form: state.checkout.form,
+  tipoPagamentoSelecionado: state.checkout.tipoPagamentoSelecionado,
+  sessionId: state.checkout.sessionId,
+  senderHash: state.checkout.senderHash,
+  freteSelecionado: state.carrinho.freteSelecionado,
+});
+
+export default connect(mapStateToProps, actions)(DadosPagamento);
