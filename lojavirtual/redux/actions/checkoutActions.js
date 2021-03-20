@@ -88,27 +88,27 @@ export const novoPedido = (
             tipoPagamentoSelecionado === 'cartao'
               ? form.parcelasCartaoSelecionada.quantity
               : 1,
-          enderecoEntregaIgualCobranca: form.enderecoEntregaIgualCobranca,
+          enderecoEntregaIgualCobranca: form.dadosEntregaIgualCobranca,
           endereco: {
-            local: !form.enderecoEntregaIgualCobranca
+            local: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.local
               : form.local,
-            numero: !form.enderecoEntregaIgualCobranca
+            numero: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.numero
               : form.numero,
-            complemento: !form.enderecoEntregaIgualCobranca
+            complemento: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.complemento
               : form.complemento,
-            bairro: !form.enderecoEntregaIgualCobranca
+            bairro: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.bairro
               : form.bairro,
-            cidade: !form.enderecoEntregaIgualCobranca
+            cidade: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.cidade
               : form.cidade,
-            estado: !form.enderecoEntregaIgualCobranca
+            estado: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.estado
               : form.estado,
-            CEP: !form.enderecoEntregaIgualCobranca
+            CEP: !form.dadosEntregaIgualCobranca
               ? form.dadosCobranca.CEP
               : form.CEP,
           },
@@ -133,14 +133,13 @@ export const novoPedido = (
         payload: response.data,
       });
       dispatch(
-        pagarPedido(response.data.pedido.pagamento._id, token, senderHash),
+        pagarPedido(response.data.pedido.pagamento._id, token, senderHash, cb),
       );
-      cb(null);
     })
     .catch((e) => cb(errorHandling(e)));
 };
 
-export const pagarPedido = (id, token, senderHash) => (dispatch) => {
+export const pagarPedido = (id, token, senderHash, cb = null) => (dispatch) => {
   axios
     .post(
       `${API}/${versao}/api/pagamentos/pagar/${id}?loja=${loja}`,
@@ -152,11 +151,12 @@ export const pagarPedido = (id, token, senderHash) => (dispatch) => {
         type: PAGAR_PEDIDO,
         payload: response.data,
       });
+      cb(null);
       Router.push('/sucesso');
       dispatch(cleanCarrinho());
-      dispatch(cleanForm());
+      //dispatch(cleanForm());
     })
-    .catch((e) => console.log(e));
+    .catch((e) => cb(errorHandling(e)));
 };
 
 export default {

@@ -175,10 +175,9 @@ class DadosPagamento extends Component {
         erros.parcelasCartaoSelecionada = 'Selecione uma forma de pagamento';
       if (!CVVCartao || CVVCartao.length !== 3)
         erros.CVVCartao = 'Preencha aqui com o código de segurança do cartão';
-
-      this.setState({ erros });
-      return !(Object.keys(erros).length > 0);
     }
+    this.setState({ erros });
+    return !(Object.keys(erros).length > 0);
   }
 
   onChange = (field, value) =>
