@@ -46,7 +46,47 @@ class DadosEntregaContainer extends Component {
     });
   }
 
-  validate() {}
+  validate() {
+    const {
+      dadosEntregaIgualDadosCobranca,
+      local,
+      numero,
+      bairro,
+      cidade,
+      estado,
+      CEP,
+      dadosCobranca,
+    } = this.props.form;
+    const erros = { dadosCobranca: {} };
+
+    if (!local) erros.local = 'Preencha aqui com o seu endereço';
+    if (!numero) erros.numero = 'Preencha aqui com o seu número';
+    if (!bairro) erros.bairro = 'Preencha aqui com o seu bairro';
+    if (!cidade) erros.cidade = 'Preencha aqui com a sua cidade';
+    if (!estado) erros.estado = 'Selecione o seu estado';
+    if (!CEP || CEP.length !== 9) erros.CEP = 'Digite aqui seu CEP';
+
+    if (!dadosEntregaIgualDadosCobranca) {
+      if (!dadosCobranca.local)
+        erros.dadosCobranca.local = 'Preencha aqui com o seu endereço';
+      if (!dadosCobranca.numero)
+        erros.dadosCobranca.numero = 'Preencha aqui com o seu número';
+      if (!dadosCobranca.bairro)
+        erros.dadosCobranca.bairro = 'Preencha aqui com o seu bairro';
+      if (!dadosCobranca.cidade)
+        erros.dadosCobranca.cidade = 'Preencha aqui com a sua cidade';
+      if (!dadosCobranca.estado)
+        erros.dadosCobranca.estado = 'Selecione o seu estado';
+      if (!dadosCobranca.CEP || dadosCobranca.CEP.length !== 9)
+        erros.dadosCobranca.CEP = 'Digite aqui seu CEP';
+    }
+
+    this.setState({ erros });
+    return (
+      Object.keys(erros).length === 1 &&
+      Object.keys(erros.dadosCobranca).length === 0
+    );
+  }
 
   onChange = (field, value, prefix) =>
     this.props.setForm({ [field]: value }, prefix).then(() => this.validate());
@@ -76,7 +116,7 @@ class DadosEntregaContainer extends Component {
             name="CEP"
             placeholder="12345-789"
             label="CEP"
-            onChange={(e) => this.onChange('CEP', e.target.value)}
+            onChange={(e) => this.onChange('CEP', formatCEP(e.target.value))}
           />
         </div>
         <div className="flex-1 flex horizontal">
@@ -97,7 +137,9 @@ class DadosEntregaContainer extends Component {
               name="numero"
               placeholder="9999"
               label="Número"
-              onChange={(e) => this.onChange('numero', e.target.value)}
+              onChange={(e) =>
+                this.onChange('numero', formatNumber(e.target.value))
+              }
             />
           </div>
         </div>
@@ -156,7 +198,7 @@ class DadosEntregaContainer extends Component {
             checked={dadosEntregaIgualDadosCobranca}
             type="checkbox"
             onChange={() =>
-              this.setState({
+              this.props.setForm({
                 dadosEntregaIgualDadosCobranca: !dadosEntregaIgualDadosCobranca,
               })
             }
@@ -194,7 +236,7 @@ class DadosEntregaContainer extends Component {
             placeholder="12345-789"
             label="CEP"
             onChange={(e) =>
-              this.onChange('CEP', e.target.value, 'dadosCobranca')
+              this.onChange('CEP', formatCEP(e.target.value), 'dadosCobranca')
             }
           />
         </div>
@@ -219,7 +261,11 @@ class DadosEntregaContainer extends Component {
               placeholder="9999"
               label="Número"
               onChange={(e) =>
-                this.onChange('numero', e.target.value, 'dadosCobranca')
+                this.onChange(
+                  'numero',
+                  formatNumber(e.target.value),
+                  'dadosCobranca',
+                )
               }
             />
           </div>
