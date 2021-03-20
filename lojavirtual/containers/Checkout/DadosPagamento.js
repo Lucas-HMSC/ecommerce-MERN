@@ -5,7 +5,8 @@ import FormSimples from '../../components/Inputs/FormSimples';
 
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
-import { formatCPF } from '../../utils/format';
+import { formatCPF, formatCartao, formatNumber } from '../../utils/format';
+import { formatMoney } from '../../utils';
 
 class DadosPagamento extends Component {
   componentDidMount() {
@@ -81,8 +82,38 @@ class DadosPagamento extends Component {
       cvv: CVVCartao,
       expirationMonth: mesCartao,
       expirationYear: anoCartao,
-      
+      success: (r) =>
+        this.props.setForm({
+          credit_card_token: r.card.token,
+        }),
+      error: (r) => console.log(r),
     };
+    PagSeguroDirectPayment.createCardToken(params);
+  }
+
+  getParcelas() {
+    const { freteSelecionado, carrinho } = this.props;
+    const { bandeira_cartao } = this.props.form;
+
+    let valorTotal = carrinho.reduce(
+      (all, item) => all + Number(item.precoUnitario) * Number(item.quantidade),
+      0,
+    );
+    let freteValor = Number(freteSelecionado.Valor.replace(',', '.'));
+
+    PagSeguroDirectPayment.getInstallments({
+      amount: valorTotal + freteValor,
+      maxInstallmentNoInterest: 6,
+      maxInstallment: 6,
+      brand: bandeira_cartao.name,
+      success: (data) => {
+        this.props.setForm({ parcelasCartao: data.installments });
+        this.props.setForm({
+          parcelasCartaoSelecionada: data.installments[bandeira_cartao.name][0],
+        });
+        error: (r) => console.log(r);
+      },
+    });
   }
 
   renderOpcoesPagamento() {
@@ -136,7 +167,10 @@ class DadosPagamento extends Component {
       CVVCartao,
       mesCartao,
       anoCartao,
-    } = this.state;
+      parcelasCartao,
+      parcelasCartaoSelecionada,
+      bandeira_cartao,
+    } = this.props.form;
     return (
       <div className="Dados-Pagamento">
         <FormSimples
@@ -144,7 +178,7 @@ class DadosPagamento extends Component {
           name="nomeCartao"
           placeholder="Nome como escrito no cartão"
           label="Nome Completo no Cartão"
-          onChange={(e) => this.onChange('nomeCartao', e)}
+          onChange={(e) => this.onChange('nomeCartao', e.target.value)}
         />
         <div className="flex horizontal">
           <div className="flex-1">
@@ -153,7 +187,9 @@ class DadosPagamento extends Component {
               name="numeroCartao"
               placeholder="XXXX XXXX XXXX XXXX"
               label="Número do Cartão"
-              onChange={(e) => this.onChange('numeroCartao', e)}
+              onChange={(e) =>
+                this.onChange('numeroCartao', formatCartao(e.target.value))
+              }
             />
           </div>
           <div className="flex-1">
@@ -162,7 +198,9 @@ class DadosPagamento extends Component {
               name="CVVCartao"
               placeholder="XXX"
               label="Código de Segurança do Cartão"
-              onChange={(e) => this.onChange('CVVCartao', e)}
+              onChange={(e) =>
+                this.onChange('CVVCartao', formatNumber(e.target.value, 3))
+              }
             />
           </div>
         </div>
@@ -175,7 +213,9 @@ class DadosPagamento extends Component {
             name="mesCartao"
             placeholder="MM"
             label="Mês"
-            onChange={(e) => this.onChange('mesCartao', e)}
+            onChange={(e) =>
+              this.onChange('mesCartao', formatNumber(e.target.value, 2))
+            }
           />
           <span className="slash-pagamento">&nbso;/&nbsp;</span>
           <FormSimples
@@ -183,24 +223,37 @@ class DadosPagamento extends Component {
             name="anoCartao"
             placeholder="AAAA"
             label="Ano"
-            onChange={(e) => this.onChange('anoCartao', e)}
+            onChange={(e) =>
+              this.onChange('anoCartao', formatNumber(e.target.value, 4))
+            }
           />
         </div>
         <br />
         <div>
           <label className="form-input">Parcelas</label>
         </div>
-        <div className="flex">
-          <select name="parcela">
-            <option>Selecione a quantidade de parcelas para pagamento</option>
-            <option value="1">1x de R$ 105,00 sem juros</option>
-            <option value="2">2x de R$ 62,50 sem juros</option>
-            <option value="3">3x de R$ 35,00 sem juros</option>
-            <option value="4">4x de R$ 31,75 sem juros</option>
-            <option value="5">5x de R$ 21,00 sem juros</option>
-            <option value="6">6x de R$ 17,50 sem juros</option>
-          </select>
-        </div>
+        {parcelasCartao && parcelasCartaoSelecionada && (
+          <div className="flex">
+            <select
+              name="parcela"
+              value={parcelasCartaoSelecionada.quantity}
+              onChange={(e) =>
+                this.onChange(
+                  'parcelasCartaoSelecionada',
+                  parcelasCartao[bandeira_cartao.name][e.target.value - 1],
+                )
+              }
+            >
+              <option>Selecione a quantidade de parcelas para pagamento</option>
+              {parcelasCartao[bandeira_cartao.name].map((item, index) => (
+                <option key={index} value={item.quantity}>
+                  {item.quantity}x de{' '}
+                  {formatMoney(item.totalAmount / item.quantity)} sem juros
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     );
   }
