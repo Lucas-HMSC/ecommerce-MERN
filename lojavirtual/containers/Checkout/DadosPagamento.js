@@ -4,34 +4,104 @@ import FormRadio from '../../components/Inputs/FormRadio';
 import FormSimples from '../../components/Inputs/FormSimples';
 
 import { connect } from 'react-redux';
-import action from '../../redux/actions';
+import actions from '../../redux/actions';
+import { formatCPF } from '../../utils/format';
 
 class DadosPagamento extends Component {
   componentDidMount() {
     this.props.getSessionPagamento();
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      numeroCartao,
+      mesCartao,
+      anoCartao,
+      CVVCartao,
+      credit_card_token,
+      bandeira_cartao,
+      parcelasCartao,
+    } = this.props.form;
+
+    if (
+      !bandeira_cartao &&
+      numeroCartao &&
+      numeroCartao.split(' ').join('').length > 7
+    ) {
+      this.getBrand();
+    }
+
+    if (
+      !credit_card_token &&
+      numeroCartao &&
+      numeroCartao.split(' ').join('').length === 16 &&
+      mesCartao &&
+      mesCartao.length === 2 &&
+      anoCartao &&
+      anoCartao.length === 4 &&
+      CVVCartao &&
+      CVVCartao.length === 3 &&
+      bandeira_cartao
+    )
+      this.submitCartaoHash();
+
+    if (
+      !parcelasCartao &&
+      bandeira_cartao &&
+      parcelasCartao &&
+      bandeira_cartao &&
+      prevProps.freteSelecionado !== this.props.freteSelecionado
+    )
+      this.getParcelas();
+  }
+
+  getBrand() {
+    const { numeroCartao } = this.props.form;
+    PagSeguroDirectPayment.getBrand({
+      cardBin: numeroCartao.split(' ').join('').slice(0, 6),
+      success: (r) =>
+        this.props.setForm({
+          bandeira_cartao: r.brand,
+        }),
+      error: (r) => console.log(r),
+    });
+  }
+
+  submitCartaoHash() {
+    const {
+      numeroCartao,
+      mesCartao,
+      anoCartao,
+      CVVCartao,
+      bandeira_cartao,
+    } = this.props.form;
+    const params = {
+      cardNumber: numeroCartao.split(' ').join(''),
+      brand: bandeira_cartao.name,
+      cvv: CVVCartao,
+      expirationMonth: mesCartao,
+      expirationYear: anoCartao,
+      
+    };
+  }
+
   renderOpcoesPagamento() {
-    const { opcaoPagamentoSelecionada } = this.state;
+    const { tipoPagamentoSelecionado } = this.props;
     return (
       <div className="flex horizontal">
         <div className="flex-1">
           <FormRadio
             name="tipo_pagamento_selecionado"
-            checked={opcaoPagamentoSelecionada === 'boleto'}
-            onChange={() =>
-              this.setState({ opcaoPagamentoSelecionada: 'boleto' })
-            }
+            checked={tipoPagamentoSelecionado === 'boleto'}
+            onChange={() => this.props.setTipoPagamento('boleto')}
             label="Boleto Bancário"
           />
         </div>
         <div className="flex-1">
           <FormRadio
             name="tipo_pagamento_selecionado"
-            checked={opcaoPagamentoSelecionada === 'cartao'}
-            onChange={() =>
-              this.setState({ opcaoPagamentoSelecionada: 'cartao' })
-            }
+            checked={tipoPagamentoSelecionado === 'cartao'}
+            onChange={() => this.props.setTipoPagamento('cartao')}
             label="Cartão de Crédito"
           />
         </div>
@@ -39,18 +109,21 @@ class DadosPagamento extends Component {
     );
   }
 
-  onChange = (field, e) => this.setState({ [field]: e.target.value });
+  validate() {}
+
+  onChange = (field, value) =>
+    this.props.setForm({ [field]: value }).then(() => this.validate());
 
   renderPagamentoComBoleto() {
-    const { CPF } = this.state;
+    const { CPF, CPFboleto } = this.props.form;
     return (
       <div className="Dados-Pagamento">
         <FormSimples
-          value={CPF}
+          value={CPFboleto || CPF}
           name="CPF"
           placeholder="CPF"
           label="CPF"
-          onChange={(e) => this.onChange('CPF', e)}
+          onChange={(e) => onChange(CPFboleto, formatCPF(e.target.value))}
         />
       </div>
     );
@@ -133,7 +206,7 @@ class DadosPagamento extends Component {
   }
 
   render() {
-    const { opcaoPagamentoSelecionada } = this.state;
+    const { tipoPagamentoSelecionado } = this.props;
     return (
       <div className="Dados-Pagamento-Container">
         <h2>DADOS DE PAGAMENTO</h2>
@@ -141,9 +214,9 @@ class DadosPagamento extends Component {
         {this.renderOpcoesPagamento()}
         <br />
         <br />
-        {opcaoPagamentoSelecionada === 'boleto' &&
+        {tipoPagamentoSelecionado === 'boleto' &&
           this.renderPagamentoComBoleto()}
-        {opcaoPagamentoSelecionada === 'cartao' &&
+        {tipoPagamentoSelecionado === 'cartao' &&
           this.renderPagamentoComCartao()}
       </div>
     );
