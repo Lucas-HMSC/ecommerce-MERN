@@ -5,6 +5,11 @@ import actions from '../../redux/actions';
 import moment from 'moment';
 
 import { validateCPF } from '../../utils/validate';
+import {
+  formatDataDeNascimento,
+  formatTelefone,
+  formatCPF,
+} from '../../utils/format';
 
 class DadosClienteContainer extends Component {
   state = {
@@ -67,11 +72,11 @@ class DadosClienteContainer extends Component {
     return !(Object.keys(erros).length > 0);
   }
 
-  onChange = (field, e) => {
+  onChange = (field, e, value) => {
     this.props
       .setForm(
         {
-          [field]: e.target.value,
+          [field]: value || e.target.value,
         },
         null,
       )
@@ -128,7 +133,7 @@ class DadosClienteContainer extends Component {
             placeholder="CPF"
             label="CPF"
             erro={erros.CPF}
-            onChange={(e) => this.onChange('CPF', e)}
+            onChange={(e) => this.onChange('CPF', e, formatCPF(e.target.value))}
           />
         </div>
         <div className="flex-1 flex horizontal">
@@ -139,7 +144,13 @@ class DadosClienteContainer extends Component {
               placeholder="DD/MM/AAAA"
               label="Data de Nascimento"
               erro={erros.dataDeNascimento}
-              onChange={(e) => this.onChange('', e)}
+              onChange={(e) =>
+                this.onChange(
+                  'dataDeNascimento',
+                  e,
+                  formatDataDeNascimento(e.target.value),
+                )
+              }
             />
           </div>
           <div className="flex-1">
@@ -149,7 +160,9 @@ class DadosClienteContainer extends Component {
               placeholder="(12) 3456-7890"
               label="Telefone/Celular"
               erro={erros.telefone}
-              onChange={(e) => this.onChange('telefone', e)}
+              onChange={(e) =>
+                this.onChange('telefone', e, formatTelefone(e.target.value))
+              }
             />
           </div>
         </div>
