@@ -4,9 +4,16 @@ import {
   SET_TIPO_PAGAMENTO,
   FETCH_SESSION_ID,
   FETCH_SENDER_HASH,
+  NOVO_PEDIDO,
+  PAGAR_PEDIDO,
 } from '../types';
 import axios from 'axios';
-import { API, versao } from '../../config';
+import { API, versao, loja } from '../../config';
+import { getCart } from '../../utils/cart';
+import { getHeaders } from './helpers';
+import errorHandling from './errorHandling';
+import Router from 'next/router';
+import { cleanCarrinho } from './carrinhoActions';
 
 export const setForm = (payload, prefix) => (dispatch) => {
   dispatch({
@@ -41,9 +48,122 @@ export const getSessionPagamento = () => (dispatch) => {
   });
 };
 
+export const novoPedido = (
+  form,
+  freteSelecionado,
+  tipoPagamentoSelecionado,
+  valorTotal,
+  token,
+  senderHash,
+  carrinho = getCart(),
+  cb = null,
+) => (dispatch) => {
+  axios
+    .post(
+      `${API}/${versao}/api/pedidos?${loja}`,
+      {
+        carrinho,
+        entrega: {
+          custo: freteSelecionado.Valor.replace(',', '.'),
+          tipo: freteSelecionado.Codigo.toString(),
+          prazo: freteSelecionado.PrazoEntrega,
+          endereco: {
+            local: form.local,
+            numero: form.numero,
+            complemento: form.complemento,
+            bairro: form.bairro,
+            cidade: form.cidade,
+            estado: form.estado,
+            CEP: form.CEP,
+          },
+        },
+        pagamento: {
+          valor:
+            tipoPagamentoSelecionado === 'cartao'
+              ? form.parcelasCartaoSelecionada.totalAmount
+              : valorTotal,
+          forma:
+            tipoPagamentoSelecionado === 'cartao' ? 'creditCard' : 'boleto',
+          parcelas:
+            tipoPagamentoSelecionado === 'cartao'
+              ? form.parcelasCartaoSelecionada.quantity
+              : 1,
+          enderecoEntregaIgualCobranca: form.enderecoEntregaIgualCobranca,
+          endereco: {
+            local: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.local
+              : form.local,
+            numero: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.numero
+              : form.numero,
+            complemento: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.complemento
+              : form.complemento,
+            bairro: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.bairro
+              : form.bairro,
+            cidade: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.cidade
+              : form.cidade,
+            estado: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.estado
+              : form.estado,
+            CEP: !form.enderecoEntregaIgualCobranca
+              ? form.dadosCobranca.CEP
+              : form.CEP,
+          },
+        },
+        cartao:
+          tipoPagamentoSelecionado === 'cartao'
+            ? {
+                nomeCompleto: form.nomeCartao.trim(),
+                codigoArea: form.telefone.slice(0, 2),
+                telefone: form.telefone.slice(2).trim(),
+                dataDeNascimento: form.dataDeNascimento,
+                credit_card_token: form.credit_card_token,
+                cpf: form.CPF,
+              }
+            : undefined,
+      },
+      getHeaders(token),
+    )
+    .then((response) => {
+      dispatch({
+        type: NOVO_PEDIDO,
+        payload: response.data,
+      });
+      dispatch(
+        pagarPedido(response.data.pedido.pagamento._id, token, senderHash),
+      );
+      cb(null);
+    })
+    .catch((e) => cb(errorHandling(e)));
+};
+
+export const pagarPedido = (id, token, senderHash) => (dispatch) => {
+  axios
+    .post(
+      `${API}/${versao}/api/pagamentos/pagar/${id}?loja=${loja}`,
+      { senderHash },
+      getHeaders(token),
+    )
+    .then((response) => {
+      dispatch({
+        type: PAGAR_PEDIDO,
+        payload: response.data,
+      });
+      Router.push('/sucesso');
+      dispatch(cleanCarrinho());
+      dispatch(cleanForm());
+    })
+    .catch((e) => console.log(e));
+};
+
 export default {
   setForm,
   cleanForm,
   setTipoPagamento,
   getSessionPagamento,
+  novoPedido,
+  pagarPedido,
 };

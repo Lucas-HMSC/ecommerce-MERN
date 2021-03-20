@@ -4,6 +4,8 @@ import {
   SET_TIPO_PAGAMENTO,
   FETCH_SESSION_ID,
   FETCH_SENDER_HASH,
+  NOVO_PEDIDO,
+  PAGAR_PEDIDO,
 } from '../types';
 
 const initialState = {
@@ -44,6 +46,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         senderHash: action.senderHash,
+      };
+    case NOVO_PEDIDO:
+      return {
+        ...state,
+        novoPedido: action.payload.pedido,
+      };
+    case PAGAR_PEDIDO:
+      return {
+        ...state,
+        novoPagamento: action.payload.pagamento,
       };
     default:
       return state;
