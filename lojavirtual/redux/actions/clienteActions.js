@@ -54,9 +54,7 @@ export const newCliente = (form, cb) => (dispatch) => {
         payload: response.data,
       });
       dispatch(
-        autenticar({ email: form.email, password: form.senha }),
-        null,
-        cb,
+        autenticar({ email: form.email, password: form.senha }, null, cb),
       );
       cb(null);
     })
