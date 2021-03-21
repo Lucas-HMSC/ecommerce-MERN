@@ -7,6 +7,7 @@ import produtoReducer from './produtoReducers';
 import carrinhoReducer from './carrinhoReducers';
 import clienteReducer from './clienteReducers';
 import checkoutReducer from './checkoutReducers';
+import pedidoReducer from './pedidoReducers';
 
 export default combineReducers({
   auth: authReducer,
@@ -16,4 +17,5 @@ export default combineReducers({
   carrinho: carrinhoReducer,
   cliente: clienteReducer,
   checkout: checkoutReducer,
+  pedido: pedidoReducer,
 });

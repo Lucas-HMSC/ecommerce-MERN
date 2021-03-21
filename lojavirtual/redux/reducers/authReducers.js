@@ -1,4 +1,4 @@
-import { AUTENTICAR_TOKEN, AUTENTICAR, USER } from '../types';
+import { AUTENTICAR_TOKEN, AUTENTICAR, USER, DESAUTENTICAR } from '../types';
 
 const initialState = { token: null, usuario: null };
 export default (satte = initialState, action) => {
@@ -19,6 +19,10 @@ export default (satte = initialState, action) => {
       return {
         ...state,
         token: action.payload,
+      };
+    case DESAUTENTICAR:
+      return {
+        initialState,
       };
     default:
       return state;

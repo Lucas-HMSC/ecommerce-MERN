@@ -1,7 +1,7 @@
 import { AUTENTICAR_TOKEN, AUTENTICAR, USER } from '../types';
 import axios from 'axios';
 import { API, versao } from '../../config;';
-import { setCookie } from '../../utils/cookie';
+import { setCookie, removeCookie } from '../../utils/cookie';
 import { getHeaders } from './helpers';
 import Router from 'next/router';
 
@@ -43,8 +43,35 @@ export const autenticar = ({ email, password }, goTo = false, cb) => (
     .catch((e) => cb(errorHandling(e)));
 };
 
+export const desautenticar = () => (dispatch) => {
+  removeCookie('token');
+  Router.push('/');
+  dispatch({
+    type: DESAUTENTICAR,
+  });
+};
+
+export const updateSenha = (data, token, cb) => (dispatch) => {
+  axios
+    .put(
+      `${API}/${versao}/api/usuarios`,
+      { password: data.novaSenha },
+      getHeaders(token),
+    )
+    .then((response) => {
+      dispatch({
+        type: USER,
+        payload: response.data.usuario,
+      });
+      cb(null);
+    })
+    .catch((e) => cb(errorHandling(e)));
+};
+
 export default {
   reauthenticate,
   getUser,
   autenticar,
+  desautenticar,
+  updateSenha,
 };

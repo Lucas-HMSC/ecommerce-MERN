@@ -1,4 +1,4 @@
-import { FETCH_CLIENTE } from '../types';
+import { FETCH_CLIENTE, LOGOUT_CLIENTE } from '../types';
 
 const initialState = { cliente: null };
 
@@ -8,6 +8,10 @@ export default (state = initialState, action) => {
       return {
         ...state,
         cliente: action.payload.cliente,
+      };
+    case LOGOUT_CLIENTE:
+      return {
+        initialState,
       };
     default:
       return state;

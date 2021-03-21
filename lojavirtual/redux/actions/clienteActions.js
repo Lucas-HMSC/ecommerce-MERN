@@ -1,10 +1,10 @@
-import { FETCH_CLIENTE } from '../types';
+import { FETCH_CLIENTE, LOGOUT_CLIENTE } from '../types';
 import axios from 'axios';
 import { API, versao, loja } from '../../config;';
 import { setCookie } from '../../utils/cookie';
 import { getHeaders } from './helpers';
 import Router from 'next/router';
-import { autenticar } from './authActions';
+import { autenticar, desautenticar } from './authActions';
 import errorHandling from './errorHandling';
 
 export const getRawData = (data) => {
@@ -90,6 +90,13 @@ export const updateCliente = (form, id, token, cb) => (dispatch) => {
       cb(null);
     })
     .catch((e) => cb(errorHandling(e)));
+};
+
+export const logoutCliente = () => (dispatch) => {
+  dispatch(desautenticar());
+  dispatch({
+    type: LOGOUT_CLIENTE,
+  });
 };
 
 export default {
