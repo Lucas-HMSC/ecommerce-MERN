@@ -1,34 +1,32 @@
 import React, { Component } from 'react';
 
 import ListaStatus from '../../../components/Listas/Status';
-
-const REGISTROS = [
-  {
-    data: '08/07/2019',
-    situacao: 'Pagamento em Processamento',
-  },
-  {
-    data: '08/07/2019',
-    situacao: 'Pagamento Aprovado',
-  },
-  {
-    data: '09/07/2019',
-    situacao: 'Pagamento Recebido',
-  },
-];
+import { connect } from 'react-redux';
+import moment from 'moment';
 
 class DetalhesDoPagamento extends Component {
   render() {
+    const { registros } = this.props;
+    if (!registros) return null;
+    const _regs = registros.filter((reg) => reg.tipo === 'pagamento');
+    const regs = _regs.map((reg) => ({
+      data: moment(reg.createdAt).format('DD/MM/YYYY'),
+      situacao: reg.situacao,
+    }));
     return (
       <div className="flex-1">
-        <div className="Detalhes-Da-Entreha">
+        <div className="Detalhes-Do-Pagamento">
           <h4>Sobre o Pagamento</h4>
           <br />
-          <ListaStatus registros={REGISTROS} />
+          <ListaStatus registros={regs} />
         </div>
       </div>
     );
   }
 }
 
-export default DetalhesDoPagamento;
+const mapStateToProps = (state) => ({
+  registros: state.pedido.pedidoRegistros,
+});
+
+export default connect(mapStateToProps)(DetalhesDoPagamento);

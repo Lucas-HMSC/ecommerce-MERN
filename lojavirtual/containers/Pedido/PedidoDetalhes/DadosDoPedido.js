@@ -1,72 +1,106 @@
 import React, { Component } from 'react';
 
-import { formatMoney } from '../../../utils';
+import { codigosCorreios, formatMoney } from '../../../utils';
 import TextoDados from '../../../components/Texto/Dados';
 import TabelaSimples from '../../../components/Tabela/Simples';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
 class DadosDoPedido extends Component {
   renderDadosDoCliente() {
+    const { pedido } = this.props;
+    if (!pedido) return null;
+    const { cliente } = pedido;
     return (
       <div className="flex-3">
         <h4 className="headline">DADOS DO CLIENTE</h4>
         <br />
-        <TextoDados chave="Nome" valor="Lucas Carvalho" />
-        <TextoDados chave="CPF" valor="111.222.333-45" />
-        <TextoDados chave="Telefone" valor="(11) 1234-5678" />
-        <TextoDados chave="Data de Nascimento" valor="01/01/1999" />
+        <TextoDados chave="Nome" valor={cliente.nome} />
+        <TextoDados chave="CPF" valor={cliente.cpf} />
+        <TextoDados chave="Telefone" valor={cliente.telefones[0]} />
+        <TextoDados
+          chave="Data de Nascimento"
+          valor={moment(cliente.dataDeNascimento).format('DD/MM/YYYY')}
+        />
       </div>
     );
   }
   renderDadosDoCarrinho() {
-    const carrinho = [
-      {
-        Produto: 'Mouse Gamer 1 - P',
-        'Preço Und.': formatMoney(55),
-        Quantidade: 1,
-        'Preço Total': formatMoney(55),
-      },
-      {
-        Produto: 'Mouse Gamer 2 - M',
-        'Preço Und.': formatMoney(105),
-        Quantidade: 2,
-        'Preço Total': formatMoney(210),
-      },
-    ];
+    const { pedido } = this.props;
+    if (!pedido) return null;
+    const { carrinho } = pedido;
+    const dados = [];
+    carrinho.forEach((item) => {
+      dados.push({
+        Produto: item.produto.titulo + ' - ' + item.variacao.nome,
+        'Preço Und.': formatMoney(item.precoUnitario),
+        Quantidade: item.quantidade,
+        'Preço Total': formatMoney(item.precoUnitario * item.quantidade),
+      });
+    });
+
     return (
       <div className="flex-5">
         <h4 className="headline">CARRINHO</h4>
         <br />
         <TabelaSimples
           cabecalho={['Produto', 'Preço Und.', 'Quantidade', 'Preço Total']}
-          dados={carrinho}
+          dados={dados}
         />
       </div>
     );
   }
   renderDadosDeEntrega() {
+    const { pedido } = this.props;
+    if (!pedido) return null;
+    const { entrega } = pedido;
     return (
       <div className="flex-3">
         <h4 className="headline">DADOS DE ENTREGA</h4>
         <br />
-        <TextoDados chave="Endereço" valor="Rua Teste" />
-        <TextoDados chave="Número" valor="123" />
-        <TextoDados chave="Bairro" valor="Centro" />
-        <TextoDados chave="Complemento" valor="" />
-        <TextoDados chave="Cidade" valor="São Paulo" />
-        <TextoDados chave="Estado" valor="SP" />
-        <TextoDados chave="CEP" valor="12345-789" />
+        <TextoDados chave="Endereço" valor={entrega.endereco.local} />
+        <TextoDados chave="Número" valor={entrega.endereco.numero} />
+        <TextoDados chave="Bairro" valor={entrega.endereco.bairro} />
+        <TextoDados
+          chave="Complemento"
+          valor={entrega.endereco.complemento || ''}
+        />
+        <TextoDados chave="Cidade" valor={entrega.endereco.cidade} />
+        <TextoDados chave="Estado" valor={entrega.endereco.estado} />
+        <TextoDados chave="CEP" valor={entrega.endereco.CEP} />
+        <br />
+        <TextoDados
+          chave="Cód. de Rastreamento"
+          valor={entrega.codigoRastreamento || '---'}
+        />
       </div>
     );
   }
   renderDadosDePagamento() {
+    const { pedido } = this.props;
+    if (!pedido) return null;
+    const { entrega, pagamento } = pedido;
     return (
       <div className="flex-5">
         <h4 className="headline">DADOS DE PAGAMENTO</h4>
         <br />
-        <TextoDados chave="Taxa de Entrega" valor={formatMoney(20)} />
-        <TextoDados chave="Valor do Pedido" valor={formatMoney(265)} />
-        <TextoDados chave="Valor Total" valor={formatMoney(285)} />
-        <TextoDados chave="Forma de Pagamento" valor="Cartão de Crédito - 2x" />
+        <TextoDados
+          chave="Taxa de Entrega"
+          valor={`${formatMoney(entrega.custo)} (${
+            codigosCorreios[entrega.tipo]
+          } - ${entrega.prazo} dias para entrega)`}
+        />
+        <TextoDados
+          chave="Valor do Pedido"
+          valor={formatMoney((pagamento.valor = entrega.custo))}
+        />
+        <TextoDados chave="Valor Total" valor={formatMoney(pagamento.valor)} />
+        <TextoDados
+          chave="Forma de Pagamento"
+          valor={`${
+            pagamento.form === 'boleto' ? 'Boleto' : 'Cartão de Crédito'
+          } - ${pagamento.parcelas}x`}
+        />
       </div>
     );
   }
@@ -87,4 +121,8 @@ class DadosDoPedido extends Component {
   }
 }
 
-export default DadosDoPedido;
+const mapStateToProps = (state) => ({
+  pedido: state.pedido.pedido,
+});
+
+export default connect(mapStateToProps)(DadosDoPedido);
