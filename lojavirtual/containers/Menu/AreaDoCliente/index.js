@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import actions from '../../../redux/actions';
 
 class MenuAreaDoCliente extends Component {
   renderCabecalho() {
@@ -54,7 +55,10 @@ class MenuAreaDoCliente extends Component {
             <span>ALTERAR SENHA</span>
           </div>
         </Link>
-        <div className="menu-lateral-item" onClick={() => alert('Logout!')}>
+        <div
+          className="menu-lateral-item"
+          onClick={() => this.props.logoutCliente()}
+        >
           <span>SAIR</span>
         </div>
       </div>
@@ -75,4 +79,4 @@ const mapStateToProps = (state) => ({
   usuario: state.auth.usuario,
 });
 
-export default connect(mapStateToProps)(withRouter(MenuAreaDoCliente));
+export default connect(mapStateToProps, actions)(withRouter(MenuAreaDoCliente));

@@ -1,4 +1,4 @@
-import { AUTENTICAR_TOKEN, AUTENTICAR, USER } from '../types';
+import { AUTENTICAR_TOKEN, AUTENTICAR, USER, DESAUTENTICAR } from '../types';
 import axios from 'axios';
 import { API, versao } from '../../config;';
 import { setCookie, removeCookie } from '../../utils/cookie';

@@ -103,4 +103,5 @@ export default {
   fetchCliente,
   newCliente,
   updateCliente,
+  logoutCliente,
 };
