@@ -5,6 +5,21 @@ import { connect } from 'react-redux';
 import actions from '../../../redux/actions';
 
 class MenuAreaDoCliente extends Component {
+  componentDidMount() {
+    this.fetchCliente();
+  }
+
+  componentDidUpdate() {
+    this.fetchCliente();
+  }
+
+  fetchCliente() {
+    const { usuario, token, cliente } = this.props;
+    if (usuario && token && !cliente) {
+      this.props.fetchCliente(usuario._id, token);
+    }
+  }
+
   renderCabecalho() {
     const { usuario } = this.props;
     return (
@@ -77,6 +92,8 @@ class MenuAreaDoCliente extends Component {
 
 const mapStateToProps = (state) => ({
   usuario: state.auth.usuario,
+  token: state.auth.token,
+  cliente: state.cliente.cliente,
 });
 
 export default connect(mapStateToProps, actions)(withRouter(MenuAreaDoCliente));

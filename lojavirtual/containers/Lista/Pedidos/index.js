@@ -1,54 +1,61 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import actions from '../../../redux/actions';
 import Pedidos from '../../../components/Listas/Pedidos';
 import Paginacao from '../../../components/Paginacao';
-
-const PEDIDOS = [
-  {
-    id: 3151321,
-    data: '16/07/2019',
-    valor: 189.55,
-    status: 'Pago / Entregue',
-  },
-  {
-    id: 3151322,
-    data: '18/07/2019',
-    valor: 255.55,
-    status: 'Pago / Em Trânsito',
-  },
-  {
-    id: 3151323,
-    data: '16/07/2019',
-    valor: 189.55,
-    status: 'Pago / Entregue',
-  },
-  {
-    id: 3151324,
-    data: '16/07/2019',
-    valor: 189.55,
-    status: 'Pago / Entregue',
-  },
-];
 
 class ListaPedidos extends Component {
   state = {
     atual: 0,
+    limit: 15,
   };
+
+  componentDidMount() {
+    this.fetchPedidos();
+  }
+
+  componentDidUpdate() {
+    const { pedidos } = this.props;
+    if (!pedidos) this.fetchPedidos();
+  }
+
+  changePagina = (numeroAtual) =>
+    this.setState({ atual: numeroAtual }, () => this.fetchPedidos());
+
+  fetchPedidos() {
+    const { token, cliente, fetchPedidos } = this.props;
+    const { atual, limit } = this.state;
+    if (token && cliente)
+      fetchPedidos({
+        offset: atual,
+        limit,
+        token,
+      });
+  }
+
   render() {
+    const { pedidos } = this.props;
     return (
       <div className="flex-4 conteudo-area-cliente">
         <h2>MEUS PEDIDOS</h2>
         <br />
-        <Pedidos pedidos={PEDIDOS} />
+        <Pedidos pedidos={pedidos ? pedidos.docs : []} />
         <Paginacao
           atual={this.state.atual || 0}
-          total={PEDIDOS.length * 4}
-          limite={PEDIDOS.length}
-          onClick={(numeroAtual) => this.setState({ atual: numeroAtual })}
+          total={pedidos ? pedidos.total : 0}
+          limite={this.state.limit}
+          onClick={this.changePagina}
         />
       </div>
     );
   }
 }
 
-export default ListaPedidos;
+const mapStateToProps = (state) => ({
+  pedidos: state.pedido.pedido,
+  token: state.auth.token,
+  usuario: state.auth.usuario,
+  cliente: state.cliente.cliente,
+});
+
+export default connect(mapStateToProps, actions)(ListaPedidos);
