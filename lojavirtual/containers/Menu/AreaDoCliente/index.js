@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
 
 class MenuAreaDoCliente extends Component {
   renderCabecalho() {
+    const { usuario } = this.props;
     return (
       <div>
         <h3>
-          Oi, Lucas!
+          Oi, {usuario ? usuario.nome : 'cliente'}!
           <br /> Seja bem-vindo à Área do Cliente.
         </h3>
         <p>
@@ -69,4 +71,8 @@ class MenuAreaDoCliente extends Component {
   }
 }
 
-export default withRouter(MenuAreaDoCliente);
+const mapStateToProps = (state) => ({
+  usuario: state.auth.usuario,
+});
+
+export default connect(mapStateToProps)(withRouter(MenuAreaDoCliente));
