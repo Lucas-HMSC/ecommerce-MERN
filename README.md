@@ -25,7 +25,7 @@
      * react-scripts: 4.0.1;
      * redux: 4.0.5;
      * redux-thunk: 2.3.0;
-   * [***Loja Virtual***](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/lojavirtual) ***(em produção)***
+   * [***Loja Virtual***](https://github.com/Lucas-HMSC/ecommerce-MERN/tree/main/lojavirtual) ***(finalizado)***
      * async: 3.2.0;
      * axios: 0.21.1;
      * js-cookie: 2.2.1;
