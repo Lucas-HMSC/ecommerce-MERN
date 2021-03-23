@@ -26,7 +26,7 @@ class Pesquisa extends Component {
         />
         <button
           className="button-pesquisa"
-          obClick={() => this.submitPesquisa()}
+          onClick={() => this.submitPesquisa()}
         >
           <i className="fa fa-search"></i>
         </button>
