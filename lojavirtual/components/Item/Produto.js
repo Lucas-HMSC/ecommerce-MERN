@@ -13,7 +13,7 @@ class Produto extends Component {
     return (
       <Link href={`/produto/${titulo}?id=${_id}`}>
         <div
-          className={`produto flex-1 flex vertical wrap-${porLinha} wrap-2-mb`}
+          className={`produto flex flex-1 vertical wrap-${porLinha} wrap-2-mb`}
         >
           <div className="produto-image flex flex-center">
             <img
