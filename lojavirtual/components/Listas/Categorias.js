@@ -12,7 +12,7 @@ class Categorias extends Component {
             href={`/categoria/${categoria.nome}?id=${categoria._id}`}
             key={categoria._id}
           >
-            <div className="categoria-item flex-1 flex felx-center">
+            <div className="categoria-item flex-1 flex flex-center">
               <span className="text-center">{categoria.nome}</span>
             </div>
           </Link>
