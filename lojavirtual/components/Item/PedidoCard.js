@@ -24,7 +24,7 @@ class PedidoCard extends Component {
           </span>
         </div>
         <div className="flex-1 flex-start">
-          <Link href={`/area/cliente/pedido/${_id}`}>
+          <Link href={`/area-cliente/pedido/${_id}`}>
             <span className="btn btn-primary btn-sm">VER DETALHES</span>
           </Link>
         </div>
