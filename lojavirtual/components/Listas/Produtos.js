@@ -27,4 +27,3 @@ class Produtos extends Component {
 }
 
 export default Produtos;
-s;
