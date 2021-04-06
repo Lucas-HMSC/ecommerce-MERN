@@ -21,7 +21,27 @@ export default () => (
     .container-big {
       max-width: 1440px;
     }
-
+    .flex {
+      display: flex;
+    }
+    .flex-1 {
+      flex: 1;
+    }
+    .flex-2 {
+      flex: 2;
+    }
+    .flex-3 {
+      flex: 3;
+    }
+    .flex-4 {
+      flex: 4;
+    }
+    .flex-5 {
+      flex: 5;
+    }
+    .flex-6 {
+      flex: 6;
+    }
     .wrap {
       flex-wrap: wrap;
     }
@@ -43,29 +63,7 @@ export default () => (
     }
     .wrap-5 {
       flex-basis: calc(20% - 50px);
-      max-width: 2calc (20% - 50px);
-    }
-
-    .flex {
-      display: flex;
-    }
-    .flex-1 {
-      flex: 1;
-    }
-    .flex-2 {
-      flex: 2;
-    }
-    .flex-3 {
-      flex: 3;
-    }
-    .flex-4 {
-      flex: 4;
-    }
-    .flex-5 {
-      flex: 5;
-    }
-    .flex-6 {
-      flex: 6;
+      max-width: calc (20% - 50px);
     }
     .vertical {
       flex-direction: column;
