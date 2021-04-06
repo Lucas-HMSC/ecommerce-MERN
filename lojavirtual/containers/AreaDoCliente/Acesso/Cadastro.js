@@ -17,7 +17,7 @@ import { validateCPF } from '../../../utils/validate';
 
 class CadastroContainer extends Component {
   state = {
-    aviso: nuul,
+    aviso: null,
     erros: {},
 
     email: '',
