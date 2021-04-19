@@ -73,7 +73,7 @@ class CadastroContainer extends Component {
     if (!CEP || CEP.length !== 9) erros.CEP = 'Preencha aqui com o seu CEP';
 
     this.setState({ erros, aviso: null });
-    return Object.keys(erros) === 0;
+    return (Object.keys(erros).length === 0);
   }
 
   handleSubmit() {
@@ -261,7 +261,7 @@ class CadastroContainer extends Component {
             label="CEP"
           />
           <br />
-
+          <AlertGeral aviso={aviso} />
           <div className="flex flex-center">
             <button
               className="btn btn-primary"
