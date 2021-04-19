@@ -58,7 +58,7 @@ class LoginContainer extends Component {
             name="email"
             type="email"
             placeholder="Email"
-            onChange={() => this.onChange('email', e.target.value)}
+            onChange={(e) => this.onChange('email', e.target.value)}
           />
           <FormSimples
             value={senha}
@@ -66,7 +66,7 @@ class LoginContainer extends Component {
             name="senha"
             type="password"
             placeholder="Senha"
-            onChange={() => this.onChange('senha', e.target.value)}
+            onChange={(e) => this.onChange('senha', e.target.value)}
           />
           <div className="flex flex-right">
             <a href={`${API}/${versao}/api/usuarios/recuperar-senha`}>
