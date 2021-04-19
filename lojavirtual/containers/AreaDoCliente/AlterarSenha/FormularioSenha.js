@@ -22,7 +22,7 @@ class FormularioSenha extends Component {
     if (!senhaAntiga) erros.senhaAntiga = 'Preencha aqui com a sua senha atual';
     if (!novaSenha) erros.novaSenha = 'Preencha aqui com a sua nova senha';
     if (!confirmarNovaSenha)
-      erros.confirmarNovaSenha = 'Preencha aqui novamente com a sua novs senha';
+      erros.confirmarNovaSenha = 'Preencha aqui novamente com a sua nova senha';
     if (novaSenha !== confirmarNovaSenha)
       erros.confirmarNovaSenha = 'As duas senhas digitadas não se coincidem';
 
